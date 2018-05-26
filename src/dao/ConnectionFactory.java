@@ -4,6 +4,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
+
+	//singleton da conex√£o - thread safe
+	private static final ThreadLocal<Connection> conn = new ThreadLocal<>();
+		
 	static {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -12,9 +16,16 @@ public class ConnectionFactory {
 		}
 	}
 	// ObtÈm conex„o com o banco de dados
-	static Connection obtemConexao() throws SQLException {
-		System.out.println("teste");
+	public static Connection obtemConexao() throws SQLException {
 		return DriverManager
 				.getConnection("jdbc:mysql://localhost/prat_prog?user=root&password=");
+	}
+	
+	//Fecha a conex√£o - usado no servlet destroy
+	public static void fecharConexao() throws SQLException {
+		if(conn.get() != null){
+			conn.get().close();
+			conn.set(null);
+		}
 	}
 }

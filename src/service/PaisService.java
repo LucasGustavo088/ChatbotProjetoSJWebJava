@@ -1,6 +1,9 @@
 package service;
 
 import model.Pais;
+
+import java.util.ArrayList;
+
 import dao.PaisDAO;
 
 
@@ -21,6 +24,14 @@ public class PaisService {
   
   public Pais carregar(int id){
     return dao.carregar(id);
+  }
+  
+  public ArrayList<Pais> listarPaises(String chave) {
+	  return dao.listarPaises(chave);
+  }
+  
+  public ArrayList<Pais> listarPaises() {
+	  return dao.listarPaises();
   }
 
 }
