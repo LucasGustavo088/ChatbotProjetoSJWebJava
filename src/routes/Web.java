@@ -1,5 +1,6 @@
 package routes;
 
+import java.lang.reflect.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import command.Command;
 import model.Usuario;
 
 /**
@@ -68,8 +70,31 @@ public class Web implements Filter {
 
 		//Inicializando rotas
 		inicializar_rotas();
-
-		runRoute(uri);
+		uri = uri.replace("/ChatbotProjetoSJWebJava/", "");
+		try {
+			runRoute(uri, request, response);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		//Mandando o usuário para a página de login caso ele não esteja logado.
 		if (logado == null && !uri.equals(path + "/login.jsp")
@@ -81,7 +106,7 @@ public class Web implements Filter {
 
 	}
 
-	public void runRoute(String url) {
+	public void runRoute(String url, ServletRequest request, ServletResponse response) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 		//get current url
 		String urlArray[];
 		urlArray = url.split("/");
@@ -99,12 +124,13 @@ public class Web implements Filter {
 				}
 				route.setUrl(String.join("/", routeArray));
 			}
-			if(url == route.getUrl()){
+			if(url.equals(route.getUrl())){
 				found = true;
 				rotaEncontrada.setUrl(route.getUrl());
 				rotaEncontrada.setController(route.getController());
 				rotaEncontrada.setFuncao(route.getFuncao());
 				rotaEncontrada.setName(route.getName());
+
 
 				break;
 			} 
@@ -116,6 +142,15 @@ public class Web implements Filter {
 		}
 		if(found){
 			System.out.println(rotaEncontrada.toString());
+
+		    //load the AppTest at runtime
+			Class cls = Class.forName("com.ChatbotProjetoSJWebJava.controller" + rotaEncontrada.getUrl());
+			Object obj = cls.newInstance();
+				
+			//call the printIt method
+			Method method = cls.getDeclaredMethod(rotaEncontrada.getFuncao(), Integer.class);
+			method.invoke(obj, null);
+
 			//controller->action();
 			//mudar o request e deixar apenas como 2 parametros
 			/*switch (count(param)){
@@ -145,16 +180,16 @@ public class Web implements Filter {
 
 	public void inicializar_rotas() {
 		//Autorização
-		rotas.add( new Route("/auth/logout", "Auth/LogoutController", "logout", "logout"));
-		rotas.add( new Route("/", "HomeController", "index", "home"));
+		rotas.add( new Route("auth/logout", "Auth/LogoutController", "logout", "logout"));
+		rotas.add( new Route("", "HomeController", "index", "home"));
 
 		//Dashboard
-		rotas.add( new Route("/dashboard", "DashboardController", "home", "dashboard.home"));
-		rotas.add( new Route("/dashboard/atendimento/{id}", "DashboardController", "atendimento", "dashboard.atendimento"));
-		rotas.add( new Route("/dashboard/listar_pendencias_ajax", "DashboardController", "listar_pendencias_ajax", "dashboard.listar_pendencias_ajax"));
+		rotas.add( new Route("dashboard", "DashboardController", "home", "dashboard.home"));
+		rotas.add( new Route("dashboard/atendimento/{id}", "DashboardController", "atendimento", "dashboard.atendimento"));
+		rotas.add( new Route("dashboard/listar_pendencias_ajax", "DashboardController", "listar_pendencias_ajax", "dashboard.listar_pendencias_ajax"));
 
 		//Utilizador   
-		rotas.add( new Route("/utilizador/remover_alerta/{id}", "UtilizadorController", "remover_alerta", "utilizador.remover_alerta"));
+		rotas.add( new Route("utilizador/remover_alerta/{id}", "UtilizadorController", "remover_alerta", "utilizador.remover_alerta"));
 
 		//Chatbot
 		rotas.add( new Route("chatbot/listar_topicos_ajax", "ChatbotController", "listar_topicos_ajax", "chatbot.listar_topicos_ajax"));
@@ -169,16 +204,15 @@ public class Web implements Filter {
 		//Chatbot Dialog
 		rotas.add( new Route("chatbot_dialog/obter_resposta_ajax", "ChatbotDialogController", "obter_resposta_ajax", "chatbotdialog.obter_resposta_ajax"));
 		rotas.add( new Route("chatbot_dialog/salvar_atendimento", "ChatbotDialogController", "salvar_atendimento", "chatbotdialog.salvar_atendimento"));
-		rotas.add( new Route("/chatbot_dialog/carregar_mensagens_chat/{id_atendimento}", "ChatbotDialogController", "carregar_mensagens_chat", "chatbot_dialog.carregar_mensagens_chat"));
-		rotas.add( new Route("/chatbot_dialog/salvar_mensagem_banco/{pergunta_ou_resposta}/{id_atendimento}", "ChatbotDialogController", "salvar_mensagem_banco", "chatbot_dialog.salvar_mensagem_banco"));
-		rotas.add( new Route("/chatbot_dialog/atualizar_status_atendimento", "ChatbotDialogController", "atualizar_status_atendimento", "chatbot_dialog.atualizar_status_atendimento"));
-		rotas.add( new Route("/chatbot_dialog/resposta_satisfatoria", "ChatbotDialogController", "resposta_satisfatoria", "chatbot_dialog.resposta_satisfatoria"));
-		rotas.add( new Route("/chatbot_dialog/finalizar_atendimento", "ChatbotDialogController", "finalizar_atendimento", "chatbot_dialog.finalizar_atendimento"));
+		rotas.add( new Route("chatbot_dialog/carregar_mensagens_chat/{id_atendimento}", "ChatbotDialogController", "carregar_mensagens_chat", "chatbot_dialog.carregar_mensagens_chat"));
+		rotas.add( new Route("chatbot_dialog/salvar_mensagem_banco/{pergunta_ou_resposta}/{id_atendimento}", "ChatbotDialogController", "salvar_mensagem_banco", "chatbot_dialog.salvar_mensagem_banco"));
+		rotas.add( new Route("chatbot_dialog/atualizar_status_atendimento", "ChatbotDialogController", "atualizar_status_atendimento", "chatbot_dialog.atualizar_status_atendimento"));
+		rotas.add( new Route("chatbot_dialog/resposta_satisfatoria", "ChatbotDialogController", "resposta_satisfatoria", "chatbot_dialog.resposta_satisfatoria"));
+		rotas.add( new Route("chatbot_dialog/finalizar_atendimento", "ChatbotDialogController", "finalizar_atendimento", "chatbot_dialog.finalizar_atendimento"));
 
 		//Relatório
-		rotas.add( new Route("/relatorio/listar_pendencias", "RelatorioController", "listar_pendencias", "relatorio.listar_pendencias"));
+		rotas.add( new Route("relatorio/listar_pendencias", "RelatorioController", "listar_pendencias", "relatorio.listar_pendencias"));
 		rotas.add( new Route("relatorio/gerar_relatorio", "RelatorioController", "gerar_relatorio", "relatorio.gerar_relatorio"));
-
 	}
 
 	/**
