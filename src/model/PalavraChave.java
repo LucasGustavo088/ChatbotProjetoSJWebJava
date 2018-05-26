@@ -11,6 +11,30 @@ public class PalavraChave {
 		private Date data_atualizacao;
 		private Date data_criacao;
 		
+		private PalavraChaveHasResposta palavraChaveHasResposta;
+		private PerguntaHasResposta perguntaHasResposta;
+		private PalavraChaveHasPergunta palavraChaveHasPergunta;
+		
+		
+		
+		public PalavraChaveHasResposta getPalavraChaveHasResposta() {
+			return palavraChaveHasResposta;
+		}
+		public void setPalavraChaveHasResposta(PalavraChaveHasResposta palavraChaveHasResposta) {
+			this.palavraChaveHasResposta = palavraChaveHasResposta;
+		}
+		public PerguntaHasResposta getPerguntaHasResposta() {
+			return perguntaHasResposta;
+		}
+		public void setPerguntaHasResposta(PerguntaHasResposta perguntaHasResposta) {
+			this.perguntaHasResposta = perguntaHasResposta;
+		}
+		public PalavraChaveHasPergunta getPalavraChaveHasPergunta() {
+			return palavraChaveHasPergunta;
+		}
+		public void setPalavraChaveHasPergunta(PalavraChaveHasPergunta palavraChaveHasPergunta) {
+			this.palavraChaveHasPergunta = palavraChaveHasPergunta;
+		}
 		public int getId() {
 			return id;
 		}

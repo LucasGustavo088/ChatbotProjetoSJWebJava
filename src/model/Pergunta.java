@@ -10,6 +10,8 @@ public class Pergunta {
 	private Date data_criacao;
 	
 	
+	
+	
 	public int getId() {
 		return id;
 	}

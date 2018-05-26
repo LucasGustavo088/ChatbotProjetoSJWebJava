@@ -4,6 +4,25 @@ public class PalavraChaveHasPergunta {
 		private int id;
 		private int  id_pergunta;
 		private int  id_palavra_chave;
+		
+		
+		private Pergunta pergunta;
+		private PalavraChave palavraChave;
+		
+		
+		
+		public Pergunta getPergunta() {
+			return pergunta;
+		}
+		public void setPergunta(Pergunta pergunta) {
+			this.pergunta = pergunta;
+		}
+		public PalavraChave getPalavraChave() {
+			return palavraChave;
+		}
+		public void setPalavraChave(PalavraChave palavraChave) {
+			this.palavraChave = palavraChave;
+		}
 		public int getId() {
 			return id;
 		}

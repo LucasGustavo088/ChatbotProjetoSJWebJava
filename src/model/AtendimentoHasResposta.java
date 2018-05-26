@@ -8,6 +8,24 @@ public class AtendimentoHasResposta {
 	private int id_atendimento;
 	private Date data_criacao;
 	private Date data_atualizacao;
+	
+	private Atendimento atendimento;
+	private Resposta resposta;
+	
+	
+	
+	public Atendimento getAtendimento() {
+		return atendimento;
+	}
+	public void setAtendimento(Atendimento atendimento) {
+		this.atendimento = atendimento;
+	}
+	public Resposta getResposta() {
+		return resposta;
+	}
+	public void setResposta(Resposta resposta) {
+		this.resposta = resposta;
+	}
 	public int getId() {
 		return id;
 	}

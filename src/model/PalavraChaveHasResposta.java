@@ -5,6 +5,24 @@ public class PalavraChaveHasResposta {
 	private int id_palavra_chave;
 	private int id_resposta;
 	private int pont_respsota;
+	
+	private PalavraChave palavraChave;
+	private Resposta resposta;
+	
+	
+	
+	public PalavraChave getPalavraChave() {
+		return palavraChave;
+	}
+	public void setPalavraChave(PalavraChave palavraChave) {
+		this.palavraChave = palavraChave;
+	}
+	public Resposta getResposta() {
+		return resposta;
+	}
+	public void setResposta(Resposta resposta) {
+		this.resposta = resposta;
+	}
 	public int getId() {
 		return id;
 	}

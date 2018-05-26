@@ -9,7 +9,23 @@ public class AtendimentoHasPergunta {
 	private Date data_criacao;
 	private Date data_atualizacao;
 	
+	private Atendimento atendimento;
+	private Pergunta pergunta;
 	
+	
+	
+	public Atendimento getAtendimento() {
+		return atendimento;
+	}
+	public void setAtendimento(Atendimento atendimento) {
+		this.atendimento = atendimento;
+	}
+	public Pergunta getPergunta() {
+		return pergunta;
+	}
+	public void setPergunta(Pergunta pergunta) {
+		this.pergunta = pergunta;
+	}
 	public int getId() {
 		return id;
 	}

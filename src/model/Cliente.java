@@ -9,6 +9,17 @@ public class Cliente {
 	private int ativo;
 	private Date data_atualizacao;
 	private Date data_criacao;
+	
+	private Atendimento atendimento;
+	
+	
+	
+	public Atendimento getAtendimento() {
+		return atendimento;
+	}
+	public void setAtendimento(Atendimento atendimento) {
+		this.atendimento = atendimento;
+	}
 	public int getId() {
 		return id;
 	}

@@ -13,6 +13,21 @@ public class Atendimento{
 	private int duracao_atendimento;
 	private int qtd_tentativa;
 	
+	private Cliente cliente;
+	private Users users;	
+	
+	public Users getUsers() {
+		return users;
+	}
+	public void setUsers(Users users) {
+		this.users = users;
+	}
+	public Cliente getCliente() {
+		return cliente;
+	}
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 	public int getId() {
 		return id;
 	}
