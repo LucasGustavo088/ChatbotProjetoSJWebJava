@@ -42,6 +42,11 @@ public class Route {
 		return funcao;
 	}
 
+	@Override
+	public String toString() {
+		return "Route [url=" + url + ", Controller=" + Controller + ", funcao=" + funcao + ", name=" + name + "]";
+	}
+
 	public void setFuncao(String funcao) {
 		this.funcao = funcao;
 	}
