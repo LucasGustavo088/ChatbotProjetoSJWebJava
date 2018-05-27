@@ -13,13 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import model.Atendimento;
+import model.AtendimentoHasPergunta;
 import model.Cliente;
+import model.Pergunta;
 import service.AtendimentoService;
 import service.ClienteService;
+import service.PerguntaService;
 
 /**
  * Servlet implementation class ChatbotDialogController
@@ -27,14 +29,14 @@ import service.ClienteService;
 @WebServlet("/ChatbotDialogController")
 public class ChatbotDialogController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ChatbotDialogController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ChatbotDialogController() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,15 +45,15 @@ public class ChatbotDialogController extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
-	
+
 	public Date data_atual() {
 		return new Date();
 	}
-	
+
 	public void salvar_atendimento(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		
+
 		PrintWriter out = response.getWriter();
-		
+
 		//cliente
 		Cliente cliente = new Cliente();
 		cliente.setNome_cliente(request.getParameter("nome"));
@@ -59,7 +61,7 @@ public class ChatbotDialogController extends HttpServlet {
 		cliente.setAtivo(1);
 		ClienteService cs = new ClienteService();
 		int idCliente = cs.criar(cliente);
-		
+
 		//atendimento
 		Atendimento atendimento = new Atendimento();
 		atendimento.setAtivo(1);
@@ -68,16 +70,59 @@ public class ChatbotDialogController extends HttpServlet {
 		atendimento.setData_atualizacao(new Date());
 		atendimento.setData_criacao(new Date());
 		atendimento.setQtd_tentativa(0);
-		
+
 		AtendimentoService as = new AtendimentoService();
 		int idAtendimento = as.criar(atendimento);
-		
+
 		//JSON
-        JsonObject jobj = new JsonObject();
-        jobj.add("atendimento", new Gson().toJsonTree(atendimento));
-        jobj.addProperty("status", "1");
-        out.write(jobj.toString());
- 
+		JsonObject jobj = new JsonObject();
+		jobj.add("atendimento", new Gson().toJsonTree(atendimento));
+		jobj.addProperty("status", "1");
+		out.write(jobj.toString());
+
+	}
+
+	public void salvar_mensagem_banco(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
+
+		if(request.getParameter("pergunta_ou_resposta").equals("pergunta")) {
+			Pergunta pergunta = new Pergunta();
+			pergunta.setDescricao(request.getParameter("mensagem"));
+			pergunta.setAtivo(1);
+			pergunta.setData_atualizacao(data_atual());
+			pergunta.setData_criacao(data_atual());
+			
+			PerguntaService ps = new PerguntaService();
+			int idPergunta;
+			idPergunta = ps.criar(pergunta);
+			
+			
+			AtendimentoHasPergunta atendimento_has_pergunta = new AtendimentoHasPergunta();
+			atendimento_has_pergunta.setId_pergunta(idPergunta);
+			atendimento_has_pergunta.setId_atendimento(Integer.parseInt(request.getParameter("id_atendimento")));
+			atendimento_has_pergunta.setData_atualizacao(data_atual());
+			atendimento_has_pergunta.setData_criacao(data_atual());
+			
+			AtendimentoHasPerguntaService ahps = new AtendimentoHasPerguntaService();
+			ahps.criar(atendimento_has_pergunta);
+		} else {
+			resposta = new Resposta();
+			resposta->DESCRICAO = request->dados_mensagem['mensagem'];
+			resposta->ATIVO = '1';
+			resposta->DATA_ATUALIZACAO = data_atual();
+			resposta->DATA_CRIACAO = data_atual();
+			resposta->save();
+
+			atendimento_has_pergunta = new AtendimentoHasResposta();
+			atendimento_has_pergunta->ID_RESPOSTA = resposta->id;
+			atendimento_has_pergunta->ID_ATENDIMENTO = request->id_atendimento;
+			atendimento_has_pergunta->DATA_CRIACAO = data_atual();
+			atendimento_has_pergunta->DATA_ATUALIZACAO = data_atual();
+			atendimento_has_pergunta->save();
+		}
+
+		echo json_encode(['status' => true]);
+		exit();
+
 	}
 
 	/**
