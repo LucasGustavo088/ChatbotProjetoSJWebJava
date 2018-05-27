@@ -8,19 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class HomeController
+ * Servlet implementation class DashboardController
  */
-@WebServlet("/HomeController")
-public class HomeController extends HttpServlet {
+@WebServlet("/DashboardController")
+public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor. 
      */
-    public HomeController() {
-        super();
+    public DashboardController() {
         // TODO Auto-generated constructor stub
     }
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */

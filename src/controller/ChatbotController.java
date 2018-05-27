@@ -8,19 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class HomeController
+ * Servlet implementation class chatbotController
  */
-@WebServlet("/HomeController")
-public class HomeController extends HttpServlet {
+@WebServlet("/ChatbotController")
+public class ChatbotController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor. 
      */
-    public HomeController() {
-        super();
+    public ChatbotController() {
         // TODO Auto-generated constructor stub
     }
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
