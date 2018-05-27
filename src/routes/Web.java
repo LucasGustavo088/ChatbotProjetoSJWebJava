@@ -130,7 +130,10 @@ public class Web implements Filter {
 				}
 				route.setUrl(String.join("/", routeArray));
 			}
-			if(url.equals(route.getUrl())){
+			
+			if(url.equals(route.getUrl() + "/")){
+				
+				
 				found = true;
 				rotaEncontrada.setUrl(route.getUrl());
 				rotaEncontrada.setController(route.getController());
@@ -212,7 +215,8 @@ public class Web implements Filter {
 		rotas.add( new Route("chatbot_dialog/obter_resposta_ajax", "ChatbotDialogController", "obter_resposta_ajax", "chatbotdialog.obter_resposta_ajax"));
 		rotas.add( new Route("chatbot_dialog/salvar_atendimento", "ChatbotDialogController", "salvar_atendimento", "chatbotdialog.salvar_atendimento"));
 		rotas.add( new Route("chatbot_dialog/carregar_mensagens_chat/{id_atendimento}", "ChatbotDialogController", "carregar_mensagens_chat", "chatbot_dialog.carregar_mensagens_chat"));
-		rotas.add( new Route("chatbot_dialog/salvar_mensagem_banco/{pergunta_ou_resposta}/{id_atendimento}", "ChatbotDialogController", "salvar_mensagem_banco", "chatbot_dialog.salvar_mensagem_banco"));
+		rotas.add( new Route("chatbot_dialog/salvar_mensagem_banco/pergunta/", "ChatbotDialogController", "salvar_mensagem_banco", "chatbot_dialog.salvar_mensagem_banco"));
+		rotas.add( new Route("chatbot_dialog/salvar_mensagem_banco/resposta/", "ChatbotDialogController", "salvar_mensagem_banco", "chatbot_dialog.salvar_mensagem_banco"));
 		rotas.add( new Route("chatbot_dialog/atualizar_status_atendimento", "ChatbotDialogController", "atualizar_status_atendimento", "chatbot_dialog.atualizar_status_atendimento"));
 		rotas.add( new Route("chatbot_dialog/resposta_satisfatoria", "ChatbotDialogController", "resposta_satisfatoria", "chatbot_dialog.resposta_satisfatoria"));
 		rotas.add( new Route("chatbot_dialog/finalizar_atendimento", "ChatbotDialogController", "finalizar_atendimento", "chatbot_dialog.finalizar_atendimento"));

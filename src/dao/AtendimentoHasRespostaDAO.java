@@ -6,17 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-import model.AtendimentoHasPergunta;
+import model.AtendimentoHasResposta;
 
-public class AtendimentoHasPerguntaDAO {
+public class AtendimentoHasRespostaDAO {
 
-	public int criar(AtendimentoHasPergunta atendimento_has_perguta) {
+	public int criar(AtendimentoHasResposta atendimento_has_perguta) {
 		
 		String sqlInsert = "INSERT INTO atendimento_has_perguta(ID_PERGUNTA, ID_ATENDIMENTO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, ?)";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
-			stm.setInt(1, atendimento_has_perguta.getId_pergunta());
+			stm.setInt(1, atendimento_has_perguta.getId_resposta());
 			stm.setInt(2, atendimento_has_perguta.getId_atendimento());
 			stm.setDate(3, new java.sql.Date( atendimento_has_perguta.getData_atualizacao().getTime() ));
 			stm.setDate(4, new java.sql.Date( atendimento_has_perguta.getData_criacao().getTime() ));

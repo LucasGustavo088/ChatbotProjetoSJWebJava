@@ -17,11 +17,16 @@ import com.google.gson.JsonObject;
 
 import model.Atendimento;
 import model.AtendimentoHasPergunta;
+import model.AtendimentoHasResposta;
 import model.Cliente;
 import model.Pergunta;
+import model.Resposta;
+import service.AtendimentoHasPerguntaService;
+import service.AtendimentoHasRespostaService;
 import service.AtendimentoService;
 import service.ClienteService;
 import service.PerguntaService;
+import service.RespostaService;
 
 /**
  * Servlet implementation class ChatbotDialogController
@@ -83,8 +88,8 @@ public class ChatbotDialogController extends HttpServlet {
 	}
 
 	public void salvar_mensagem_banco(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
-
-		if(request.getParameter("pergunta_ou_resposta").equals("pergunta")) {
+		
+		if(url[2].equals("pergunta")) {
 			Pergunta pergunta = new Pergunta();
 			pergunta.setDescricao(request.getParameter("mensagem"));
 			pergunta.setAtivo(1);
@@ -105,24 +110,29 @@ public class ChatbotDialogController extends HttpServlet {
 			AtendimentoHasPerguntaService ahps = new AtendimentoHasPerguntaService();
 			ahps.criar(atendimento_has_pergunta);
 		} else {
-			resposta = new Resposta();
-			resposta->DESCRICAO = request->dados_mensagem['mensagem'];
-			resposta->ATIVO = '1';
-			resposta->DATA_ATUALIZACAO = data_atual();
-			resposta->DATA_CRIACAO = data_atual();
-			resposta->save();
+			Resposta resposta = new Resposta();
+			resposta.setDescricao(request.getParameter("mensagem"));
+			resposta.setAtivo(1);
+			resposta.setData_criacao(data_atual());
+			
+			RespostaService rs = new RespostaService();
+			int idResposta = rs.criar(resposta);
 
-			atendimento_has_pergunta = new AtendimentoHasResposta();
-			atendimento_has_pergunta->ID_RESPOSTA = resposta->id;
-			atendimento_has_pergunta->ID_ATENDIMENTO = request->id_atendimento;
-			atendimento_has_pergunta->DATA_CRIACAO = data_atual();
-			atendimento_has_pergunta->DATA_ATUALIZACAO = data_atual();
-			atendimento_has_pergunta->save();
+			AtendimentoHasResposta atendimento_has_resposta = new AtendimentoHasResposta();
+			atendimento_has_resposta.setId_resposta(idResposta);
+			atendimento_has_resposta.setId_atendimento(Integer.parseInt(request.getParameter("id_atendimento")));
+			atendimento_has_resposta.setData_atualizacao(data_atual());
+			atendimento_has_resposta.setData_criacao(data_atual());
+			
+			AtendimentoHasRespostaService ahps = new AtendimentoHasRespostaService();
+			ahps.criar(atendimento_has_resposta);
 		}
 
-		echo json_encode(['status' => true]);
-		exit();
-
+		//JSON
+		PrintWriter out = response.getWriter();
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("status", "1");
+		out.write(jobj.toString());
 	}
 
 	/**
