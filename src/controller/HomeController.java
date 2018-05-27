@@ -33,6 +33,14 @@ public class HomeController extends HttpServlet {
     	out.println("teste");
 
 	}
+    
+ public void teste(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+		
+    	
+    	PrintWriter out = response.getWriter();
+    	out.println("teste 2222");
+
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
