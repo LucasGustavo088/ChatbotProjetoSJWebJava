@@ -1,7 +1,11 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +26,13 @@ public class HomeController extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    public void index() {
-    	System.out.println("teste");
-    }
+    public void index(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+		
+    	
+    	PrintWriter out = response.getWriter();
+    	out.println("teste");
+
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

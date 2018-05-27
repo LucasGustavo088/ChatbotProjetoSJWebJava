@@ -1,7 +1,9 @@
 package routes;
 
-import java.lang.reflect.*;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.servlet.Filter;
@@ -15,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import command.Command;
 import model.Usuario;
 
 /**
@@ -67,10 +68,13 @@ public class Web implements Filter {
 		if(comando == null){
 			comando = "";
 		}
-
+		
 		//Inicializando rotas
 		inicializar_rotas();
 		uri = uri.replace("/ChatbotProjetoSJWebJava/", "");
+		
+		System.out.println(uri);
+    	
 		try {
 			runRoute(uri, request, response);
 		} catch (ClassNotFoundException e) {
@@ -97,16 +101,16 @@ public class Web implements Filter {
 		}
 
 		//Mandando o usuário para a página de login caso ele não esteja logado.
-		if (logado == null && !uri.equals(path + "/login.jsp")
+		/*if (logado == null && !uri.equals(path + "/login.jsp")
 				&& !comando.equals("FazerLogin")) {
 			((HttpServletResponse) response).sendRedirect(path + "/login.jsp");
-		}
+		}*/
 
-		chain.doFilter(request, response);
+		//chain.doFilter(request, response);
 
 	}
 
-	public void runRoute(String url, ServletRequest request, ServletResponse response) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
+	public void runRoute(String url, ServletRequest request, ServletResponse response) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException {
 		//get current url
 		String urlArray[];
 		urlArray = url.split("/");
@@ -140,16 +144,17 @@ public class Web implements Filter {
 			//  throw new Exception("Erro 404", 1);
 			// } 
 		}
+		
 		if(found){
 			System.out.println(rotaEncontrada.toString());
 
 		    //load the AppTest at runtime
-			Class cls = Class.forName("com.ChatbotProjetoSJWebJava.controller" + rotaEncontrada.getUrl());
+			Class cls = Class.forName("controller." + rotaEncontrada.getController());
 			Object obj = cls.newInstance();
 				
 			//call the printIt method
-			Method method = cls.getDeclaredMethod(rotaEncontrada.getFuncao(), Integer.class);
-			method.invoke(obj, null);
+			Method method = cls.getDeclaredMethod(rotaEncontrada.getFuncao(), ServletRequest.class, ServletResponse.class);
+			method.invoke(obj, request, response);
 
 			//controller->action();
 			//mudar o request e deixar apenas como 2 parametros
