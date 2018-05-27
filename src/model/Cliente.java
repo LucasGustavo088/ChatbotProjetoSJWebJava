@@ -1,6 +1,6 @@
 package model;
 
-import java.util.*;
+import java.sql.Date;
 
 public class Cliente {
 	private int id;
@@ -11,8 +11,6 @@ public class Cliente {
 	private Date data_criacao;
 	
 	private Atendimento atendimento;
-	
-	
 	
 	public Atendimento getAtendimento() {
 		return atendimento;
@@ -56,8 +54,5 @@ public class Cliente {
 	public void setData_criacao(Date data_criacao) {
 		this.data_criacao = data_criacao;
 	}
-	
-	
-	
 
 }

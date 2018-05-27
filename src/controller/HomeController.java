@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -17,28 +18,28 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/HomeController")
 public class HomeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public HomeController() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
-    public void index(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		
-    	
-    	PrintWriter out = response.getWriter();
-    	out.println("teste");
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public HomeController() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public void index(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
+
+
+		PrintWriter out = response.getWriter();
+		out.println(Arrays.toString(url));
 
 	}
-    
- public void teste(ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		
-    	
-    	PrintWriter out = response.getWriter();
-    	out.println("teste 2222");
+
+	public void teste(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+
+
+		PrintWriter out = response.getWriter();
+		out.println("teste 2222");
 
 	}
 

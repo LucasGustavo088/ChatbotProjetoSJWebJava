@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.Usuario;
-
 /**
  * Servlet Filter implementation class Web
  */
@@ -47,6 +45,10 @@ public class Web implements Filter {
 		/*
     /*  Web filter - Rotas
 		 */
+		//Cors
+		// Authorize (allow) all domains to consume the content
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
 
 		//Configurações de enconding
 		request.setCharacterEncoding("UTF-8");
@@ -57,7 +59,7 @@ public class Web implements Filter {
 		HttpSession session = req.getSession();
 
 		//Obtendo dados do usuario na session
-		Usuario logado = (Usuario) session.getAttribute("logado");
+		//Users logado = (Usuario) session.getAttribute("logado");
 
 		//Caminho de url
 		String path = req.getContextPath();
@@ -153,8 +155,8 @@ public class Web implements Filter {
 			Object obj = cls.newInstance();
 				
 			//call the printIt method
-			Method method = cls.getDeclaredMethod(rotaEncontrada.getFuncao(), ServletRequest.class, ServletResponse.class);
-			method.invoke(obj, request, response);
+			Method method = cls.getDeclaredMethod(rotaEncontrada.getFuncao(), String[].class, ServletRequest.class, ServletResponse.class);
+			method.invoke(obj, url.split("/"),request, response);
 
 			//controller->action();
 			//mudar o request e deixar apenas como 2 parametros

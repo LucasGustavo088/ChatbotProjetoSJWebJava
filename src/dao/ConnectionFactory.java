@@ -18,7 +18,7 @@ public class ConnectionFactory {
 	// Obtém conexão com o banco de dados
 	public static Connection obtemConexao() throws SQLException {
 		return DriverManager
-				.getConnection("jdbc:mysql://localhost/prat_prog?user=root&password=");
+				.getConnection("jdbc:mysql://localhost/mydb?user=root&password=");
 	}
 	
 	//Fecha a conexÃ£o - usado no servlet destroy

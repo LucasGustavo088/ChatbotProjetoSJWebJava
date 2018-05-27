@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="assets/ico/favicon.png">
+    <link rel="shortcut icon" href="assets/images/logo-icon.png">
 
     <title>Cartório Projeto Interdisciplinar</title>
 
@@ -21,6 +21,7 @@
     <!-- Scripts -->
     <!--===============================================================================================-->
     <script src="assets/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="assets/js/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
     <!--===============================================================================================-->
     <script src="assets/vendor/animsition/js/animsition.min.js"></script>
     <!--===============================================================================================-->
@@ -280,6 +281,7 @@
         email: '' 
       };
       var contador_clone_chatbot_mensagem = 0;
+      var enderecoBack = 'http://localhost:8080/ChatbotProjetoSJWebJava/';
 
       $(document).ready(function() {
           inicializar_chatbot();
@@ -300,7 +302,7 @@
       });
 
       $( function() {
-       $( "#chatbot1" ).draggable();
+       // $( "#chatbot1" ).draggable();
       } );
       $(document).on('click', '.panel-heading span.icon_minim', function (e) {
         var $this = $(this);
@@ -342,7 +344,7 @@
         $('#base_mensagens').html('');
 
         $.ajax({
-            url: '/chatbot_dialog/carregar_mensagens_chat/' + id_atendimento,
+            url: enderecoBack + 'chatbot_dialog/carregar_mensagens_chat/' + id_atendimento,
             dataType: 'json',
             method: 'get',
             async: false,
@@ -392,12 +394,12 @@
         $('#base_mensagens').append('<br><br><h4 style="text-align: center"><strong>Obrigado!</strong></h4><br><br><br><button type="button" class="btn btn-success" style="margin-left: 60px;" onclick="location.reload();">Perguntar novamente</button>');
         travar_atualizacao = true;
         $.ajax({
-            url: '/chatbot_dialog/finalizar_atendimento',
+            url: enderecoBack + 'chatbot_dialog/finalizar_atendimento',
             dataType: 'json',
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'id_atendimento': id_atendimento
             },
             error: function() {
@@ -424,12 +426,12 @@
 
       function salvar_atendimento() {
         $.ajax({
-            url: '/chatbot_dialog/salvar_atendimento',
+            url: enderecoBack + 'chatbot_dialog/salvar_atendimento',
             dataType: 'json',
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'nome': dados_usuario.nome,
                 'email': dados_usuario.email,
             },
@@ -481,12 +483,12 @@
       function salvar_mensagem_banco(pergunta_ou_resposta) {
         if(pergunta_ou_resposta == 'pergunta') {
           $.ajax({
-              url: '/chatbot_dialog/salvar_mensagem_banco/pergunta/' + id_atendimento,
+              url: enderecoBack + 'chatbot_dialog/salvar_mensagem_banco/pergunta/' + id_atendimento,
               dataType: 'json',
               method: 'get',
               async: false,
               data: {
-                  '_token': "{{ csrf_token() }}",
+                  // '_token': "{{ csrf_token() }}",
                   dados_mensagem: obter_log_ultima_mensagem_usuario()
               },
               success: function(retorno) {
@@ -550,12 +552,12 @@
 
       function atualizar_status_atendimento(status) {
         $.ajax({
-            url: '/chatbot_dialog/atualizar_status_atendimento',
+            url: enderecoBack + 'chatbot_dialog/atualizar_status_atendimento',
             dataType: 'json',
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'status': status,
                 'id_atendimento': id_atendimento
             },
@@ -577,12 +579,12 @@
         
         var resposta_chatbot = {};
         $.ajax({
-            url: '/chatbot_dialog/obter_resposta_ajax',
+            url: enderecoBack + 'chatbot_dialog/obter_resposta_ajax',
             dataType: 'json',
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'mensagem_usuario': obter_log_ultima_mensagem_usuario().mensagem,
             },
             success: function(retorno) {
@@ -608,11 +610,11 @@
         }
 
         $.ajax({
-            url: '/chatbot_dialog/resposta_satisfatoria',
+            url: enderecoBack + 'chatbot_dialog/resposta_satisfatoria',
             dataType: 'json',
             method: 'post',
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'id_pergunta_resposta': id_pergunta_resposta,
             },
             success: function(retorno) {
