@@ -90,6 +90,7 @@ public class ChatbotDialogController extends HttpServlet {
 		out.write(jobj.toString());
 
 	}
+	
 
 	public void salvar_mensagem_banco(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		
@@ -142,9 +143,6 @@ public class ChatbotDialogController extends HttpServlet {
 		out.write(jobj.toString());
 	}
 	
-	public void debug(String[] stirng) {
-		System.out.println(Arrays.toString(stirng));
-	}
 	
 	public void obter_resposta_ajax (String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException  {
         String mensagem_usuario = request.getParameter("mensagem_usuario");
@@ -199,6 +197,34 @@ public class ChatbotDialogController extends HttpServlet {
 
         return string;
     }
+
+	public void finalizar_atendimento(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		//atendimento
+		boolean status = false;
+		
+		Atendimento atendimento = new Atendimento();
+		atendimento.setStatus("finalizado");
+		atendimento.setData_finalizacao(data_atual());
+		
+		atendimento.setId(Integer.parseInt(request.getParameter("id_atendimento")));
+		
+		if(request.getParameter("id_atendimento").equals("")) {
+			
+			AtendimentoService as = new AtendimentoService();
+		    as.finalizar_atendimento(atendimento);
+		    status = true;
+			
+		}
+		
+		//JSON
+		JsonObject jobj = new JsonObject();
+		jobj.add("atendimento", new Gson().toJsonTree(atendimento));
+		jobj.addProperty("status", "1");
+		out.write(jobj.toString());
+		
+	}
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

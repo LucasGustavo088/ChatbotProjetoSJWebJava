@@ -12,7 +12,16 @@ public class Atendimento{
 	private int id_cliente;
 	private int duracao_atendimento;
 	private int qtd_tentativa;
+	private Date data_finalizacao;
 	
+	
+	
+	public Date getData_finalizacao() {
+		return data_finalizacao;
+	}
+	public void setData_finalizacao(Date data_finalizacao) {
+		this.data_finalizacao = data_finalizacao;
+	}
 	private Cliente cliente;
 	private Users users;	
 	
