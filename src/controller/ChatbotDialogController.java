@@ -2,6 +2,8 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -19,12 +21,14 @@ import model.Atendimento;
 import model.AtendimentoHasPergunta;
 import model.AtendimentoHasResposta;
 import model.Cliente;
+import model.PalavraChave;
 import model.Pergunta;
 import model.Resposta;
 import service.AtendimentoHasPerguntaService;
 import service.AtendimentoHasRespostaService;
 import service.AtendimentoService;
 import service.ClienteService;
+import service.PalavraChaveService;
 import service.PerguntaService;
 import service.RespostaService;
 
@@ -100,10 +104,10 @@ public class ChatbotDialogController extends HttpServlet {
 			int idPergunta;
 			idPergunta = ps.criar(pergunta);
 			
-			
+			Integer.parseInt(url[3]);
 			AtendimentoHasPergunta atendimento_has_pergunta = new AtendimentoHasPergunta();
 			atendimento_has_pergunta.setId_pergunta(idPergunta);
-			atendimento_has_pergunta.setId_atendimento(Integer.parseInt(request.getParameter("id_atendimento")));
+			atendimento_has_pergunta.setId_atendimento(Integer.parseInt(url[3]));
 			atendimento_has_pergunta.setData_atualizacao(data_atual());
 			atendimento_has_pergunta.setData_criacao(data_atual());
 			
@@ -134,6 +138,55 @@ public class ChatbotDialogController extends HttpServlet {
 		jobj.addProperty("status", "1");
 		out.write(jobj.toString());
 	}
+	
+	public void debug(String[] stirng) {
+		System.out.println(Arrays.toString(stirng));
+	}
+	
+	public void obter_resposta_ajax (String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException  {
+        String mensagem_usuario = request.getParameter("mensagem_usuario");
+
+        String[] palavras_chave_mensagem = transformar_string_palavras_chave(mensagem_usuario);
+        
+        ArrayList <PalavraChave> palavra_chave_perguntas = new ArrayList <PalavraChave> ();
+
+        /*
+        * Obtendo todas as perguntas com as palavras-chaves da mensagem perguntada. 
+        */ 
+        for(int i =0; i < palavras_chave_mensagem.length; i++) {
+            PalavraChaveService pcs = new PalavraChaveService();
+            ArrayList<PalavraChave> palavra_chave_cadastro = pcs.obter_palavra_chave_com_string(palavras_chave_mensagem[i]);
+            if(palavra_chave_cadastro.size() == 0) {
+                continue;
+            }
+            
+            //for(PalavraChave palavra_chave : palavra_chave_cadastro) {
+            //	palavra_chave_perguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId()));
+            //}
+        }
+       
+        
+        
+        
+    }
+	
+	public String[] transformar_string_palavras_chave(String string) {
+        String string_filtrada = escapar_caracteres_notacao(string);
+
+        String palavras_chave[] = string_filtrada.split(" ");
+        return palavras_chave;
+    }
+	
+	public String escapar_caracteres_notacao(String string) {
+		
+		string = string.replace("(", "");
+		string = string.replace(")", "");
+		string = string.replace(".", "");
+		string = string.replace("?", "");
+		string = string.replace("!", "");
+
+        return string;
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

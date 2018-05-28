@@ -436,12 +436,19 @@
                 'email': dados_usuario.email,
             },
             success: function(retorno) {
+                if(retorno.atendimento.id == "") {
+                    alerta_erro();
+                }
                 id_atendimento = retorno.atendimento.id;
             },
             error: function() {
-              alert('Ops, houve um erro interno. Verifique minha conexão.');
+                alerta_erro();
             }
         });
+      }
+
+      function alerta_erro() {
+            alert('Ops, houve um erro interno. Verifique minha conexão.');
       }
 
       function inicializar_chatbot() {

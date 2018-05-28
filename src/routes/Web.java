@@ -47,8 +47,8 @@ public class Web implements Filter {
 		 */
 		//Cors
 		// Authorize (allow) all domains to consume the content
-        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
-        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
+        //((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
+        //((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
 
 		//Configurações de enconding
 		request.setCharacterEncoding("UTF-8");
@@ -123,16 +123,16 @@ public class Web implements Filter {
 		//Verify all of the url of routes.php is equal to current url
 		for(Route route : this.rotas){
 			String routeArray[] = route.getUrl().split("/");
-			for(int i = 0; i < routeArray.length; i++){
+			
+			/*for(int i = 0; i < routeArray.length; i++){
 				if(routeArray[i].contains("{") != false && urlArray.length == routeArray.length){
 					routeArray[i] = urlArray[i];
 					param.add(urlArray[i]);
 				}
 				route.setUrl(String.join("/", routeArray));
-			}
+			}*/
 			
-			if(url.equals(route.getUrl() + "/")){
-				
+			if(isClass("controller." + route.getController()) && urlArray[1].equals(route.getFuncao())){
 				
 				found = true;
 				rotaEncontrada.setUrl(route.getUrl());
@@ -182,6 +182,15 @@ public class Web implements Filter {
 			System.out.println("Página não encontrada");
 		}
 	}
+	
+	public boolean isClass(String className) {
+	    try  {
+	        Class.forName(className);
+	        return true;
+	    }  catch (ClassNotFoundException e) {
+	        return false;
+	    }
+	}
 
 
 	public String obterRotaComName() {
@@ -202,28 +211,28 @@ public class Web implements Filter {
 		rotas.add( new Route("utilizador/remover_alerta/{id}", "UtilizadorController", "remover_alerta", "utilizador.remover_alerta"));
 
 		//Chatbot
-		rotas.add( new Route("chatbot/listar_topicos_ajax", "ChatbotController", "listar_topicos_ajax", "chatbot.listar_topicos_ajax"));
-		rotas.add( new Route("chatbot/configuracoes", "ChatbotController", "configuracoes", "chatbot.configuracoes"));
-		rotas.add( new Route("chatbot/listar_perguntas_respostas_ajax", "ChatbotController", "listar_perguntas_respostas_ajax", "chatbot.listar_perguntas_respostas_ajax"));
-		rotas.add( new Route("chatbot/listar_topicos", "ChatbotController", "listar_topicos", "chatbot.listar_topicos"));
-		rotas.add( new Route("chatbot/adicionar_palavra_chave_pergunta", "ChatbotController", "adicionar_palavra_chave_pergunta", "chatbot.adicionar_palavra_chave_pergunta"));
-		rotas.add( new Route("chatbot/editar_palavra_chave_pergunta/{id}", "ChatbotController", "editar_palavra_chave_pergunta", "editar_palavra_chave_pergunta"));
-		rotas.add( new Route("chatbot/excluir_palavra_chave_pergunta/{id}", "ChatbotController", "excluir_palavra_chave_pergunta", "excluir_palavra_chave_pergunta"));
-		rotas.add( new Route("p_adicionar_palavra_chave_pergunta", "ChatbotController", "p_adicionar_palavra_chave_pergunta", "chatbot.p_adicionar_palavra_chave_pergunta"));
+		rotas.add( new Route("chatbot/listar_topicos_ajax/", "ChatbotController", "listar_topicos_ajax", "chatbot.listar_topicos_ajax"));
+		rotas.add( new Route("chatbot/configuracoes/", "ChatbotController", "configuracoes", "chatbot.configuracoes"));
+		rotas.add( new Route("chatbot/listar_perguntas_respostas_ajax/", "ChatbotController", "listar_perguntas_respostas_ajax", "chatbot.listar_perguntas_respostas_ajax"));
+		rotas.add( new Route("chatbot/listar_topicos/", "ChatbotController", "listar_topicos", "chatbot.listar_topicos"));
+		rotas.add( new Route("chatbot/adicionar_palavra_chave_pergunta/", "ChatbotController", "adicionar_palavra_chave_pergunta", "chatbot.adicionar_palavra_chave_pergunta"));
+		rotas.add( new Route("chatbot/editar_palavra_chave_pergunta/{id}/", "ChatbotController", "editar_palavra_chave_pergunta", "editar_palavra_chave_pergunta"));
+		rotas.add( new Route("chatbot/excluir_palavra_chave_pergunta/{id}/", "ChatbotController", "excluir_palavra_chave_pergunta", "excluir_palavra_chave_pergunta"));
+		rotas.add( new Route("p_adicionar_palavra_chave_pergunta/", "ChatbotController", "p_adicionar_palavra_chave_pergunta", "chatbot.p_adicionar_palavra_chave_pergunta"));
 
 		//Chatbot Dialog
-		rotas.add( new Route("chatbot_dialog/obter_resposta_ajax", "ChatbotDialogController", "obter_resposta_ajax", "chatbotdialog.obter_resposta_ajax"));
-		rotas.add( new Route("chatbot_dialog/salvar_atendimento", "ChatbotDialogController", "salvar_atendimento", "chatbotdialog.salvar_atendimento"));
-		rotas.add( new Route("chatbot_dialog/carregar_mensagens_chat/{id_atendimento}", "ChatbotDialogController", "carregar_mensagens_chat", "chatbot_dialog.carregar_mensagens_chat"));
+		rotas.add( new Route("chatbot_dialog/obter_resposta_ajax/", "ChatbotDialogController", "obter_resposta_ajax", "chatbotdialog.obter_resposta_ajax"));
+		rotas.add( new Route("chatbot_dialog/salvar_atendimento/", "ChatbotDialogController", "salvar_atendimento", "chatbotdialog.salvar_atendimento"));
+		rotas.add( new Route("chatbot_dialog/carregar_mensagens_chat/{id_atendimento}/", "ChatbotDialogController", "carregar_mensagens_chat", "chatbot_dialog.carregar_mensagens_chat"));
 		rotas.add( new Route("chatbot_dialog/salvar_mensagem_banco/pergunta/", "ChatbotDialogController", "salvar_mensagem_banco", "chatbot_dialog.salvar_mensagem_banco"));
 		rotas.add( new Route("chatbot_dialog/salvar_mensagem_banco/resposta/", "ChatbotDialogController", "salvar_mensagem_banco", "chatbot_dialog.salvar_mensagem_banco"));
-		rotas.add( new Route("chatbot_dialog/atualizar_status_atendimento", "ChatbotDialogController", "atualizar_status_atendimento", "chatbot_dialog.atualizar_status_atendimento"));
-		rotas.add( new Route("chatbot_dialog/resposta_satisfatoria", "ChatbotDialogController", "resposta_satisfatoria", "chatbot_dialog.resposta_satisfatoria"));
-		rotas.add( new Route("chatbot_dialog/finalizar_atendimento", "ChatbotDialogController", "finalizar_atendimento", "chatbot_dialog.finalizar_atendimento"));
+		rotas.add( new Route("chatbot_dialog/atualizar_status_atendimento/", "ChatbotDialogController", "atualizar_status_atendimento", "chatbot_dialog.atualizar_status_atendimento"));
+		rotas.add( new Route("chatbot_dialog/resposta_satisfatoria/", "ChatbotDialogController", "resposta_satisfatoria", "chatbot_dialog.resposta_satisfatoria"));
+		rotas.add( new Route("chatbot_dialog/finalizar_atendimento/", "ChatbotDialogController", "finalizar_atendimento", "chatbot_dialog.finalizar_atendimento"));
 
 		//Relatório
-		rotas.add( new Route("relatorio/listar_pendencias", "RelatorioController", "listar_pendencias", "relatorio.listar_pendencias"));
-		rotas.add( new Route("relatorio/gerar_relatorio", "RelatorioController", "gerar_relatorio", "relatorio.gerar_relatorio"));
+		rotas.add( new Route("relatorio/listar_pendencias/", "RelatorioController", "listar_pendencias", "relatorio.listar_pendencias"));
+		rotas.add( new Route("relatorio/gerar_relatorio/", "RelatorioController", "gerar_relatorio", "relatorio.gerar_relatorio"));
 	}
 
 	/**
