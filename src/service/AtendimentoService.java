@@ -10,5 +10,9 @@ public class AtendimentoService {
   public int criar(Atendimento atendimento) {
     return dao.criar(atendimento);
   }
+  
+  public void finalizar_atendimento(Atendimento atendimento ) {
+	  dao.finalizar_atendimento(atendimento);
+  }
 
 }

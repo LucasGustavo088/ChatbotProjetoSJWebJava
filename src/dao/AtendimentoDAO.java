@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,5 +37,19 @@ public class AtendimentoDAO {
 			e.printStackTrace();
 		}
 		return atendimento.getId();
+	}
+	
+	public int finalizar_atendimento(Atendimento atendimento) {
+		String sqlUpdate = "UPDATE atendimento SET STATUS=?, DATA_FINALIZACAO=?  WHERE id=? ";
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = ConnectionFactory.obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlUpdate);) {
+			stm.setString(1, atendimento.getStatus());
+			stm.setDate(2, new java.sql.Date(atendimento.getData_finalizacao().getTime()));
+			stm.setInt(3, atendimento.getId());
+			stm.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
