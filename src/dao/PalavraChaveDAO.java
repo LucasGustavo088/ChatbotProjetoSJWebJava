@@ -39,11 +39,11 @@ public class PalavraChaveDAO {
 		return palavra_chave.getId();
 	}*/
 
-	public ArrayList<PalavraChave> carregarCadastro(String where) {
+	public ArrayList<PalavraChave> carregarCadastro(String query) {
 		PalavraChave palavra_chave;
 		ArrayList<PalavraChave> lista = new ArrayList<>();
 
-		String sqlSelect = "SELECT * FROM palavra_chave " + where;
+		String sqlSelect = "SELECT * FROM palavra_chave " + query;
 
 
 		// usando o try with resources do Java 7, que fecha o que abriu

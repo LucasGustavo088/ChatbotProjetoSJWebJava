@@ -152,13 +152,14 @@ public class ChatbotDialogController extends HttpServlet {
         String[] palavras_chave_mensagem = transformar_string_palavras_chave(mensagem_usuario);
         
         ArrayList <PalavraChave> palavra_chave_perguntas = new ArrayList <PalavraChave> ();
-
+        System.out.println(Arrays.toString(palavras_chave_mensagem));
         /*
         * Obtendo todas as perguntas com as palavras-chaves da mensagem perguntada. 
         */ 
         for(int i =0; i < palavras_chave_mensagem.length; i++) {
             PalavraChaveService pcs = new PalavraChaveService();
             ArrayList<PalavraChave> palavra_chave_cadastro = pcs.obter_palavra_chave_com_string(palavras_chave_mensagem[i]);
+            
             if(palavra_chave_cadastro.size() == 0) {
                 continue;
             }
@@ -172,6 +173,14 @@ public class ChatbotDialogController extends HttpServlet {
         
         
     }
+	
+	public void ArrayListString(ArrayList<PalavraChave> arrayList) {
+	    String results = "+";
+	    for(PalavraChave p : arrayList) {
+	        results += p.toString(); //if you implement toString() for Dog then it will be added here
+	    }
+	    System.out.println(results);
+	}
 	
 	public String[] transformar_string_palavras_chave(String string) {
         String string_filtrada = escapar_caracteres_notacao(string);
