@@ -4,22 +4,23 @@ import java.util.*;
 
 public class PalavraChave {
 
-		private int id;
-		private String nome;
-		private int palavra_chave_principal;
-		private int ativo;
-		private Date data_atualizacao;
-		private Date data_criacao;
+		public int id;
+		public String nome;
+		public int palavra_chave_principal;
+		public int ativo;
+		public Date data_atualizacao;
+		public Date data_criacao;
 		
-		private PalavraChaveHasResposta palavraChaveHasResposta;
-		private PerguntaHasResposta perguntaHasResposta;
-		private PalavraChaveHasPergunta palavraChaveHasPergunta;
+		public PalavraChaveHasResposta palavraChaveHasResposta;
+		public PerguntaHasResposta perguntaHasResposta;
+		public ArrayList<PalavraChaveHasPergunta> palavraChaveHasPergunta;
 		
 		
 		
 		public PalavraChaveHasResposta getPalavraChaveHasResposta() {
 			return palavraChaveHasResposta;
 		}
+		
 		public void setPalavraChaveHasResposta(PalavraChaveHasResposta palavraChaveHasResposta) {
 			this.palavraChaveHasResposta = palavraChaveHasResposta;
 		}
@@ -29,10 +30,10 @@ public class PalavraChave {
 		public void setPerguntaHasResposta(PerguntaHasResposta perguntaHasResposta) {
 			this.perguntaHasResposta = perguntaHasResposta;
 		}
-		public PalavraChaveHasPergunta getPalavraChaveHasPergunta() {
+		public ArrayList<PalavraChaveHasPergunta> getPalavraChaveHasPergunta() {
 			return palavraChaveHasPergunta;
 		}
-		public void setPalavraChaveHasPergunta(PalavraChaveHasPergunta palavraChaveHasPergunta) {
+		public void setPalavraChaveHasPergunta(ArrayList<PalavraChaveHasPergunta> palavraChaveHasPergunta) {
 			this.palavraChaveHasPergunta = palavraChaveHasPergunta;
 		}
 		public int getId() {
@@ -70,6 +71,14 @@ public class PalavraChave {
 		}
 		public void setData_criacao(Date data_criacao) {
 			this.data_criacao = data_criacao;
+		}
+		
+		@Override
+		public String toString() {
+			return "PalavraChave [id=" + id + ", nome=" + nome + ", palavra_chave_principal=" + palavra_chave_principal
+					+ ", ativo=" + ativo + ", data_atualizacao=" + data_atualizacao + ", data_criacao=" + data_criacao
+					+ ", palavraChaveHasResposta=" + palavraChaveHasResposta + ", perguntaHasResposta="
+					+ perguntaHasResposta + ", palavraChaveHasPergunta=" + palavraChaveHasPergunta + "]";
 		}
 		
 		
