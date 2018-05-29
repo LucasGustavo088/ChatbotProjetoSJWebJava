@@ -53,7 +53,6 @@ public class PalavraChaveService {
 
 				//perguntaHasResposta
 				PerguntaHasRespostaService perguntaHasRespostaService = new PerguntaHasRespostaService();
-				System.out.println(palavraChaveHasPerguntas.pergunta.getId());
 				ArrayList<PerguntaHasResposta> perguntaHasRespostas = perguntaHasRespostaService.carregarCadastro("WHERE ID_PERGUNTA = " + palavraChaveHasPerguntas.pergunta.getId() + "");
 				palavraChaveHasPerguntas.pergunta.perguntaHasResposta = null;
 				

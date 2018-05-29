@@ -15,4 +15,16 @@ public class PerguntaHasRespostaService {
 		return dao.carregarCadastro(query);
 	}
 
+  public void aumentarPontuacao(int id_pergunta_resposta) {
+	  
+	  ArrayList<PerguntaHasResposta> perguntaHasRespostas = dao.carregarCadastro("WHERE ID = " + id_pergunta_resposta);
+	  if(!perguntaHasRespostas.isEmpty()) {
+		  int pontuacao = perguntaHasRespostas.get(0).getPontuacao();
+		  pontuacao += 1;
+		  dao.query("UPDATE pergunta_has_resposta SET PONTUACAO = "  + pontuacao + " WHERE ID = " + id_pergunta_resposta);
+	  }
+      
+
+  }
+
 }

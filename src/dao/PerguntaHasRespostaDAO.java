@@ -10,7 +10,7 @@ import java.util.Date;
 import model.PerguntaHasResposta;
 import model.PerguntaHasResposta;
 
-public class PerguntaHasRespostaDAO {
+public class PerguntaHasRespostaDAO extends Dao {
 
 	/*public int criar(PerguntaHasResposta pergunta) {
 		

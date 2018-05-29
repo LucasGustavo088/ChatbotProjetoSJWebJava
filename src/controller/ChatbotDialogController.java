@@ -30,6 +30,7 @@ import service.AtendimentoHasRespostaService;
 import service.AtendimentoService;
 import service.ClienteService;
 import service.PalavraChaveService;
+import service.PerguntaHasRespostaService;
 import service.PerguntaService;
 import service.RespostaService;
 import utils.Debug;
@@ -303,11 +304,12 @@ public class ChatbotDialogController extends HttpServlet {
 
 		atendimento.setId(Integer.parseInt(request.getParameter("id_atendimento")));
 
-		if(request.getParameter("id_atendimento").equals("")) {
+		if(request.getParameter("id_atendimento").equals("") == false) {
 
 			AtendimentoService as = new AtendimentoService();
 			as.finalizar_atendimento(atendimento);
 			status = true;
+			
 
 		}
 
@@ -318,6 +320,25 @@ public class ChatbotDialogController extends HttpServlet {
 		out.write(jobj.toString());
 
 	}
+	
+	public void resposta_satisfatoria(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+        boolean retorno = false;
+
+        if(request.getParameter("id_pergunta_resposta") != null) {
+            
+        	int id_pergunta_resposta = Integer.parseInt(request.getParameter("id_pergunta_resposta"));
+            PerguntaHasRespostaService phr = new PerguntaHasRespostaService();
+            phr.aumentarPontuacao(id_pergunta_resposta);
+
+            retorno = true;
+        } 
+
+        //JSON
+        PrintWriter out = response.getWriter();
+  		JsonObject jobj = new JsonObject();
+  		jobj.addProperty("status", retorno);
+  		out.write(jobj.toString());
+    }
 
 
 	/**

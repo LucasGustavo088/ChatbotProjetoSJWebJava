@@ -400,7 +400,7 @@
             async: false,
             data: {
                 // '_token': "{{ csrf_token() }}",
-                'id_atendimento': id_atendimento
+                id_atendimento: id_atendimento
             },
             error: function() {
               alert('Ops, houve um erro interno ao finalizar o atendimento.');
@@ -598,7 +598,7 @@
             },
             success: function(retorno) {
                 resposta_chatbot.resposta = retorno.perguntaHasResposta.resposta.descricao;
-                resposta_chatbot.id_pergunta_resposta = retorno.perguntaHasResposta.id_resposta;
+                resposta_chatbot.id_pergunta_resposta = retorno.perguntaHasResposta.id;
             },
             error: function() {
               alerta_erro();
