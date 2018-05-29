@@ -22,6 +22,7 @@ import model.AtendimentoHasPergunta;
 import model.AtendimentoHasResposta;
 import model.Cliente;
 import model.PalavraChave;
+import model.PalavraChaveHasPergunta;
 import model.Pergunta;
 import model.Resposta;
 import service.AtendimentoHasPerguntaService;
@@ -150,7 +151,7 @@ public class ChatbotDialogController extends HttpServlet {
         String[] palavras_chave_mensagem = transformar_string_palavras_chave(mensagem_usuario);
         
         ArrayList <PalavraChave> palavra_chave_perguntas = new ArrayList <PalavraChave> ();
-        System.out.println(Arrays.toString(palavras_chave_mensagem));
+        
         /*
         * Obtendo todas as perguntas com as palavras-chaves da mensagem perguntada. 
         */ 
@@ -163,9 +164,44 @@ public class ChatbotDialogController extends HttpServlet {
             }
             
             for(PalavraChave palavra_chave : palavra_chave_cadastro) {
-            	palavra_chave_perguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId()));
+            	palavra_chave_perguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId(), response));
             }
         }
+        
+        /*
+         * Verificando a pergunta com maior peso a partir das palavras-chaves
+        */
+        for (PalavraChave palavraChavePergunta : palavra_chave_perguntas) {
+			for(PalavraChaveHasPergunta palavra_chave_has_pergunta : palavraChavePergunta.palavraChaveHasPergunta) {
+				if(palavra_chave_has_pergunta.pergunta == null) {
+                    continue;
+                }
+				
+				/* ==== PESOS DE DEFINIÇÃO DE MELHOR RESPOSTA =====*/
+                int peso = 0;
+
+                //1) Número de ocorrências 
+                peso += obterPesoComparacaoString(
+                    palavra_chave_has_pergunta.pergunta.DESCRICAO'],
+                    palavras_chave_mensagem
+                );
+
+                //2) Respostas satisfatórias
+                if(isset(palavra_chave_has_pergunta.pergunta.pergunta_has_resposta.PONTUACAO'])) {
+                    peso += palavra_chave_has_pergunta.pergunta.pergunta_has_resposta.PONTUACAO'];
+                }
+
+                //3) Palavras-chaves contém no tópico principal
+                if(isset(palavra_chave_has_pergunta.pergunta.pergunta_has_resposta.topico.NOME'])) {
+                    peso += obterPesoComparacaoString(
+                        palavra_chave_has_pergunta.pergunta.pergunta_has_resposta.topico.NOME'],
+                        palavras_chave_mensagem
+                    );
+                }
+
+                palavra_chave_has_pergunta.pergunta.peso_pergunta'] = peso;	
+			}
+		}
        
         
         

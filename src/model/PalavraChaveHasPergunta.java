@@ -6,8 +6,8 @@ public class PalavraChaveHasPergunta {
 		private int  id_palavra_chave;
 		
 		
-		private Pergunta pergunta;
-		private PalavraChave palavraChave;
+		public Pergunta pergunta;
+		public PalavraChave palavraChave;
 		
 		
 		

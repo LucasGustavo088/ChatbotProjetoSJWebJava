@@ -8,7 +8,8 @@ public class Pergunta {
 	private int ativo;
 	private Date data_atualizacao;
 	private Date data_criacao;
-	
+	private int usuario_externo;
+	public PerguntaHasResposta perguntaHasResposta;
 	
 	
 	
@@ -41,6 +42,12 @@ public class Pergunta {
 	}
 	public void setData_criacao(Date data_criacao) {
 		this.data_criacao = data_criacao;
+	}
+	public int getUsuario_externo() {
+		return usuario_externo;
+	}
+	public void setUsuario_externo(int usuario_externo) {
+		this.usuario_externo = usuario_externo;
 	}
 	
 	

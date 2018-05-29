@@ -5,11 +5,14 @@ public class PerguntaHasResposta {
 	private int id_pergunta;
 	private int id_resposta;
 	private int pont_resposta;
+	private int id_topico;
+	private int id_palavra_chave;
+	private int pontuacao;
 	
 	private Pergunta pergunta;
-	private Resposta resposta;
+	public Resposta resposta;
 	private PalavraChave palavraChave;
-	private Topico topico;
+	public Topico topico;
 	
 	
 	
@@ -60,6 +63,24 @@ public class PerguntaHasResposta {
 	}
 	public void setPont_resposta(int pont_resposta) {
 		this.pont_resposta = pont_resposta;
+	}
+	public int getId_palavra_chave() {
+		return id_palavra_chave;
+	}
+	public void setId_palavra_chave(int id_palavra_chave) {
+		this.id_palavra_chave = id_palavra_chave;
+	}
+	public int getId_topico() {
+		return id_topico;
+	}
+	public void setId_topico(int id_topico) {
+		this.id_topico = id_topico;
+	}
+	public int getPontuacao() {
+		return pontuacao;
+	}
+	public void setPontuacao(int pontuacao) {
+		this.pontuacao = pontuacao;
 	}
 	
 	

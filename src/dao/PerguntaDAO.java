@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import model.Pergunta;
+
 
 public class PerguntaDAO {
 
@@ -35,5 +37,33 @@ public class PerguntaDAO {
 			e.printStackTrace();
 		}
 		return pergunta.getId();
+	}
+	
+	public ArrayList<Pergunta> carregarCadastro(String query) {
+		Pergunta tabela;
+		ArrayList<Pergunta> lista = new ArrayList<>();
+
+		String sqlSelect = "SELECT * FROM pergunta " + query;
+
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = ConnectionFactory.obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+
+			try (ResultSet rs = stm.executeQuery();) {
+				while (rs.next()) {
+					tabela = new Pergunta();
+					tabela.setId(rs.getInt("ID"));
+					tabela.setDescricao(rs.getString("DESCRICAO"));
+					tabela.setAtivo(rs.getInt("ATIVO"));
+					tabela.setUsuario_externo(rs.getInt("USUARIO_EXTERNO"));
+					lista.add(tabela);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException e1) {
+			System.out.print(e1.getStackTrace());
+		}
+		return lista;
 	}
 }

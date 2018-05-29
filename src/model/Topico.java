@@ -8,6 +8,8 @@ public class Topico {
 	private int ativo;
 	private Date data_atualizacao;
 	private Date data_criacao;
+	private String nome;
+	
 	public int getId() {
 		return id;
 	}
@@ -37,6 +39,12 @@ public class Topico {
 	}
 	public void setData_criacao(Date data_criacao) {
 		this.data_criacao = data_criacao;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 	
 	

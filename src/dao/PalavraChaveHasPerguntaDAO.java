@@ -1,4 +1,4 @@
-package model;
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.ConnectionFactory;
+import model.PalavraChaveHasPergunta;
 
 public class PalavraChaveHasPerguntaDAO {
 	public ArrayList<PalavraChaveHasPergunta> carregarCadastro(String query) {
@@ -23,8 +24,8 @@ public class PalavraChaveHasPerguntaDAO {
 				while (rs.next()) {
 					tabela = new PalavraChaveHasPergunta();
 					tabela.setId(rs.getInt("ID"));
-					tabela.setId_pergunta(rs.getInt("ID_PERGUNTA"));
-					tabela.setId_palavra_chave(rs.getInt("ID_PALAVRA_CHAVE"));
+					tabela.setId(rs.getInt("ID_PERGUNTA"));
+					tabela.setId(rs.getInt("ID_PALAVRA_CHAVE"));
 					lista.add(tabela);
 				}
 			} catch (SQLException e) {
