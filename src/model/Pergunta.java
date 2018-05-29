@@ -10,6 +10,7 @@ public class Pergunta {
 	private Date data_criacao;
 	private int usuario_externo;
 	public PerguntaHasResposta perguntaHasResposta;
+	public int peso_pergunta;
 	
 	
 	

@@ -585,6 +585,8 @@
       function obter_resposta_ajax(mensagem_usuario) {
         
         var resposta_chatbot = {};
+        resposta_chatbot.resposta = 'Ops, houve um erro interno e não consegui achar o que procura. Verifique minha conexão.';
+        resposta_chatbot.id_pergunta_resposta = -1;
         $.ajax({
             url: enderecoBack + 'chatbot_dialog/obter_resposta_ajax',
             dataType: 'json',
@@ -595,12 +597,11 @@
                 'mensagem_usuario': obter_log_ultima_mensagem_usuario().mensagem,
             },
             success: function(retorno) {
-                resposta_chatbot.resposta = retorno.pergunta_has_resposta.resposta.DESCRICAO;
-                resposta_chatbot.id_pergunta_resposta = retorno.pergunta_has_resposta.ID_RESPOSTA;
+                resposta_chatbot.resposta = retorno.perguntaHasResposta.resposta.descricao;
+                resposta_chatbot.id_pergunta_resposta = retorno.perguntaHasResposta.id_resposta;
             },
             error: function() {
-              resposta_chatbot.resposta = 'Ops, houve um erro interno e não consegui achar o que procura. Verifique minha conexão.';
-              resposta_chatbot.id_pergunta_resposta = -1;
+              alerta_erro();
             }
         });
         return resposta_chatbot;

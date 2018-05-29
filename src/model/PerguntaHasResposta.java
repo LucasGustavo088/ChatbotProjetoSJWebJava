@@ -9,7 +9,7 @@ public class PerguntaHasResposta {
 	private int id_palavra_chave;
 	private int pontuacao;
 	
-	private Pergunta pergunta;
+	public Pergunta pergunta;
 	public Resposta resposta;
 	private PalavraChave palavraChave;
 	public Topico topico;

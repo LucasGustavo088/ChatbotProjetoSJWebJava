@@ -13,6 +13,7 @@ import model.PerguntaHasResposta;
 import model.Resposta;
 import model.Topico;
 import utils.Debug;
+import utils.Json;
 
 public class PalavraChaveService {
 
@@ -52,14 +53,16 @@ public class PalavraChaveService {
 
 				//perguntaHasResposta
 				PerguntaHasRespostaService perguntaHasRespostaService = new PerguntaHasRespostaService();
+				System.out.println(palavraChaveHasPerguntas.pergunta.getId());
 				ArrayList<PerguntaHasResposta> perguntaHasRespostas = perguntaHasRespostaService.carregarCadastro("WHERE ID_PERGUNTA = " + palavraChaveHasPerguntas.pergunta.getId() + "");
 				palavraChaveHasPerguntas.pergunta.perguntaHasResposta = null;
+				
 				if(!perguntaHasRespostas.isEmpty()) {
 					palavraChaveHasPerguntas.pergunta.perguntaHasResposta = perguntaHasRespostas.get(0);
-
+					
 					//Resposta
 					RespostaService respostaService = new RespostaService();
-					ArrayList<Resposta> respostas = respostaService.carregarCadastro("WHERE ID_RESPOSTA = " + palavraChaveHasPerguntas.pergunta.perguntaHasResposta.getId_resposta() + "");
+					ArrayList<Resposta> respostas = respostaService.carregarCadastro("WHERE ID = " + palavraChaveHasPerguntas.pergunta.perguntaHasResposta.getId_resposta() + "");
 
 					if(!respostas.isEmpty()) {
 						palavraChaveHasPerguntas.pergunta.perguntaHasResposta.resposta = respostas.get(0);
@@ -67,8 +70,8 @@ public class PalavraChaveService {
 
 					//Topico
 					TopicoService topicoService = new TopicoService();
-					ArrayList<Topico> topicos = topicoService.carregarCadastro("WHERE ID_RESPOSTA = " + palavraChaveHasPerguntas.pergunta.perguntaHasResposta.getId_topico() + "");
-
+					ArrayList<Topico> topicos = topicoService.carregarCadastro("WHERE ID = " + palavraChaveHasPerguntas.pergunta.perguntaHasResposta.getId_topico() + "");
+					palavraChaveHasPerguntas.pergunta.perguntaHasResposta.topico = null;
 					if(!topicos.isEmpty()) {
 						palavraChaveHasPerguntas.pergunta.perguntaHasResposta.topico = topicos.get(0);
 					}
@@ -77,7 +80,7 @@ public class PalavraChaveService {
 
 
 		}
-
+		
 		return palavraChaveCadastro;
 	}
 	

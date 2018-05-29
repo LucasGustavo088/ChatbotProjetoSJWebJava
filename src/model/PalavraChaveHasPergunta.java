@@ -7,6 +7,8 @@ public class PalavraChaveHasPergunta {
 		
 		
 		public Pergunta pergunta;
+		public PerguntaHasResposta perguntaHasResposta;
+		
 		public PalavraChave palavraChave;
 		
 		
