@@ -94,6 +94,7 @@ public class ChatbotDialogController extends HttpServlet {
 	public void salvar_mensagem_banco(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 		
 		if(url[2].equals("pergunta")) {
+			System.out.println("pergunta");
 			Pergunta pergunta = new Pergunta();
 			pergunta.setDescricao(request.getParameter("mensagem"));
 			pergunta.setAtivo(1);
@@ -112,8 +113,10 @@ public class ChatbotDialogController extends HttpServlet {
 			atendimento_has_pergunta.setData_criacao(data_atual());
 			
 			AtendimentoHasPerguntaService ahps = new AtendimentoHasPerguntaService();
+			
 			ahps.criar(atendimento_has_pergunta);
 		} else {
+			System.out.println("resposta");
 			Resposta resposta = new Resposta();
 			resposta.setDescricao(request.getParameter("mensagem"));
 			resposta.setAtivo(1);
@@ -160,9 +163,9 @@ public class ChatbotDialogController extends HttpServlet {
                 continue;
             }
             
-            //for(PalavraChave palavra_chave : palavra_chave_cadastro) {
-            //	palavra_chave_perguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId()));
-            //}
+            for(PalavraChave palavra_chave : palavra_chave_cadastro) {
+            	palavra_chave_perguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId()));
+            }
         }
        
         
