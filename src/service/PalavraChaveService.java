@@ -34,4 +34,10 @@ public class PalavraChaveService {
 		
 		return palavraChaveCadastro;
 	}
+	
+	public PalavraChave verificar_ja_existe_palavra_chave(PalavraChave palavra_chave) {
+		return dao.verificar_ja_existe_palavra_chave(palavra_chave);
+	}
+	
+	
 }

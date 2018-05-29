@@ -65,4 +65,20 @@ public class PalavraChaveDAO {
 		}
 		return lista;
 	}
+	
+	public PalavraChave verificar_ja_existe_palavra_chave(PalavraChave palavra_chave) {
+		String sqlSelect = "SELECT NOME FROM palvra_chave where NOME =? LIMIT 1 ";
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = ConnectionFactory.obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+			stm.setString(1, palavra_chave.getNome());
+			stm.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return palavra_chave;
+	}
+	
+	//pegar o exemplo de carregar paisDAo ========================
 }
