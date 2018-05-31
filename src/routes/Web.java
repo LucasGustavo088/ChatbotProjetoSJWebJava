@@ -211,7 +211,7 @@ public class Web implements Filter {
 		rotas.add( new Route("autorizacao/login", "AutorizacaoController", "login", "login"));
 		rotas.add( new Route("autorizacao/logar", "AutorizacaoController", "logar", "logar"));
 		//Dashboard
-		rotas.add( new Route("dashboard", "DashboardController", "home", "dashboard.home"));
+		rotas.add( new Route("dashboard/home", "DashboardController", "home", "dashboard.home"));
 		rotas.add( new Route("dashboard/atendimento/{id}", "DashboardController", "atendimento", "dashboard.atendimento"));
 		rotas.add( new Route("dashboard/listar_pendencias_ajax", "DashboardController", "listar_pendencias_ajax", "dashboard.listar_pendencias_ajax"));
 

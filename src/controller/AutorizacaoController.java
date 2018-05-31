@@ -61,6 +61,10 @@ public class AutorizacaoController implements Filter {
 			password = request.getParameter("password");
 			if(logarUsuario(email, password)) {
 				System.out.println("logado");
+				//Request
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/dashboard/home.jsp");
+				dispatcher.forward(request, response);
 			} else {
 				System.out.println("erro ao logar");
 			}
