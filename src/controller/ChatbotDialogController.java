@@ -309,7 +309,6 @@ public class ChatbotDialogController extends HttpServlet {
 			AtendimentoService as = new AtendimentoService();
 			as.finalizar_atendimento(atendimento);
 			status = true;
-			
 
 		}
 

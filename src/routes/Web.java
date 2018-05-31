@@ -5,16 +5,17 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -64,7 +65,7 @@ public class Web implements Filter {
 		//Caminho de url
 		String path = req.getContextPath();
 		String uri = req.getRequestURI();
-
+		
 		//Command
 		String comando = req.getParameter("command");
 		if(comando == null){
@@ -132,7 +133,13 @@ public class Web implements Filter {
 				route.setUrl(String.join("/", routeArray));
 			}*/
 			
-			if(isClass("controller." + route.getController()) && urlArray[1].equals(route.getFuncao())){
+			if(urlArray.length < 2) {
+				PrintWriter out = response.getWriter();
+				out.println("Página não encontrada");
+				return;
+			}
+			
+			if(isClass("controller." + route.getController()) && urlArray[0].equals(routeArray[0]) && urlArray[1].equals(route.getFuncao())){
 				
 				found = true;
 				rotaEncontrada.setUrl(route.getUrl());
@@ -201,7 +208,8 @@ public class Web implements Filter {
 		//Autorização
 		rotas.add( new Route("auth/logout", "Auth/LogoutController", "logout", "logout"));
 		rotas.add( new Route("", "HomeController", "index", "home"));
-
+		rotas.add( new Route("autorizacao/login", "AutorizacaoController", "login", "login"));
+		rotas.add( new Route("autorizacao/logar", "AutorizacaoController", "logar", "logar"));
 		//Dashboard
 		rotas.add( new Route("dashboard", "DashboardController", "home", "dashboard.home"));
 		rotas.add( new Route("dashboard/atendimento/{id}", "DashboardController", "atendimento", "dashboard.atendimento"));

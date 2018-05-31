@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -29,7 +30,9 @@ public class HomeController extends HttpServlet {
 
 	public void index(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
-
+		//Request
+	
+				
 		PrintWriter out = response.getWriter();
 		out.println(Arrays.toString(url));
 
