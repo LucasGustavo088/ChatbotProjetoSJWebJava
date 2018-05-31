@@ -10,28 +10,27 @@
     <title>Cartório SP</title>
 
     <!-- Styles -->
-    <link href="css/bootstrap.min.css" rel="stylesheet"> 
-    <link rel="shortcut icon" href="images/logo-icon.png">
+    <link href="../css/bootstrap.min.css" rel="stylesheet"> 
+    <link rel="shortcut icon" href="../images/logo-icon.png">
     <link rel="icon" type="image/png" href="cartorio-sp.ico"/>
-    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
-    <link rel="stylesheet" href="css/datatable.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/datatable.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="vendor/jquery-ui-1.12.1.custom/jquery-ui.structure.css">
-    <link rel="stylesheet" href="vendor/jquery-ui-1.12.1.custom/jquery-ui.css">
+    <link rel="stylesheet" href="../vendor/jquery-ui-1.12.1.custom/jquery-ui.structure.css">
+    <link rel="stylesheet" href="../vendor/jquery-ui-1.12.1.custom/jquery-ui.css">
     
     <!-- Scripts -->
-    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-    <script src="vendor/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-    <script src="vendor/bootstrap/js/popper.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="../vendor/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script src="../vendor/bootstrap/js/popper.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     
     
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 
     <!-- Fonts -->
-    <script src="fonts\fontawesome-free-5.0.8\svg-with-js\js\fontawesome-all.js"></script>
-    
+    <script src="../fonts\fontawesome-free-5.0.8\svg-with-js\js\fontawesome-all.js"></script>
     <style>
         .ui-datepicker-header {
             background: #d9534f;
@@ -128,8 +127,6 @@
             </div>
             @endforeach
         @endif
-        
-
         <div class="container-row">
            
             <div class="container-row">

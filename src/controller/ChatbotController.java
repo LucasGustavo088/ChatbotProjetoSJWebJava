@@ -1,9 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,26 +10,18 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import model.Atendimento;
-import model.Cliente;
-import service.AtendimentoService;
-import service.ClienteService;
-
 /**
- * Servlet Filter implementation class DashboardController
+ * Servlet Filter implementation class ChatbotController
  */
-@WebFilter("/DashboardController")
-public class DashboardController implements Filter {
+@WebFilter("/ChatbotController")
+public class ChatbotController implements Filter {
 
-    /**
-     * Default constructor. 
-     */
-    public DashboardController() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor. 
+	 */
+	public ChatbotController() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see Filter#destroy()
@@ -51,20 +40,12 @@ public class DashboardController implements Filter {
 		// pass the request along the filter chain
 		chain.doFilter(request, response);
 	}
-	
-	public void home(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
+
+	public void listar_topicos(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
 		RequestDispatcher dispatcher = request
-				.getRequestDispatcher("/dashboard/home.jsp");
-		dispatcher.forward(request, response);
-		
-	}
-	
-	public void atendimento(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
-		
-		RequestDispatcher dispatcher = request
-				.getRequestDispatcher("/dashboard/atendimento.jsp");
-		
+				.getRequestDispatcher("/chatbot/listar_topicos.jsp");
+
 		dispatcher.forward(request, response);
 	}
 

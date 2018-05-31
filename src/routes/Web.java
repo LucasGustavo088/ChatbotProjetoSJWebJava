@@ -222,7 +222,7 @@ public class Web implements Filter {
 		rotas.add( new Route("chatbot/listar_topicos_ajax/", "ChatbotController", "listar_topicos_ajax", "chatbot.listar_topicos_ajax"));
 		rotas.add( new Route("chatbot/configuracoes/", "ChatbotController", "configuracoes", "chatbot.configuracoes"));
 		rotas.add( new Route("chatbot/listar_perguntas_respostas_ajax/", "ChatbotController", "listar_perguntas_respostas_ajax", "chatbot.listar_perguntas_respostas_ajax"));
-		rotas.add( new Route("chatbot/listar_topicos/", "ChatbotController", "listar_topicos", "chatbot.listar_topicos"));
+		rotas.add( new Route("chatbot/listar_topicos", "ChatbotController", "listar_topicos", "chatbot.listar_topicos"));
 		rotas.add( new Route("chatbot/adicionar_palavra_chave_pergunta/", "ChatbotController", "adicionar_palavra_chave_pergunta", "chatbot.adicionar_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/editar_palavra_chave_pergunta/{id}/", "ChatbotController", "editar_palavra_chave_pergunta", "editar_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/excluir_palavra_chave_pergunta/{id}/", "ChatbotController", "excluir_palavra_chave_pergunta", "excluir_palavra_chave_pergunta"));
