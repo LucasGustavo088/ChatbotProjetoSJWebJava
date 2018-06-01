@@ -95,7 +95,7 @@
 		$('#base_mensagens').html('');
 
 		$.ajax({
-		    url: '/chatbot_dialog/carregar_mensagens_chat/' + id_atendimento,
+		    url: enderecoBack + 'chatbot_dialog/carregar_mensagens_chat/' + id_atendimento,
 		    dataType: 'json',
 		    method: 'get',
 		    async: false,

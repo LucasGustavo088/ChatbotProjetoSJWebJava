@@ -10,7 +10,7 @@ public class AtendimentoHasPergunta {
 	private Date data_atualizacao;
 	
 	private Atendimento atendimento;
-	private Pergunta pergunta;
+	public Pergunta pergunta;
 	
 	
 	

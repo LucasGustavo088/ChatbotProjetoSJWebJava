@@ -14,7 +14,8 @@ public class Atendimento{
 	private int qtd_tentativa;
 	private Date data_finalizacao;
 	public Cliente cliente;
-	
+	public ArrayList<AtendimentoHasPergunta> atendimentoHasPergunta;
+	public ArrayList<AtendimentoHasResposta> atendimentoHasResposta;
 	
 	public Date getData_finalizacao() {
 		return data_finalizacao;

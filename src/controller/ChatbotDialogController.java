@@ -343,10 +343,11 @@ public class ChatbotDialogController extends HttpServlet {
 		boolean retorno = true;
 		
 		AtendimentoService atendimentoService = new AtendimentoService();
-		ArrayList<Atendimento> atendimentos = atendimentoService.carregarCadastroCompleto("WHERE ID = " + url[0], response);
+		ArrayList<Atendimento> atendimentos = atendimentoService.carregarCadastroCompleto("WHERE ID = " + url[2], response);
 		
 		if(atendimentos.isEmpty()) {
 			retorno = false;
+			return;
 		}
 		
 		Atendimento atendimento = atendimentos.get(0);
