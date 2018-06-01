@@ -113,7 +113,7 @@ public class Web implements Filter {
 
 	}
 
-	public void runRoute(String url, ServletRequest request, ServletResponse response) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException {
+	public void runRoute(String url, ServletRequest request, ServletResponse response) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException, ServletException {
 		//get current url
 		String urlArray[];
 		urlArray = url.split("/");
@@ -133,9 +133,19 @@ public class Web implements Filter {
 				route.setUrl(String.join("/", routeArray));
 			}*/
 			
+			
+			
 			if(urlArray.length < 2) {
 				PrintWriter out = response.getWriter();
 				out.println("Página não encontrada");
+				return;
+			}
+			
+			if(urlArray[0].equals("public")) {
+				
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/" + url);
+				dispatcher.forward(request, response);
 				return;
 			}
 			

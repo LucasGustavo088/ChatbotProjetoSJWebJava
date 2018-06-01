@@ -7,7 +7,6 @@
 </div>
 <div class="panel panel-default" id="div_relatorio" style="display: none; border-radius: 0px;">
     <form action="{{ route('relatorio.gerar_relatorio') }}" method="POST">
-         {{ csrf_field() }}
         <div class="panel-body">
             <div class="form-group row col-md-6">
                 <div class="col-md-4">
@@ -57,7 +56,7 @@
     var popular_tabela_atendimento = "";
     $(document).ready(function () {
         $('#popular_tabela_atendimento').DataTable( {
-            ajax: '/dashboard/listar_pendencias_ajax',
+            ajax: enderecoBack + 'dashboard/listar_pendencias_ajax/',
             searching: false,
             bFilter: true,
             info:     false,
@@ -79,7 +78,7 @@
     }
 
     function redirecionar_para_atendimento(id_atendimento) {
-       window.open("{{ url('dashboard','atendimento') }}/" + id_atendimento, '_blank');
+       window.open( enderecoBack + "dashboard/atendimento/" + id_atendimento, '_blank');
     }
 
     $('#popular_tabela_atendimento tbody').append(popular_tabela_atendimento);

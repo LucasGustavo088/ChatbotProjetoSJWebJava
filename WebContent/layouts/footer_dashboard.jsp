@@ -3,6 +3,8 @@
     </div>
 </div>
 <script>
+	var enderecoBack = 'http://localhost:8080/ChatbotProjetoSJWebJava/';
+
     $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar').toggleClass('active');
@@ -34,7 +36,7 @@
         $('#alerta' + id).remove();
 
         $.ajax({
-            url: '/utilizador/remover_alerta/' + id,
+            url: enderecoBack + '/utilizador/remover_alerta/' + id,
             dataType: 'json',
             method: 'get',
             data: {

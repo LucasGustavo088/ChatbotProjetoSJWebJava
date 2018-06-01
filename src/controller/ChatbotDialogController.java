@@ -338,6 +338,26 @@ public class ChatbotDialogController extends HttpServlet {
   		jobj.addProperty("status", retorno);
   		out.write(jobj.toString());
     }
+	
+	public void carregar_mensagens_chat(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+		boolean retorno = true;
+		
+		AtendimentoService atendimentoService = new AtendimentoService();
+		ArrayList<Atendimento> atendimentos = atendimentoService.carregarCadastroCompleto("WHERE ID = " + url[0], response);
+		
+		if(atendimentos.isEmpty()) {
+			retorno = false;
+		}
+		
+		Atendimento atendimento = atendimentos.get(0);
+		
+        //JSON
+        PrintWriter out = response.getWriter();
+  		JsonObject jobj = new JsonObject();
+  		jobj.addProperty("status", retorno);
+  		jobj.add("atendimento", new Gson().toJsonTree(atendimento));
+  		out.write(jobj.toString());
+    }
 
 
 	/**

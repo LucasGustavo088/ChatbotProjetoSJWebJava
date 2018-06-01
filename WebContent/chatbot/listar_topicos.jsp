@@ -3,7 +3,7 @@
 
 <c:import url="../layouts/header_dashboard.jsp"/>
 <div class="navbar">
-    <a class="btn btn-success" href="{{ route('chatbot.adicionar_palavra_chave_pergunta') }}">Adicionar tópico principal</a>
+    <a class="btn btn-success" href="chatbot.adicionar_palavra_chave_pergunta">Adicionar tópico principal</a>
 </div>
 <div style="clear: both;"></div>
 <table class="table datatable table-striped" id="popular_tabela_atendimento">

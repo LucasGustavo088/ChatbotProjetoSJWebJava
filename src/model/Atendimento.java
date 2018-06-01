@@ -13,7 +13,7 @@ public class Atendimento{
 	private int duracao_atendimento;
 	private int qtd_tentativa;
 	private Date data_finalizacao;
-	
+	public Cliente cliente;
 	
 	
 	public Date getData_finalizacao() {
@@ -22,7 +22,7 @@ public class Atendimento{
 	public void setData_finalizacao(Date data_finalizacao) {
 		this.data_finalizacao = data_finalizacao;
 	}
-	private Cliente cliente;
+	
 	private Users users;	
 	
 	public Users getUsers() {
