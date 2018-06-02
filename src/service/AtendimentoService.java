@@ -41,7 +41,7 @@ public class AtendimentoService {
 				AtendimentoHasPerguntaService AtendimentoHasPerguntaService = new AtendimentoHasPerguntaService();
 				ArrayList<AtendimentoHasPergunta> atendimentoHasPerguntas = AtendimentoHasPerguntaService
 						.carregarCadastro("WHERE ID_ATENDIMENTO = " + atendimento.getId());
-				
+
 				if(!atendimentoHasPerguntas.isEmpty()) {
 
 					for(AtendimentoHasPergunta atendimentoHasPergunta : atendimentoHasPerguntas) {
@@ -55,25 +55,25 @@ public class AtendimentoService {
 
 					atendimento.atendimentoHasPergunta = atendimentoHasPerguntas;
 				}
-				
+
 				//Resposta
-		        AtendimentoHasRespostaService AtendimentoHasRespostaService = new AtendimentoHasRespostaService();
-		        ArrayList<AtendimentoHasResposta> atendimentoHasRespostas = AtendimentoHasRespostaService
-		            .carregarCadastro("WHERE ID_ATENDIMENTO = " + atendimento.getId());
-		        
-		        if(!atendimentoHasRespostas.isEmpty()) {
+				AtendimentoHasRespostaService AtendimentoHasRespostaService = new AtendimentoHasRespostaService();
+				ArrayList<AtendimentoHasResposta> atendimentoHasRespostas = AtendimentoHasRespostaService
+						.carregarCadastro("WHERE ID_ATENDIMENTO = " + atendimento.getId());
 
-		          for(AtendimentoHasResposta atendimentoHasResposta : atendimentoHasRespostas) {
-		            RespostaService respostaService = new RespostaService();
-		            ArrayList<Resposta> respostas = respostaService.carregarCadastro("WHERE ID = " + atendimentoHasResposta.getId_resposta());
+				if(!atendimentoHasRespostas.isEmpty()) {
 
-		            if(!respostas.isEmpty()) {
-		              atendimentoHasResposta.resposta = respostas.get(0);
-		            }
-		          }
+					for(AtendimentoHasResposta atendimentoHasResposta : atendimentoHasRespostas) {
+						RespostaService respostaService = new RespostaService();
+						ArrayList<Resposta> respostas = respostaService.carregarCadastro("WHERE ID = " + atendimentoHasResposta.getId_resposta());
 
-		          atendimento.atendimentoHasResposta = atendimentoHasRespostas;
-		        }
+						if(!respostas.isEmpty()) {
+							atendimentoHasResposta.resposta = respostas.get(0);
+						}
+					}
+
+					atendimento.atendimentoHasResposta = atendimentoHasRespostas;
+				}
 
 			}
 
@@ -84,6 +84,10 @@ public class AtendimentoService {
 		return atendimentos;
 	}
 
+	public ArrayList <Atendimento> carregarCadastro(String query) {
+		return dao.carregarCadastro(query);
+	}
+	
 	public void query(String query) {
 		dao.query(query);
 	}

@@ -6,7 +6,7 @@
     <button type="button" id="toggle_relatorio" class="btn btn-danger"><i class="fas fa-clipboard"></i> Relatórios</button>
 </div>
 <div class="panel panel-default" id="div_relatorio" style="display: none; border-radius: 0px;">
-    <form action="{{ route('relatorio.gerar_relatorio') }}" method="POST">
+    <form action="/ChatbotProjetoSJWebJava/relatorio/gerar_relatorio" method="POST">
         <div class="panel-body">
             <div class="form-group row col-md-6">
                 <div class="col-md-4">

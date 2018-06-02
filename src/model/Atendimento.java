@@ -10,7 +10,7 @@ public class Atendimento{
 	private int id_atendente;
 	private String status;
 	private int id_cliente;
-	private int duracao_atendimento;
+	public String duracao_atendimento;
 	private int qtd_tentativa;
 	private Date data_finalizacao;
 	public Cliente cliente;
@@ -81,12 +81,7 @@ public class Atendimento{
 	public void setId_cliente(int id_cliente) {
 		this.id_cliente = id_cliente;
 	}
-	public int getDuracao_atendimento() {
-		return duracao_atendimento;
-	}
-	public void setDuracao_atendimento(int duracao_atendimento) {
-		this.duracao_atendimento = duracao_atendimento;
-	}
+	
 	public int getQtd_tentativa() {
 		return qtd_tentativa;
 	}
