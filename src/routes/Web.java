@@ -123,6 +123,7 @@ public class Web implements Filter {
 
 		//Verify all of the url of routes.php is equal to current url
 		for(Route route : this.rotas){
+			//System.out.println(route.getUrl());
 			String routeArray[] = route.getUrl().split("/");
 			
 			/*for(int i = 0; i < routeArray.length; i++){

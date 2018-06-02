@@ -3,7 +3,10 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -19,6 +22,7 @@ import com.google.gson.JsonObject;
 import model.Atendimento;
 import model.AtendimentoHasPergunta;
 import model.AtendimentoHasResposta;
+import model.Chat;
 import model.Cliente;
 import model.PalavraChave;
 import model.PalavraChaveHasPergunta;
@@ -33,7 +37,6 @@ import service.PalavraChaveService;
 import service.PerguntaHasRespostaService;
 import service.PerguntaService;
 import service.RespostaService;
-import utils.Debug;
 import utils.Json;
 
 /**
@@ -371,6 +374,43 @@ public class ChatbotDialogController extends HttpServlet {
 		}
 
 		Atendimento atendimento = atendimentos.get(0);
+
+		List<Chat> chat = new ArrayList<Chat>();
+
+		if(atendimento.atendimentoHasPergunta != null) {
+			for(AtendimentoHasPergunta atendimentoHasPergunta : atendimento.atendimentoHasPergunta) {
+				Chat chatPergunta = new Chat();
+				chatPergunta.data_criacao = atendimentoHasPergunta.getData_criacao();
+				chatPergunta.pergunta = atendimentoHasPergunta.pergunta;
+				chatPergunta.id_atendimento = atendimentoHasPergunta.getId_atendimento();
+				chat.add(chatPergunta);
+			}
+		}
+
+		if(atendimento.atendimentoHasResposta != null) {
+			for(AtendimentoHasResposta atendimentoHasResposta : atendimento.atendimentoHasResposta) {
+				Chat chatResposta = new Chat();
+				chatResposta.data_criacao = atendimentoHasResposta.getData_criacao();
+				chatResposta.resposta = atendimentoHasResposta.resposta;
+				chatResposta.id_atendimento = atendimentoHasResposta.getId_atendimento();
+				chat.add(chatResposta);
+			}
+		}
+
+		if(!chat.isEmpty()) {
+			Collections.sort(chat, new Comparator<Chat>() {
+				@Override
+				public int compare(Chat o1, Chat o2) {
+					if (((Chat) o1).getData_criacao() == null || ((Chat) o1).getData_criacao() == null)
+						return 0;
+					return o1.getData_criacao().compareTo(o2.getData_criacao());
+				}
+			});
+		}
+
+		atendimento.chat = chat;
+
+
 
 		//JSON
 		PrintWriter out = response.getWriter();

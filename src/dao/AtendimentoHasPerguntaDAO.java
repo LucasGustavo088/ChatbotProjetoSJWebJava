@@ -55,7 +55,7 @@ public class AtendimentoHasPerguntaDAO {
 					tabela.setId(rs.getInt("ID"));
 					tabela.setId_pergunta(rs.getInt("ID_PERGUNTA"));
 					tabela.setId_atendimento(rs.getInt("ID_ATENDIMENTO"));
-					tabela.setData_criacao(rs.getDate("DATA_CRIACAO"));
+					tabela.setData_criacao(rs.getTimestamp("DATA_CRIACAO"));
 					lista.add(tabela);
 				}
 			} catch (SQLException e) {

@@ -349,15 +349,15 @@
             method: 'get',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
             },
             success: function(retorno) {
               if(retorno.atendimento != null) {
                 retorno.atendimento.chat.forEach(function(chat) {
                   if(chat["resposta"] != undefined) {
-                    adicionar_mensagem_usuario_atendente_caixa(chat.resposta.DESCRICAO);
+                    adicionar_mensagem_usuario_atendente_caixa(chat.resposta.descricao);
                   } else if (chat["pergunta"] != undefined) {
-                    adicionar_mensagem_usuario_caixa(chat.pergunta.DESCRICAO)
+                    adicionar_mensagem_usuario_caixa(chat.pergunta.descricao)
                   }
                 });
               }
@@ -399,7 +399,7 @@
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 id_atendimento: id_atendimento
             },
             error: function() {
@@ -431,7 +431,7 @@
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'nome': dados_usuario.nome,
                 'email': dados_usuario.email,
             },
@@ -495,7 +495,7 @@
               method: 'get',
               async: false,
               data: {
-                  '_token': "{{ csrf_token() }}",
+                  // '_token': "{{ csrf_token() }}",
                   dados_mensagem: obter_log_ultima_mensagem_usuario()
               },
               success: function(retorno) {
@@ -527,7 +527,7 @@
         if(contador_resposta == 3) {
           contador_resposta++;
           alert('Por favor, aguarde. Estamos iniciando o atendimento');
-          setInterval(atualizar_chat, 10000);
+          setInterval(atualizar_chat, 3000);
           atualizar_status_atendimento('atendimento_iniciado');
           return false;
         }
@@ -564,7 +564,7 @@
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'status': status,
                 'id_atendimento': id_atendimento
             },
@@ -593,7 +593,7 @@
             method: 'post',
             async: false,
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'mensagem_usuario': obter_log_ultima_mensagem_usuario().mensagem,
             },
             success: function(retorno) {
@@ -622,7 +622,7 @@
             dataType: 'json',
             method: 'post',
             data: {
-                '_token': "{{ csrf_token() }}",
+                // '_token': "{{ csrf_token() }}",
                 'id_pergunta_resposta': id_pergunta_resposta,
             },
             success: function(retorno) {

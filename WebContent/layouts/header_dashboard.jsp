@@ -89,7 +89,18 @@
             </li>
         </ul>
     </nav>
+	
+	<!-- Funções globais -->
+	<script>
+	function str_replace(find,replaceTo, str){
+	      find = find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	      var re = new RegExp(find, 'g');
+	      str = str.replace(re,replaceTo);
 
+	      return str;
+	  }
+	</script>
+	
     <!-- Page Content Holder -->
     <!-- header -->
     <div id="content">

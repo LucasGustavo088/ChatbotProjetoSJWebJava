@@ -21,8 +21,6 @@ public class AtendimentoHasRespostaDAO {
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
 			stm.setInt(1, atendimento_has_resposta.getId_resposta());
 			stm.setInt(2, atendimento_has_resposta.getId_atendimento());
-			stm.setDate(3, new java.sql.Date( atendimento_has_resposta.getData_atualizacao().getTime() ));
-			stm.setDate(4, new java.sql.Date( atendimento_has_resposta.getData_criacao().getTime() ));
 			stm.execute();
 			
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
@@ -57,7 +55,7 @@ public class AtendimentoHasRespostaDAO {
 					tabela.setId(rs.getInt("ID"));
 					tabela.setId_resposta(rs.getInt("ID_RESPOSTA"));
 					tabela.setId_atendimento(rs.getInt("ID_ATENDIMENTO"));
-					tabela.setData_criacao(rs.getDate("DATA_CRIACAO"));
+					tabela.setData_criacao(rs.getTimestamp("DATA_CRIACAO"));
 					lista.add(tabela);
 				}
 			} catch (SQLException e) {
