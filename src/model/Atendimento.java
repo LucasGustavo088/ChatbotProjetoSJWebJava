@@ -16,6 +16,7 @@ public class Atendimento{
 	public Cliente cliente;
 	public ArrayList<AtendimentoHasPergunta> atendimentoHasPergunta;
 	public ArrayList<AtendimentoHasResposta> atendimentoHasResposta;
+	public ArrayList<Object> chat;
 	
 	public Date getData_finalizacao() {
 		return data_finalizacao;

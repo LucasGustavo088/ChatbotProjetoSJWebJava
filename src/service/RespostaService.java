@@ -9,8 +9,8 @@ import dao.RespostaDAO;
 public class RespostaService {
   RespostaDAO dao = new RespostaDAO();
   
-  public int criar(Resposta cliente) {
-    return dao.criar(cliente);
+  public int criar(Resposta resposta) {
+    return dao.criar(resposta);
   }
   
   public ArrayList<Resposta> carregarCadastro(String query) {

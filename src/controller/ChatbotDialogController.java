@@ -99,9 +99,8 @@ public class ChatbotDialogController extends HttpServlet {
 	public void salvar_mensagem_banco(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
 		if(url[2].equals("pergunta")) {
-			System.out.println("pergunta");
 			Pergunta pergunta = new Pergunta();
-			pergunta.setDescricao(request.getParameter("mensagem"));
+			pergunta.setDescricao(request.getParameter("dados_mensagem[mensagem]"));
 			pergunta.setAtivo(1);
 			pergunta.setData_atualizacao(data_atual());
 			pergunta.setData_criacao(data_atual());
@@ -121,18 +120,17 @@ public class ChatbotDialogController extends HttpServlet {
 
 			ahps.criar(atendimento_has_pergunta);
 		} else {
-			System.out.println("resposta");
 			Resposta resposta = new Resposta();
-			resposta.setDescricao(request.getParameter("mensagem"));
+			resposta.setDescricao(request.getParameter("dados_mensagem[mensagem]"));
 			resposta.setAtivo(1);
 			resposta.setData_criacao(data_atual());
-
+			resposta.setData_atualizacao(data_atual());
 			RespostaService rs = new RespostaService();
 			int idResposta = rs.criar(resposta);
 
 			AtendimentoHasResposta atendimento_has_resposta = new AtendimentoHasResposta();
 			atendimento_has_resposta.setId_resposta(idResposta);
-			atendimento_has_resposta.setId_atendimento(Integer.parseInt(request.getParameter("id_atendimento")));
+			atendimento_has_resposta.setId_atendimento(Integer.parseInt(url[3]));
 			atendimento_has_resposta.setData_atualizacao(data_atual());
 			atendimento_has_resposta.setData_criacao(data_atual());
 
@@ -171,7 +169,7 @@ public class ChatbotDialogController extends HttpServlet {
 			}
 		}
 
-		
+
 
 		/*
 		 * Verificando a pergunta com maior peso a partir das palavras-chaves
@@ -189,20 +187,20 @@ public class ChatbotDialogController extends HttpServlet {
 				peso += obterPesoComparacaoString(
 						palavra_chave_has_pergunta.pergunta.getDescricao(),
 						palavras_chave_mensagem
-				);
+						);
 
 				//2) Respostas satisfatórias
 				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() != 0) {
 					peso += palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao();
 				}
-				
-				
+
+
 				//3) Palavras-chaves contém no tópico principal
 				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico != null) {
 					peso += obterPesoComparacaoString(
 							palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico.getNome(),
 							palavras_chave_mensagem
-					);
+							);
 				}
 
 				palavra_chave_has_pergunta.pergunta.peso_pergunta = peso; 
@@ -210,43 +208,43 @@ public class ChatbotDialogController extends HttpServlet {
 		}
 
 		/*
-        * Verificando qual pergunta_has_resposta tem maior peso de provável resposta.
-        */
-        Pergunta respostaFinal = new Pergunta();
-        int maior_peso = -1;
-        for(PalavraChave palavra_chave_pergunta : palavra_chave_perguntas) {
-            for(PalavraChaveHasPergunta palavra_chave_has_pergunta : palavra_chave_pergunta.palavraChaveHasPergunta) {
-                if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta == null ) {
-                	
-                	continue;
-                	
-                } else if (palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta == null) {
-           
-                	continue;
-            		
-            	} else if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta.getDescricao().equals("")) {
-            		
-            		continue;
-            	}
-                
-               if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() > maior_peso) {
-                	respostaFinal = palavra_chave_has_pergunta.pergunta;
-               }
-            }
-        }
-        
-        //$this->salvar_pergunta_usuario_externo($mensagem_usuario);
+		 * Verificando qual pergunta_has_resposta tem maior peso de provável resposta.
+		 */
+		Pergunta respostaFinal = new Pergunta();
+		int maior_peso = -1;
+		for(PalavraChave palavra_chave_pergunta : palavra_chave_perguntas) {
+			for(PalavraChaveHasPergunta palavra_chave_has_pergunta : palavra_chave_pergunta.palavraChaveHasPergunta) {
+				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta == null ) {
 
-        if(respostaFinal.getId() == 0) {
-        	PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
-        	perguntaHasResposta.setId_resposta(-1);
-        	respostaFinal.perguntaHasResposta = perguntaHasResposta;
-        	Resposta resposta = new Resposta();
-        	resposta.setDescricao(this.mensagemRespostaNaoEncontrada);
-        	respostaFinal.perguntaHasResposta.resposta = resposta;
-        }
-        
-        Json.jsonEncode(respostaFinal, response);
+					continue;
+
+				} else if (palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta == null) {
+
+					continue;
+
+				} else if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta.getDescricao().equals("")) {
+
+					continue;
+				}
+
+				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() > maior_peso) {
+					respostaFinal = palavra_chave_has_pergunta.pergunta;
+				}
+			}
+		}
+
+		//$this->salvar_pergunta_usuario_externo($mensagem_usuario);
+
+		if(respostaFinal.getId() == 0) {
+			PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
+			perguntaHasResposta.setId_resposta(-1);
+			respostaFinal.perguntaHasResposta = perguntaHasResposta;
+			Resposta resposta = new Resposta();
+			resposta.setDescricao(this.mensagemRespostaNaoEncontrada);
+			respostaFinal.perguntaHasResposta.resposta = resposta;
+		}
+
+		Json.jsonEncode(respostaFinal, response);
 	}
 
 	public int obterPesoComparacaoString(String texto, String[] possiveis_ocorrencias) {
@@ -319,46 +317,68 @@ public class ChatbotDialogController extends HttpServlet {
 		out.write(jobj.toString());
 
 	}
-	
+
+	public void atualizar_status_atendimento(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		//atendimento
+		boolean status = false;
+		if(request.getParameter("status").equals("") != true) {
+			Atendimento atendimento = new Atendimento();
+			atendimento.setStatus(request.getParameter("status"));
+			atendimento.setId(Integer.parseInt(request.getParameter("id_atendimento")));
+
+			AtendimentoService as = new AtendimentoService();
+			as.query("UPDATE atendimento SET STATUS = '" + atendimento.getStatus() + "' WHERE ID = " + atendimento.getId());
+			status = true;
+
+		}
+
+		//JSON
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("status", "1");
+		out.write(jobj.toString());
+
+	}
+
 	public void resposta_satisfatoria(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
-        boolean retorno = false;
+		boolean retorno = false;
 
-        if(request.getParameter("id_pergunta_resposta") != null) {
-            
-        	int id_pergunta_resposta = Integer.parseInt(request.getParameter("id_pergunta_resposta"));
-            PerguntaHasRespostaService phr = new PerguntaHasRespostaService();
-            phr.aumentarPontuacao(id_pergunta_resposta);
+		if(request.getParameter("id_pergunta_resposta") != null) {
 
-            retorno = true;
-        } 
+			int id_pergunta_resposta = Integer.parseInt(request.getParameter("id_pergunta_resposta"));
+			PerguntaHasRespostaService phr = new PerguntaHasRespostaService();
+			phr.aumentarPontuacao(id_pergunta_resposta);
 
-        //JSON
-        PrintWriter out = response.getWriter();
-  		JsonObject jobj = new JsonObject();
-  		jobj.addProperty("status", retorno);
-  		out.write(jobj.toString());
-    }
-	
+			retorno = true;
+		} 
+
+		//JSON
+		PrintWriter out = response.getWriter();
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("status", retorno);
+		out.write(jobj.toString());
+	}
+
 	public void carregar_mensagens_chat(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
 		boolean retorno = true;
-		
+
 		AtendimentoService atendimentoService = new AtendimentoService();
 		ArrayList<Atendimento> atendimentos = atendimentoService.carregarCadastroCompleto("WHERE ID = " + url[2], response);
-		
+
 		if(atendimentos.isEmpty()) {
 			retorno = false;
 			return;
 		}
-		
+
 		Atendimento atendimento = atendimentos.get(0);
-		
-        //JSON
-        PrintWriter out = response.getWriter();
-  		JsonObject jobj = new JsonObject();
-  		jobj.addProperty("status", retorno);
-  		jobj.add("atendimento", new Gson().toJsonTree(atendimento));
-  		out.write(jobj.toString());
-    }
+
+		//JSON
+		PrintWriter out = response.getWriter();
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("status", retorno);
+		jobj.add("atendimento", new Gson().toJsonTree(atendimento));
+		out.write(jobj.toString());
+	}
 
 
 	/**

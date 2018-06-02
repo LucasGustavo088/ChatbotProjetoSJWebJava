@@ -100,7 +100,7 @@ public class DashboardController implements Filter {
 
 		RequestDispatcher dispatcher = request
 				.getRequestDispatcher("/dashboard/atendimento.jsp");
-
+		request.setAttribute("id_atendimento", url[2]);
 		dispatcher.forward(request, response);
 	}
 

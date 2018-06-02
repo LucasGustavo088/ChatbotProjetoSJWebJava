@@ -30,7 +30,7 @@
 
 <script>
 	// Dados globais da página
-    var id_atendimento = 1;
+    var id_atendimento = ${id_atendimento};
     var travar_atualizacao = false;
     var dados_usuario = {
     	nome: 'Hernesto',
@@ -43,7 +43,7 @@
 	$(document).ready(function() {
 		atualizar_chat();
 
-		setInterval(atualizar_chat, 3000);
+		setInterval(atualizar_chat, 10000);
 
 		document.querySelector('#mensagem_input').addEventListener('keypress', function (e) {
 		    var key = e.which || e.keyCode;
@@ -104,7 +104,7 @@
 		    },
 		    success: function(retorno) {
 		    	if(retorno.atendimento != null) {
-		    		if(retorno.atendimento.STATUS != 'atendimento_iniciado') {
+		    		if(retorno.atendimento.status != 'atendimento_iniciado') {
 		    			desabilitar_envio();
 		    		} else {
 		    			habilitar_envio();
@@ -136,7 +136,7 @@
 
 	function salvar_mensagem_banco() {
 		$.ajax({
-		    url: '/chatbot_dialog/salvar_mensagem_banco/resposta/' + id_atendimento,
+		    url: enderecoBack + 'chatbot_dialog/salvar_mensagem_banco/resposta/' + id_atendimento,
 		    dataType: 'json',
 		    method: 'get',
 		    async: false,

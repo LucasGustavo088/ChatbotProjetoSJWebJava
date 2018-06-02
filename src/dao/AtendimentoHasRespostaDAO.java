@@ -7,21 +7,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import model.AtendimentoHasPergunta;
-import model.AtendimentoHasPergunta;
+import model.AtendimentoHasResposta;
+import utils.Helper;
+import model.AtendimentoHasResposta;
 
 public class AtendimentoHasRespostaDAO {
 
-	public int criar(AtendimentoHasPergunta atendimento_has_pergunta) {
+	public int criar(AtendimentoHasResposta atendimento_has_resposta) {
 		
-		String sqlInsert = "INSERT INTO atendimento_has_pergunta(ID_PERGUNTA, ID_ATENDIMENTO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, ?)";
+		String sqlInsert = "INSERT INTO atendimento_has_resposta(ID_RESPOSTA, ID_ATENDIMENTO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
-			stm.setInt(1, atendimento_has_pergunta.getId_pergunta());
-			stm.setInt(2, atendimento_has_pergunta.getId_atendimento());
-			stm.setDate(3, new java.sql.Date( atendimento_has_pergunta.getData_atualizacao().getTime() ));
-			stm.setDate(4, new java.sql.Date( atendimento_has_pergunta.getData_criacao().getTime() ));
+			stm.setInt(1, atendimento_has_resposta.getId_resposta());
+			stm.setInt(2, atendimento_has_resposta.getId_atendimento());
+			stm.setDate(3, new java.sql.Date( atendimento_has_resposta.getData_atualizacao().getTime() ));
+			stm.setDate(4, new java.sql.Date( atendimento_has_resposta.getData_criacao().getTime() ));
 			stm.execute();
 			
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
@@ -29,7 +30,7 @@ public class AtendimentoHasRespostaDAO {
 					ResultSet rs = stm2.executeQuery();) {
 				if (rs.next()) {
 					
-					atendimento_has_pergunta.setId(rs.getInt(1));
+					atendimento_has_resposta.setId(rs.getInt(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -37,12 +38,12 @@ public class AtendimentoHasRespostaDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return atendimento_has_pergunta.getId();
+		return atendimento_has_resposta.getId();
 	}
 	
-	public ArrayList<AtendimentoHasPergunta> carregarCadastro(String query) {
-		AtendimentoHasPergunta tabela;
-		ArrayList<AtendimentoHasPergunta> lista = new ArrayList<>();
+	public ArrayList<AtendimentoHasResposta> carregarCadastro(String query) {
+		AtendimentoHasResposta tabela;
+		ArrayList<AtendimentoHasResposta> lista = new ArrayList<>();
 
 		String sqlSelect = "SELECT * FROM atendimento_has_resposta " + query;
 
@@ -52,10 +53,11 @@ public class AtendimentoHasRespostaDAO {
 
 			try (ResultSet rs = stm.executeQuery();) {
 				while (rs.next()) {
-					tabela = new AtendimentoHasPergunta();
+					tabela = new AtendimentoHasResposta();
 					tabela.setId(rs.getInt("ID"));
-					tabela.setId_pergunta(rs.getInt("ID_RESPOSTA"));
+					tabela.setId_resposta(rs.getInt("ID_RESPOSTA"));
 					tabela.setId_atendimento(rs.getInt("ID_ATENDIMENTO"));
+					tabela.setData_criacao(rs.getDate("DATA_CRIACAO"));
 					lista.add(tabela);
 				}
 			} catch (SQLException e) {
