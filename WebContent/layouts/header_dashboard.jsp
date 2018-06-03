@@ -69,7 +69,7 @@
             <li>
                 <a href="#chatbot_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Chatbot</a>
                 <ul class="collapse list-unstyled" id="chatbot_menu">
-                    <li class="nav-item"><a href="chatbot.listar_topicos"><i class="fas fa-sitemap"></i> Perguntas e respostas</a></li>
+                    <li class="nav-item"><a href="/chatbot/listar_topicos"><i class="fas fa-sitemap"></i> Perguntas e respostas</a></li>
                     <li><a href="chatbot.configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
                 </ul>
                 
@@ -126,7 +126,7 @@
             </div>
         </nav>
         
-        @if (!empty($_SESSION['alertas']))
+        <!-- @if (!empty($_SESSION['alertas']))
             @foreach ($_SESSION['alertas'] as $key => $alerta)
             <div class="container-row alert alert-$alerta['tipo'] }}" id="alerta$key }}">
                 
@@ -137,13 +137,13 @@
                 </a>
             </div>
             @endforeach
-        @endif
+        @endif -->
         <div class="container-row">
            
             <div class="container-row">
                 <ol class="breadcrumb" style="border: 1px solid #ddd; border-radius: 4px;">
                     
-                    <li><a href=""></a>$parametro }} </li>
+                    <li><a href=""></a>parametro </li>
                     
                 </ol>
             </div>

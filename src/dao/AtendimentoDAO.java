@@ -68,12 +68,12 @@ public class AtendimentoDAO extends Dao{
 					tabela = new Atendimento();
 					tabela.setId(rs.getInt("ID"));
 					tabela.setAtivo(rs.getInt("ATIVO"));
-					tabela.setData_atualizacao(rs.getDate("DATA_ATUALIZACAO"));
-					tabela.setData_criacao(rs.getDate("DATA_CRIACAO"));
+					tabela.setData_atualizacao(rs.getTimestamp("DATA_ATUALIZACAO"));
+					tabela.setData_criacao(rs.getTimestamp("DATA_CRIACAO"));
 					tabela.setId_atendente(rs.getInt("ID_ATENDENTE"));
 					tabela.setStatus(rs.getString("STATUS"));
 					tabela.setId_cliente(rs.getInt("ID_CLIENTE"));
-					tabela.setData_finalizacao(rs.getDate("DATA_FINALIZACAO"));
+					tabela.setData_finalizacao(rs.getTimestamp("DATA_FINALIZACAO"));
 					lista.add(tabela);
 				}
 			} catch (SQLException e) {

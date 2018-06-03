@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpSession;
 
 import model.Atendimento;
 import service.AtendimentoService;
@@ -103,8 +102,16 @@ public class RelatorioController implements Filter {
 
 			//Duração da interação
 			if(atendimento.getData_finalizacao() != null && atendimento.getData_criacao() != null) {
-				long diferenca_data = atendimento.getData_criacao().getTime() - atendimento.getData_finalizacao().getTime();
-				atendimento.duracao_atendimento = "finalizado";
+				long diferenca_data = atendimento.getData_finalizacao().getTime() - atendimento.getData_criacao().getTime();
+				long diffSeconds = diferenca_data / 1000 % 60;
+				long diffMinutes = diferenca_data / (60 * 1000) % 60;
+				long diffHours = diferenca_data / (60 * 60 * 1000) % 24;
+				long diffDays = diferenca_data / (24 * 60 * 60 * 1000);
+				atendimento.duracao_atendimento = 
+						(diffDays != 0 ? diffDays + " dias " : "") 
+						+ (diffHours != 0 ? diffHours + " horas " : "") 
+						+ (diffMinutes != 0 ? diffMinutes + " minutos " : "") 
+						+ (diffSeconds != 0 ? diffSeconds + " segundos " : "");
 			} else {
 				atendimento.duracao_atendimento = "Não finalizado";
 			}
@@ -112,6 +119,7 @@ public class RelatorioController implements Filter {
 		
 		relatorio.atendimentos = atendimentos;
 		//Json.jsonEncode(relatorio, response);
+		request.setAttribute("filtro", filtro);
 		request.setAttribute("relatorio", relatorio);
 		request.setAttribute("atendimentos", atendimentos);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/relatorio/gerar_relatorio.jsp");
