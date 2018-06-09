@@ -188,7 +188,15 @@ public class Web implements Filter {
 				}
 				
 			}
-			System.out.println("ele esta logado? " + logado);
+			
+			if(logado == 0) {
+				if(rotaEncontrada.getController().equals("DashboardController")) {
+					//Request
+					RequestDispatcher dispatcher = request
+							.getRequestDispatcher("/autorizacao/login.jsp");
+					dispatcher.forward(request, response);
+				}
+			}
 			
 >>>>>>> ajustes no login
 			System.out.println(rotaEncontrada.toString());
@@ -239,7 +247,7 @@ public class Web implements Filter {
 
 	public void inicializar_rotas() {
 		//Autorização
-		rotas.add( new Route("auth/logout", "Auth/LogoutController", "logout", "logout"));
+		rotas.add( new Route("autorizacao/logout", "AutorizacaoController", "logout", "logout"));
 		rotas.add( new Route("", "HomeController", "index", "home"));
 		rotas.add( new Route("autorizacao/login", "AutorizacaoController", "login", "login"));
 		rotas.add( new Route("autorizacao/logar", "AutorizacaoController", "logar", "logar"));

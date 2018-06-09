@@ -10,11 +10,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
-<<<<<<< HEAD
-=======
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
->>>>>>> ajustes no login
+
 
 import service.UsersService;
 
@@ -80,6 +79,10 @@ public class AutorizacaoController implements Filter {
 				dispatcher.forward(request, response);
 			} else {
 				System.out.println("erro ao logar");
+				//Request
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/autorizacao/login.jsp");
+				dispatcher.forward(request, response);
 			}
 		}
 
@@ -92,11 +95,11 @@ public class AutorizacaoController implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 	    HttpSession session = req.getSession(false);
 	    
-		session.setAttribute("logado", 1);
+		session.setAttribute("logado", 0);
 		
 		//Request
 		RequestDispatcher dispatcher = request
-				.getRequestDispatcher("/dashboard/home.jsp");
+				.getRequestDispatcher("/autorizacao/login.jsp");
 		dispatcher.forward(request, response);
 	}
 >>>>>>> ajustes no login
