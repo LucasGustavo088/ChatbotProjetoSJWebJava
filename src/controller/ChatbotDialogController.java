@@ -236,8 +236,6 @@ public class ChatbotDialogController extends HttpServlet {
 			}
 		}
 
-		//$this->salvar_pergunta_usuario_externo($mensagem_usuario);
-
 		if(respostaFinal.getId() == 0) {
 			PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
 			perguntaHasResposta.setId_resposta(-1);

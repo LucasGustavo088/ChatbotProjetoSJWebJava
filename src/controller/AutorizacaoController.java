@@ -88,8 +88,7 @@ public class AutorizacaoController implements Filter {
 
 
 	}
-<<<<<<< HEAD
-=======
+
 	
 	public void logout(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {				
 		HttpServletRequest req = (HttpServletRequest) request;
@@ -102,7 +101,7 @@ public class AutorizacaoController implements Filter {
 				.getRequestDispatcher("/autorizacao/login.jsp");
 		dispatcher.forward(request, response);
 	}
->>>>>>> ajustes no login
+
 
 	public void redirecionarLogin(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
