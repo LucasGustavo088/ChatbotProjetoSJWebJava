@@ -7,28 +7,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import model.Resposta;
 import model.Topico;
 
 
 public class TopicoDAO {
 
-	public int criar(Topico pergunta) {
+	public int criar(Topico topico) {
 		
-		String sqlInsert = "INSERT INTO pergunta(DESCRICAO, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, ?)";
+		String sqlInsert = "INSERT INTO topico(NOME, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, ?)";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
-			stm.setString(1, pergunta.getDescricao());
-			stm.setInt(2, pergunta.getAtivo());
-			stm.setDate(3, new java.sql.Date( pergunta.getData_atualizacao().getTime() ));
-			stm.setDate(4, new java.sql.Date( pergunta.getData_atualizacao().getTime() ));
+			stm.setString(1, topico.getDescricao());
+			stm.setInt(2, topico.getAtivo());
+			stm.setDate(3, new java.sql.Date( topico.getData_atualizacao().getTime() ));
+			stm.setDate(4, new java.sql.Date( topico.getData_atualizacao().getTime() ));
 			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
 			try (PreparedStatement stm2 = conn.prepareStatement(sqlQuery);
 					ResultSet rs = stm2.executeQuery();) {
 				if (rs.next()) {
-					pergunta.setId(rs.getInt(1));
+					topico.setId(rs.getInt(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -36,13 +37,12 @@ public class TopicoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return pergunta.getId();
+		return topico.getId();
 	}
 	
-	public ArrayList<Topico> carregarCadastro(String query) {
+	public ArrayList<Topico> verificar_nome_topico_existente(String query) {
 		Topico tabela;
 		ArrayList<Topico> lista = new ArrayList<>();
-
 		String sqlSelect = "SELECT * FROM topico " + query;
 
 		// usando o try with resources do Java 7, que fecha o que abriu
@@ -66,4 +66,6 @@ public class TopicoDAO {
 		}
 		return lista;
 	}
+	
+	
 }

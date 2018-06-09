@@ -7,28 +7,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import model.Atendimento;
 import model.PerguntaHasResposta;
+import model.Topico;
+import utils.Helper;
 import model.PerguntaHasResposta;
 
 public class PerguntaHasRespostaDAO extends Dao {
 
-	/*public int criar(PerguntaHasResposta pergunta) {
+public int criar(PerguntaHasResposta perguntaHasResposta) {
 		
-		String sqlInsert = "INSERT INTO pergunta(DESCRICAO, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, ?)";
+		String sqlInsert = "INSERT INTO pergunta_has_resposta(ID_PERGUNTA, ID_RESPOSTA, PONTUACAO, ID_PALAVRA_CHAVE, DATA_ATUALIZACAO, DATA_CRIACAO, ID_TOPICO) VALUES (?, ?, 0, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "', ?)";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
-			stm.setString(1, pergunta.getDescricao());
-			stm.setInt(2, pergunta.getAtivo());
-			stm.setDate(3, new java.sql.Date( pergunta.getData_atualizacao().getTime() ));
-			stm.setDate(4, new java.sql.Date( pergunta.getData_atualizacao().getTime() ));
+			stm.setInt(1, perguntaHasResposta.getId_pergunta());
+			stm.setInt(2, perguntaHasResposta.getId_resposta());
+			stm.setInt(3, perguntaHasResposta.getPontuacao());
+			stm.setInt(4, perguntaHasResposta.getId_palavra_chave());
+			stm.setInt(7, perguntaHasResposta.getId_palavra_chave());
 			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
 			try (PreparedStatement stm2 = conn.prepareStatement(sqlQuery);
 					ResultSet rs = stm2.executeQuery();) {
 				if (rs.next()) {
-					pergunta.setId(rs.getInt(1));
+					perguntaHasResposta.setId(rs.getInt(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -36,8 +40,8 @@ public class PerguntaHasRespostaDAO extends Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return pergunta.getId();
-	}*/
+		return perguntaHasResposta.getId();
+	}
 	
 	public ArrayList<PerguntaHasResposta> carregarCadastro(String query) {
 		PerguntaHasResposta tabela;

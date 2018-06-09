@@ -83,8 +83,25 @@ public class PalavraChaveService {
 		return palavraChaveCadastro;
 	}
 	
-	public PalavraChave verificar_ja_existe_palavra_chave(PalavraChave palavra_chave) {
-		return dao.verificar_ja_existe_palavra_chave(palavra_chave);
+	public int carregar_id(String query) {
+		ArrayList<PalavraChave> palavras_chave = dao.carregarCadastro(query);
+		
+		if(palavras_chave.isEmpty()) {
+			return -1;
+		} else {
+			PalavraChave palavraChave = palavras_chave.get(0);
+			return palavraChave.getId();
+		}
+	}
+  
+	
+	public boolean verificar_ja_existe_palavra_chave(String palavra_chave) {
+		ArrayList<PalavraChave> palavras_chave = dao.carregarCadastro("WHERE NOME = '" + palavra_chave + "'");
+		if(palavras_chave.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	

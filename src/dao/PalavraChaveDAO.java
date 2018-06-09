@@ -67,7 +67,7 @@ public class PalavraChaveDAO {
 	}
 	
 	public PalavraChave verificar_ja_existe_palavra_chave(PalavraChave palavra_chave) {
-		String sqlSelect = "SELECT NOME FROM palvra_chave where NOME =? LIMIT 1 ";
+		String sqlSelect = "SELECT NOME FROM palavra_chave where NOME =? LIMIT 1 ";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {

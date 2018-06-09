@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jdt.internal.compiler.env.ISourceMethod;
+import org.junit.internal.runners.model.EachTestNotifier;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -24,7 +28,9 @@ import model.PalavraChave;
 import model.PalavraChaveHasPergunta;
 import model.Pergunta;
 import model.PerguntaHasResposta;
+import model.PerguntaHasResposta;
 import model.Resposta;
+import model.Topico;
 import service.AtendimentoHasPerguntaService;
 import service.AtendimentoHasRespostaService;
 import service.AtendimentoService;
@@ -33,9 +39,12 @@ import service.PalavraChaveService;
 import service.PerguntaHasRespostaService;
 import service.PerguntaService;
 import service.RespostaService;
+import service.TopicoService;
 import utils.Debug;
 import utils.Json;
 
+
+import model.Topico;
 /**
  * Servlet implementation class ChatbotDialogController
  */
@@ -171,7 +180,7 @@ public class ChatbotDialogController extends HttpServlet {
 			}
 		}
 
-		
+
 
 		/*
 		 * Verificando a pergunta com maior peso a partir das palavras-chaves
@@ -189,20 +198,20 @@ public class ChatbotDialogController extends HttpServlet {
 				peso += obterPesoComparacaoString(
 						palavra_chave_has_pergunta.pergunta.getDescricao(),
 						palavras_chave_mensagem
-				);
+						);
 
 				//2) Respostas satisfatórias
 				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() != 0) {
 					peso += palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao();
 				}
-				
-				
+
+
 				//3) Palavras-chaves contém no tópico principal
 				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico != null) {
 					peso += obterPesoComparacaoString(
 							palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico.getNome(),
 							palavras_chave_mensagem
-					);
+							);
 				}
 
 				palavra_chave_has_pergunta.pergunta.peso_pergunta = peso; 
@@ -210,43 +219,43 @@ public class ChatbotDialogController extends HttpServlet {
 		}
 
 		/*
-        * Verificando qual pergunta_has_resposta tem maior peso de provável resposta.
-        */
-        Pergunta respostaFinal = new Pergunta();
-        int maior_peso = -1;
-        for(PalavraChave palavra_chave_pergunta : palavra_chave_perguntas) {
-            for(PalavraChaveHasPergunta palavra_chave_has_pergunta : palavra_chave_pergunta.palavraChaveHasPergunta) {
-                if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta == null ) {
-                	
-                	continue;
-                	
-                } else if (palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta == null) {
-           
-                	continue;
-            		
-            	} else if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta.getDescricao().equals("")) {
-            		
-            		continue;
-            	}
-                
-               if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() > maior_peso) {
-                	respostaFinal = palavra_chave_has_pergunta.pergunta;
-               }
-            }
-        }
-        
-        //$this->salvar_pergunta_usuario_externo($mensagem_usuario);
+		 * Verificando qual pergunta_has_resposta tem maior peso de provável resposta.
+		 */
+		Pergunta respostaFinal = new Pergunta();
+		int maior_peso = -1;
+		for(PalavraChave palavra_chave_pergunta : palavra_chave_perguntas) {
+			for(PalavraChaveHasPergunta palavra_chave_has_pergunta : palavra_chave_pergunta.palavraChaveHasPergunta) {
+				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta == null ) {
 
-        if(respostaFinal.getId() == 0) {
-        	PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
-        	perguntaHasResposta.setId_resposta(-1);
-        	respostaFinal.perguntaHasResposta = perguntaHasResposta;
-        	Resposta resposta = new Resposta();
-        	resposta.setDescricao(this.mensagemRespostaNaoEncontrada);
-        	respostaFinal.perguntaHasResposta.resposta = resposta;
-        }
-        
-        Json.jsonEncode(respostaFinal, response);
+					continue;
+
+				} else if (palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta == null) {
+
+					continue;
+
+				} else if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta.getDescricao().equals("")) {
+
+					continue;
+				}
+
+				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() > maior_peso) {
+					respostaFinal = palavra_chave_has_pergunta.pergunta;
+				}
+			}
+		}
+
+		//$this->salvar_pergunta_usuario_externo($mensagem_usuario);
+
+		if(respostaFinal.getId() == 0) {
+			PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
+			perguntaHasResposta.setId_resposta(-1);
+			respostaFinal.perguntaHasResposta = perguntaHasResposta;
+			Resposta resposta = new Resposta();
+			resposta.setDescricao(this.mensagemRespostaNaoEncontrada);
+			respostaFinal.perguntaHasResposta.resposta = resposta;
+		}
+
+		Json.jsonEncode(respostaFinal, response);
 	}
 
 	public int obterPesoComparacaoString(String texto, String[] possiveis_ocorrencias) {
@@ -319,26 +328,142 @@ public class ChatbotDialogController extends HttpServlet {
 		out.write(jobj.toString());
 
 	}
-	
+
 	public void resposta_satisfatoria(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
-        boolean retorno = false;
+		boolean retorno = false;
 
-        if(request.getParameter("id_pergunta_resposta") != null) {
-            
-        	int id_pergunta_resposta = Integer.parseInt(request.getParameter("id_pergunta_resposta"));
-            PerguntaHasRespostaService phr = new PerguntaHasRespostaService();
-            phr.aumentarPontuacao(id_pergunta_resposta);
+		if(request.getParameter("id_pergunta_resposta") != null) {
 
-            retorno = true;
-        } 
+			int id_pergunta_resposta = Integer.parseInt(request.getParameter("id_pergunta_resposta"));
+			PerguntaHasRespostaService phr = new PerguntaHasRespostaService();
+			phr.aumentarPontuacao(id_pergunta_resposta);
 
-        //JSON
-        PrintWriter out = response.getWriter();
-  		JsonObject jobj = new JsonObject();
-  		jobj.addProperty("status", retorno);
-  		out.write(jobj.toString());
-    }
+			retorno = true;
+		} 
 
+		//JSON
+		PrintWriter out = response.getWriter();
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("status", retorno);
+		out.write(jobj.toString());
+	}
+
+	public void p_adicionar_palavra_chave_pergunta(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+
+		String topicos_principal = request.getParameter("nome");
+		Topico topico = new Topico();
+		topico.setNome(topicos_principal);
+		topico.setAtivo(1);
+
+		if(topicos_principal.equals("")) {
+			// alerta('O tópico está vazio.', 'erro');
+			// copiar função alerta do php e colocar no java utils
+		}
+
+		TopicoService ts = new TopicoService();
+		if(ts.verificar_nome_topico_existente(topicos_principal)) {
+			/* alerta('O nome do tópico já existe.', 'erro');
+            voltar_atras();*/
+		}
+		//criar a array vazio, depois converter String em array 
+		int id_topico = ts.criar(topico);
+
+		ArrayList<Pergunta> Perguntas = new ArrayList<>() ;
+		ArrayList<Resposta> Respostas = new ArrayList<>();
+
+
+		String respostasString = request.getParameter("respostas");
+		String perguntasString = request.getParameter("perguntas");
+
+		if(perguntasString.isEmpty()) {
+			/*alerta('As perguntas estão vazias.', 'erro');
+            voltar_atras();*/
+		}
+
+
+		String[] palavras_chaves_resposta;
+
+		for (Resposta resposta : Respostas) {
+
+			Resposta resposta_cadastro = new Resposta();
+			resposta_cadastro.setDescricao(resposta.getDescricao());
+			resposta_cadastro.setAtivo(1);
+
+			RespostaService rs = new RespostaService();
+			int id_resposta = rs.criar(resposta_cadastro);
+
+
+			Pergunta pergunta_cadastro = new Pergunta();
+			pergunta_cadastro.setDescricao(resposta.getDescricao());
+			pergunta_cadastro.setAtivo(1);
+
+			PerguntaService ps = new PerguntaService();
+			int id_pergunta = ps.criar(pergunta_cadastro);
+			
+			PerguntaHasResposta  pergunta_has_resposta = new PerguntaHasResposta();
+			pergunta_has_resposta.setId(id_pergunta);
+			pergunta_has_resposta.setId(id_resposta);
+			pergunta_has_resposta.setPontuacao(0);
+			pergunta_has_resposta.setId_topico(id_topico);
+			
+			PerguntaHasRespostaService perguntaHasRespostaService = new PerguntaHasRespostaService();
+			perguntaHasRespostaService.criar(pergunta_has_resposta);
+			
+			/*            //Quebrando a resposta em várias palavras chaves.
+            $palavras_chaves_resposta = $this->transformar_string_palavras_chave($resposta['resposta']);
+            foreach ($palavras_chaves_resposta as $key_resposta => $palavra_chave_resposta) {
+                if(PalavraChave::verificar_ja_existe_palavra_chave($palavra_chave_resposta)) {
+                    $id_palavra_chave = PalavraChave::where('NOME', $palavra_chave_resposta)->get()->first()->ID;
+                } else {
+                    $palavra_chave_principal = new PalavraChave();
+                    $palavra_chave_principal->NOME = $palavra_chave_resposta;
+                    $palavra_chave_principal->ATIVO = '1';
+                    $palavra_chave_principal->DATA_CRIACAO = data_atual();
+                    $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
+                    $palavra_chave_principal->save();
+                    $id_palavra_chave = $palavra_chave_principal->id;
+                }    
+
+                $palavra_chave_has_resposta = new PalavraChaveHasResposta();
+                $palavra_chave_has_resposta->ID_RESPOSTA = $resposta_cadastro->id; 
+                $palavra_chave_has_resposta->ID_PALAVRA_CHAVE = $id_palavra_chave; 
+                $palavra_chave_has_resposta->PONT_RESPOSTA = '0'; 
+                $palavra_chave_has_resposta->save();
+            }*/
+			// foreach ($palavras_chaves_resposta as $key_resposta => $palavra_chave_resposta) {
+			//if(PalavraChave::verificar_ja_existe_palavra_chave($palavra_chave_resposta))
+			// $id_palavra_chave = PalavraChave::where('NOME', $palavra_chave_resposta)->get()->first()->ID;
+			//alavra_chave_principal = new PalavraChave();
+			palavras_chaves_resposta = transformar_string_palavras_chave(resposta.getDescricao());
+			for (String palavra_chave_resposta : palavras_chaves_resposta) {
+				PalavraChaveService palavraChaveService = new PalavraChaveService();
+				
+				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavra_chave_resposta)) {
+					int id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavra_chave_resposta + "' LIMIT 1");
+				}else {
+					PalavraChave palavra_chave_principal = new PalavraChave();
+					palavra_chave_principal.setNome(palavra_chave_resposta);
+					palavra_chave_principal.setAtivo(1);
+					
+					//palavraChaveService.c, criar a função Criar naPalavraChave
+					
+					
+					/* $palavra_chave_principal = new PalavraChave();
+                    $palavra_chave_principal->NOME = $palavra_chave_resposta;
+                    $palavra_chave_principal->ATIVO = '1';
+                    $palavra_chave_principal->DATA_CRIACAO = data_atual();
+                    $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
+                    $palavra_chave_principal->save();
+                    $id_palavra_chave = $palavra_chave_principal->id;*/
+				}
+			}
+			
+
+
+
+		}
+
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
