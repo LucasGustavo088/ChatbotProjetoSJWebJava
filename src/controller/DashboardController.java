@@ -13,6 +13,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+
 import model.Atendimento;
 import service.AtendimentoService;
 import utils.Debug;
@@ -28,7 +32,6 @@ public class DashboardController implements Filter {
 	 * Default constructor. 
 	 */
 	public DashboardController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -108,7 +111,7 @@ public class DashboardController implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
+
 	}
 
 }

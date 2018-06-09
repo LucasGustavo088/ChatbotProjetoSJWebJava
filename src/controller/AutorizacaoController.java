@@ -10,6 +10,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+<<<<<<< HEAD
+=======
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+>>>>>>> ajustes no login
 
 import service.UsersService;
 
@@ -61,6 +66,14 @@ public class AutorizacaoController implements Filter {
 			password = request.getParameter("password");
 			if(logarUsuario(email, password)) {
 				System.out.println("logado");
+
+				
+				HttpServletRequest req = (HttpServletRequest) request;
+			    HttpSession session = req.getSession(false);
+			    
+				session.setAttribute("logado", 1);
+				
+
 				//Request
 				RequestDispatcher dispatcher = request
 						.getRequestDispatcher("/dashboard/home.jsp");
@@ -72,6 +85,21 @@ public class AutorizacaoController implements Filter {
 
 
 	}
+<<<<<<< HEAD
+=======
+	
+	public void logout(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {				
+		HttpServletRequest req = (HttpServletRequest) request;
+	    HttpSession session = req.getSession(false);
+	    
+		session.setAttribute("logado", 1);
+		
+		//Request
+		RequestDispatcher dispatcher = request
+				.getRequestDispatcher("/dashboard/home.jsp");
+		dispatcher.forward(request, response);
+	}
+>>>>>>> ajustes no login
 
 	public void redirecionarLogin(ServletRequest request, ServletResponse response) throws ServletException, IOException {
 

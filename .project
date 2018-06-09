@@ -3,6 +3,14 @@
 	<name>ChatbotProjetoSJWebJava</name>
 	<comment></comment>
 	<projects>
+<<<<<<< HEAD
+=======
+		<project>mysql-connector-java-5.1.38</project>
+		<project>javax.servlet.jsp.jstl-1.2.1</project>
+		<project>gson-2.6.2</project>
+		<project>mysql-connector-java-5-1-30</project>
+		<project>javax.servlet.jsp.jstl-api-1.2.1</project>
+>>>>>>> ajustes no login
 	</projects>
 	<buildSpec>
 		<buildCommand>

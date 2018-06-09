@@ -19,6 +19,7 @@ public class ConnectionFactory {
 	public static Connection obtemConexao() throws SQLException {
 		return DriverManager
 				.getConnection("jdbc:mysql://localhost/mydb?user=root&password=");
+
 	}
 	
 	//Fecha a conexão - usado no servlet destroy
