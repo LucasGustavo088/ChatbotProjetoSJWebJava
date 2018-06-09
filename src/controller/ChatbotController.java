@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.Filter;
@@ -15,6 +16,7 @@ import javax.servlet.annotation.WebFilter;
 import model.Topico;
 import service.TopicoService;
 import utils.Debug;
+import utils.ResultadosAjax;
 
 /**
  * Servlet Filter implementation class ChatbotController
@@ -58,30 +60,19 @@ public class ChatbotController implements Filter {
 	public void listar_topicos_ajax(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
 		TopicoService topicoService = new TopicoService();
-		ArrayList<Topico> topicos = topicoService.carregarCadastro("");
-		Debug.debug(topicos, response);
-		/*
+		ArrayList<Topico> topicos = topicoService.carregarCadastro("WHERE ATIVO = 1 ORDER BY DATA_CRIACAO DESC");
 		ArrayList<ArrayList> aaData = new ArrayList<ArrayList>();
-		for(Atendimento atendimento : atendimentos) {
-			String botao_atender = " <a onclick='redirecionar_para_atendimento(" + atendimento.getId() + ");' class='btn btn-success'> Atender</a>"; 
+		for(Topico topico : topicos) {
+			String botao_editar = " <a href='chatbot/editar_palavra_chave_pergunta/" + topico.getId() + "' class='btn btn-default'><i class='fas fa-pencil-alt'></i> Editar</a>"; 
+			String botao_excluir = " <a href='chatbot/excluir_palavra_chave_pergunta/" + topico.getId() + "' class='btn btn-danger'><i class='fas fa-times'></i> Excluir</a>";                                  
 
-			String status = "Chatbot";
-
-			if(atendimento.getStatus().equals("atendimento_iniciado")) {
-				status = "Atendimento iniciado";
-			} else {
-				botao_atender = " <a onclick='redirecionar_para_atendimento(" + atendimento.getId() + ");' class='btn btn-primary'> Visualizar</a>";
-			}
-			
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 			ArrayList<String> data = new ArrayList<String>();
-			data.add(String.valueOf(atendimento.getId()));
-			data.add(atendimento.cliente.getNome_cliente());
-			data.add(atendimento.cliente.getEmail_cliente());
-			data.add(sdf.format(atendimento.getData_criacao()));
-			data.add(status);
-			data.add(botao_atender);
+			data.add(String.valueOf(topico.getId()));
+			data.add(topico.getNome());
+			data.add(sdf.format(topico.getData_criacao()));
+			data.add(botao_editar + botao_excluir);
 			
 			aaData.add(data);
 
@@ -92,7 +83,8 @@ public class ChatbotController implements Filter {
 		resultado.iTotalDisplayRecords = aaData.size();
 		resultado.iTotalRecords = aaData.size();
 		resultado.sEcho = 1;
-		Debug.debug(resultado, response);*/
+		Debug.debug(resultado, response);
+		
 	}
 
 	/**
