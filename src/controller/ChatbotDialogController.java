@@ -26,6 +26,7 @@ import model.AtendimentoHasResposta;
 import model.Cliente;
 import model.PalavraChave;
 import model.PalavraChaveHasPergunta;
+import model.PalavraChaveHasResposta;
 import model.Pergunta;
 import model.PerguntaHasResposta;
 import model.PerguntaHasResposta;
@@ -409,33 +410,10 @@ public class ChatbotDialogController extends HttpServlet {
 			PerguntaHasRespostaService perguntaHasRespostaService = new PerguntaHasRespostaService();
 			perguntaHasRespostaService.criar(pergunta_has_resposta);
 			
-			/*            //Quebrando a resposta em várias palavras chaves.
-            $palavras_chaves_resposta = $this->transformar_string_palavras_chave($resposta['resposta']);
-            foreach ($palavras_chaves_resposta as $key_resposta => $palavra_chave_resposta) {
-                if(PalavraChave::verificar_ja_existe_palavra_chave($palavra_chave_resposta)) {
-                    $id_palavra_chave = PalavraChave::where('NOME', $palavra_chave_resposta)->get()->first()->ID;
-                } else {
-                    $palavra_chave_principal = new PalavraChave();
-                    $palavra_chave_principal->NOME = $palavra_chave_resposta;
-                    $palavra_chave_principal->ATIVO = '1';
-                    $palavra_chave_principal->DATA_CRIACAO = data_atual();
-                    $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
-                    $palavra_chave_principal->save();
-                    $id_palavra_chave = $palavra_chave_principal->id;
-                }    
-
-                $palavra_chave_has_resposta = new PalavraChaveHasResposta();
-                $palavra_chave_has_resposta->ID_RESPOSTA = $resposta_cadastro->id; 
-                $palavra_chave_has_resposta->ID_PALAVRA_CHAVE = $id_palavra_chave; 
-                $palavra_chave_has_resposta->PONT_RESPOSTA = '0'; 
-                $palavra_chave_has_resposta->save();
-            }*/
-			// foreach ($palavras_chaves_resposta as $key_resposta => $palavra_chave_resposta) {
-			//if(PalavraChave::verificar_ja_existe_palavra_chave($palavra_chave_resposta))
-			// $id_palavra_chave = PalavraChave::where('NOME', $palavra_chave_resposta)->get()->first()->ID;
-			//alavra_chave_principal = new PalavraChave();
+			//Quebrando a resposta em várias palavras chaves.
 			palavras_chaves_resposta = transformar_string_palavras_chave(resposta.getDescricao());
 			for (String palavra_chave_resposta : palavras_chaves_resposta) {
+				PalavraChave palavraChave = new PalavraChave();
 				PalavraChaveService palavraChaveService = new PalavraChaveService();
 				
 				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavra_chave_resposta)) {
@@ -445,17 +423,21 @@ public class ChatbotDialogController extends HttpServlet {
 					palavra_chave_principal.setNome(palavra_chave_resposta);
 					palavra_chave_principal.setAtivo(1);
 					
-					//palavraChaveService.c, criar a função Criar naPalavraChave
-					
-					
-					/* $palavra_chave_principal = new PalavraChave();
-                    $palavra_chave_principal->NOME = $palavra_chave_resposta;
-                    $palavra_chave_principal->ATIVO = '1';
-                    $palavra_chave_principal->DATA_CRIACAO = data_atual();
-                    $palavra_chave_principal->DATA_ATUALIZACAO = data_atual();
-                    $palavra_chave_principal->save();
-                    $id_palavra_chave = $palavra_chave_principal->id;*/
+					palavraChaveService.criar(palavra_chave_principal);
+					//$id_palavra_chave = $palavra_chave_principal->id; Lucas da uma olhada na linha abaixo
+					int id_palavra_chave = palavra_chave_principal.id;
 				}
+				
+				/*
+				 *  $palavra_chave_has_resposta = new PalavraChaveHasResposta();
+                $palavra_chave_has_resposta->ID_RESPOSTA = $resposta_cadastro->id; 
+                $palavra_chave_has_resposta->ID_PALAVRA_CHAVE = $id_palavra_chave; 
+                $palavra_chave_has_resposta->PONT_RESPOSTA = '0'; 
+                $palavra_chave_has_resposta->save();*/
+				
+				PalavraChaveHasResposta palavra_chave_has_resposta = new PalavraChaveHasResposta();
+				palavra_chave_has_resposta.setId(id_resposta);
+				//palavra_chave_has_resposta.set
 			}
 			
 

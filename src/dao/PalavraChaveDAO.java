@@ -8,27 +8,26 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import model.PalavraChave;
+import utils.Helper;
 
 public class PalavraChaveDAO {
 
-	/*public int criar(PalavraChave palavra_chave) {
-
-		String sqlInsert = "INSERT INTO palavra_chave(ATIVO, STATUS, ID_CLIENTE, DATA_ATUALIZACAO, DATA_CRIACAO, QTD_TENTATIVA) VALUES (?, ?, ?, ?, ?, ?)";
+public int criar(PalavraChave palavraChave) {
+		
+		String sqlInsert = "INSERT INTO pergunta_has_resposta(NOME, PALAVRA_CHAVE_PRINCIPAL, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
-			stm.setInt(1, palavra_chave.getAtivo());
-			stm.setString(2, palavra_chave.getStatus());
-			stm.setInt(3, palavra_chave.getId_cliente());
-			stm.setDate(4, new java.sql.Date( palavra_chave.getData_atualizacao().getTime() ));
-			stm.setDate(5, new java.sql.Date( palavra_chave.getData_criacao().getTime() ));
-			stm.setInt(6, palavra_chave.getQtd_tentativa());
+			stm.setString(1, palavraChave.getNome());
+			stm.setInt(2, palavraChave.getPalavra_chave_principal());
+			stm.setInt(3, palavraChave.getAtivo());
+			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
 			try (PreparedStatement stm2 = conn.prepareStatement(sqlQuery);
 					ResultSet rs = stm2.executeQuery();) {
 				if (rs.next()) {
-					palavra_chave.setId(rs.getInt(1));
+					palavraChave.setId(rs.getInt(1));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -36,8 +35,8 @@ public class PalavraChaveDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return palavra_chave.getId();
-	}*/
+		return palavraChave.getId();
+	}
 
 	public ArrayList<PalavraChave> carregarCadastro(String query) {
 		PalavraChave palavra_chave;
