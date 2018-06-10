@@ -57,6 +57,14 @@ public class ChatbotController implements Filter {
 		dispatcher.forward(request, response);
 	}
 	
+	public void adicionar_palavra_chave_pergunta(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
+
+		RequestDispatcher dispatcher = request
+				.getRequestDispatcher("/chatbot/adicionar_palavra_chave_pergunta.jsp");
+
+		dispatcher.forward(request, response);
+	}
+	
 	public void listar_topicos_ajax(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
 		TopicoService topicoService = new TopicoService();

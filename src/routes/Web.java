@@ -106,7 +106,11 @@ public class Web implements Filter {
 
 		//Verificando todas as rotas criadas
 		for(Route route : this.rotas){
-		
+			
+			if(route.getUrl() == null) {
+				continue;
+			}
+			
 			String routeArray[] = route.getUrl().split("/");
 			
 			if(urlArray.length < 2) {
@@ -215,7 +219,7 @@ public class Web implements Filter {
 		rotas.add( new Route("chatbot/adicionar_palavra_chave_pergunta/", "ChatbotController", "adicionar_palavra_chave_pergunta", "chatbot.adicionar_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/editar_palavra_chave_pergunta/{id}/", "ChatbotController", "editar_palavra_chave_pergunta", "editar_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/excluir_palavra_chave_pergunta/{id}/", "ChatbotController", "excluir_palavra_chave_pergunta", "excluir_palavra_chave_pergunta"));
-		rotas.add( new Route("p_adicionar_palavra_chave_pergunta/", "ChatbotController", "p_adicionar_palavra_chave_pergunta", "chatbot.p_adicionar_palavra_chave_pergunta"));
+		rotas.add( new Route("chatbot/p_adicionar_palavra_chave_pergunta_ajax/", "ChatbotController", "p_adicionar_palavra_chave_pergunta_ajax", "chatbot.p_adicionar_palavra_chave_pergunta_ajax"));
 
 		//Chatbot Dialog
 		rotas.add( new Route("chatbot_dialog/obter_resposta_ajax/", "ChatbotDialogController", "obter_resposta_ajax", "chatbotdialog.obter_resposta_ajax"));

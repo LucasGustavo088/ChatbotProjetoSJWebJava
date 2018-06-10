@@ -124,6 +124,14 @@ table.dataTable thead th {
 
 	      return str;
 	  }
+	
+	function str_replace_all(find, replace, str) {
+		for(var i = 0; i < 100; i++) {
+			str = str.replace(find, replace);
+		}
+		
+		return str;
+	}
 	</script>
 
 		<!-- Page Content Holder -->
@@ -180,7 +188,7 @@ table.dataTable thead th {
 				path = path.split("/");
 				
 				path.forEach(function(valor) {
-					var link = ucwords(valor).replace("_", " ");
+					var link = str_replace("_", " ", ucwords(valor))
 					$('#breadcrumb').append("<li>" + link + "</li>");	
 				});
 				
