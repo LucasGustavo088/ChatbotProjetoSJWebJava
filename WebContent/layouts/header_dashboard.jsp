@@ -154,20 +154,18 @@ table.dataTable thead th {
 					</div>
 				</div>
 			</nav>
-			
-			<!-- @if (!empty($_SESSION['alertas']))
+			<c:if test="${not empty alertas}">
+            <c:forEach var="alerta" items="${alertas}" varStatus="myIndex">
+            <div class="container-row alert alert-${alerta.tipo}" id="alerta${myIndex.index}">    
+                ${alerta.mensagem}
 
-            @foreach ($_SESSION['alertas'] as $key => $alerta)
-            <div class="container-row alert alert-$alerta['tipo'] }}" id="alerta$key }}">
-                
-                $alerta['mensagem'] }}
-
-                <a style="float: right; cursor: pointer;" onclick="remover_alerta($key }})">
+                <a style="float: right; cursor: pointer;" onclick="remover_alerta(${myIndex.index})">
                     X
                 </a>
             </div>
-            @endforeach
-        @endif -->
+            </c:forEach>
+     
+        	</c:if>
 			<div class="container-row">
 
 				<div class="container-row">
