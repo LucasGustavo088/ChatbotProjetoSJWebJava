@@ -1,5 +1,6 @@
 package service;
 
+import model.Atendimento;
 import model.PalavraChaveHasPergunta;
 import model.Pergunta;
 import model.PerguntaHasResposta;
@@ -10,6 +11,10 @@ import dao.PerguntaHasRespostaDAO;
 
 public class PerguntaHasRespostaService {
 	PerguntaHasRespostaDAO dao = new PerguntaHasRespostaDAO();
+	
+	public int criar(PerguntaHasResposta perguntaHasResposta) {
+	    return dao.criar(perguntaHasResposta);
+	  }
   
   public ArrayList<PerguntaHasResposta> carregarCadastro(String query) {
 		return dao.carregarCadastro(query);

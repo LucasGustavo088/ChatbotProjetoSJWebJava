@@ -1,11 +1,17 @@
 package service;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletResponse;
 
+import dao.ConnectionFactory;
 import dao.PalavraChaveDAO;
+import model.Atendimento;
 import model.PalavraChave;
 import model.PalavraChaveHasPergunta;
 import model.Pergunta;
@@ -13,6 +19,7 @@ import model.PerguntaHasResposta;
 import model.Resposta;
 import model.Topico;
 import utils.Debug;
+import utils.Helper;
 import utils.Json;
 
 public class PalavraChaveService {
@@ -23,7 +30,11 @@ public class PalavraChaveService {
 	public ArrayList<PalavraChave> obter_palavra_chave_com_string(String palavra_chave) {
 		return dao.carregarCadastro("where NOME = '" + palavra_chave + "'");
 	}
-
+	
+	public int criar(PalavraChave palavraChave) {
+	    return dao.criar(palavraChave);
+	  }
+	
 	public PalavraChave carregar_cadastro_completo(int idPalavraChave, ServletResponse response) throws IOException {
 		ArrayList<PalavraChave> palavraChaveList = dao.carregarCadastro("WHERE ID = '" + idPalavraChave + "' LIMIT 1");
 		PalavraChave palavraChaveCadastro = palavraChaveList.get(0); 
@@ -83,8 +94,25 @@ public class PalavraChaveService {
 		return palavraChaveCadastro;
 	}
 	
-	public PalavraChave verificar_ja_existe_palavra_chave(PalavraChave palavra_chave) {
-		return dao.verificar_ja_existe_palavra_chave(palavra_chave);
+	public int carregar_id(String query) {
+		ArrayList<PalavraChave> palavras_chave = dao.carregarCadastro(query);
+		
+		if(palavras_chave.isEmpty()) {
+			return -1;
+		} else {
+			PalavraChave palavraChave = palavras_chave.get(0);
+			return palavraChave.getId();
+		}
+	}
+  
+	
+	public boolean verificar_ja_existe_palavra_chave(String palavra_chave) {
+		ArrayList<PalavraChave> palavras_chave = dao.carregarCadastro("WHERE NOME = '" + palavra_chave + "'");
+		if(palavras_chave.isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	
