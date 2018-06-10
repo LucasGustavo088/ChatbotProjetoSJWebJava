@@ -30,10 +30,7 @@ public class DashboardController implements Filter {
 	 * Default constructor. 
 	 */
 	public DashboardController() {
-//		HttpServletRequest req = (HttpServletRequest) request;
-//		HttpSession session = req.getSession();
-//		boolean logado = (boolean) session.getAttribute("logado");
-//		System.out.println("ele esta logado? " + logado);
+
 	}
 
 	/**
@@ -113,7 +110,7 @@ public class DashboardController implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		
+
 	}
 
 }

@@ -23,7 +23,7 @@
 <script>
     $(document).ready(function() {
         $('.datatable').DataTable( {
-            ajax: '/chatbot/listar_topicos_ajax',
+            ajax: enderecoBack + 'chatbot/listar_topicos_ajax',
             searching: false,
             bFilter: true,
             info:     false,

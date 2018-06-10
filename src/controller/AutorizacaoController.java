@@ -13,6 +13,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+
 import service.UsersService;
 
 /**
@@ -69,12 +73,17 @@ public class AutorizacaoController implements Filter {
 			    
 				session.setAttribute("logado", 1);
 				
+
 				//Request
 				RequestDispatcher dispatcher = request
 						.getRequestDispatcher("/dashboard/home.jsp");
 				dispatcher.forward(request, response);
 			} else {
 				System.out.println("erro ao logar");
+				//Request
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/autorizacao/login.jsp");
+				dispatcher.forward(request, response);
 			}
 		}
 

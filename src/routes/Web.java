@@ -1,5 +1,4 @@
 package routes;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -168,12 +167,28 @@ public class Web implements Filter {
 		}
 		
 		if(found){
+
 			//Autorização
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
-			int logado = (int) session.getAttribute("logado");
-			System.out.println("ele esta logado? " + logado);
+			int logado = 0;
+			if(session.getAttribute("logado") != null) {
+				if((int) session.getAttribute("logado") == 1) {
+					logado = 1;
+				}
+				
+			}
 			
+			if(logado == 0) {
+				if(rotaEncontrada.getController().equals("DashboardController")) {
+					//Request
+					RequestDispatcher dispatcher = request
+							.getRequestDispatcher("/autorizacao/login.jsp");
+					dispatcher.forward(request, response);
+				}
+			}
+			
+
 			System.out.println(rotaEncontrada.toString());
 
 		    //load the AppTest at runtime
@@ -222,7 +237,7 @@ public class Web implements Filter {
 
 	public void inicializar_rotas() {
 		//Autorização
-		rotas.add( new Route("auth/logout", "Auth/LogoutController", "logout", "logout"));
+		rotas.add( new Route("autorizacao/logout", "AutorizacaoController", "logout", "logout"));
 		rotas.add( new Route("", "HomeController", "index", "home"));
 		rotas.add( new Route("autorizacao/login", "AutorizacaoController", "login", "login"));
 		rotas.add( new Route("autorizacao/logar", "AutorizacaoController", "logar", "logar"));
@@ -259,6 +274,7 @@ public class Web implements Filter {
 		rotas.add( new Route("relatorio/listar_pendencias/", "RelatorioController", "listar_pendencias", "relatorio.listar_pendencias"));
 		rotas.add( new Route("relatorio/gerar_relatorio/", "RelatorioController", "gerar_relatorio", "relatorio.gerar_relatorio"));
 	}
+
 	
 	public static boolean estaLogado(ServletRequest request, ServletResponse response) {
 		HttpServletRequest req = (HttpServletRequest) request;
