@@ -201,6 +201,20 @@ a:after {
 	color: white;
 }
 
+#eq {
+    margin-top:  100px ;
+    background: fixed no-repeat center top;
+    padding-top: 100px;
+    padding-bottom: 5px;
+}
+
+#ser {
+    margin-top:  100px ;
+    background: fixed no-repeat center top;
+    padding-top: 100px;
+    padding-bottom: 5px;
+}
+
 /* Blue Wrap */
 
 #red {

@@ -59,7 +59,7 @@
             <li>
                 <a href="#home_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-home"></span> Home</a>
                 <ul class="collapse list-unstyled" id="home_menu">
-                    <li><a href="home"><i class="fas fa-list"></i> Pendências de atendimento</a></li>
+                    <li><a href="/ChatbotProjetoSJWebJava/dashboard/home"><i class="fas fa-list"></i> Pendências de atendimento</a></li>
                     <li class="nav-item"><a href="#"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Relatório de periodicidade diária</a></li>
                 </ul>
             </li>
@@ -69,7 +69,7 @@
             <li>
                 <a href="#chatbot_menu" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Chatbot</a>
                 <ul class="collapse list-unstyled" id="chatbot_menu">
-                    <li class="nav-item"><a href="/chatbot/listar_topicos"><i class="fas fa-sitemap"></i> Perguntas e respostas</a></li>
+                    <li class="nav-item"><a href="/ChatbotProjetoSJWebJava/chatbot/listar_topicos"><i class="fas fa-sitemap"></i> Perguntas e respostas</a></li>
                     <li><a href="chatbot.configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
                 </ul>
                 
@@ -116,11 +116,11 @@
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a class="nav-link" href="home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/ChatbotProjetoSJWebJava/dashboard/home">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Relatório</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Administrativo</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Configurações</a></li>
-                        <li class="nav-item"><a class="nav-link" href="logout">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/ChatbotProjetoSJWebJava/autorizacao/logout">Logout</a></li>
                     </ul>
                 </div>
             </div>

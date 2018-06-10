@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import model.Atendimento;
 import service.AtendimentoService;
@@ -28,7 +30,10 @@ public class DashboardController implements Filter {
 	 * Default constructor. 
 	 */
 	public DashboardController() {
-		// TODO Auto-generated constructor stub
+//		HttpServletRequest req = (HttpServletRequest) request;
+//		HttpSession session = req.getSession();
+//		boolean logado = (boolean) session.getAttribute("logado");
+//		System.out.println("ele esta logado? " + logado);
 	}
 
 	/**
@@ -108,7 +113,7 @@ public class DashboardController implements Filter {
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
+		
 	}
 
 }

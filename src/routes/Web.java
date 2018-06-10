@@ -135,7 +135,6 @@ public class Web implements Filter {
 			}*/
 			
 			
-			
 			if(urlArray.length < 2) {
 				PrintWriter out = response.getWriter();
 				out.println("Página não encontrada");
@@ -169,6 +168,12 @@ public class Web implements Filter {
 		}
 		
 		if(found){
+			//Autorização
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpSession session = req.getSession();
+			int logado = (int) session.getAttribute("logado");
+			System.out.println("ele esta logado? " + logado);
+			
 			System.out.println(rotaEncontrada.toString());
 
 		    //load the AppTest at runtime
@@ -221,6 +226,7 @@ public class Web implements Filter {
 		rotas.add( new Route("", "HomeController", "index", "home"));
 		rotas.add( new Route("autorizacao/login", "AutorizacaoController", "login", "login"));
 		rotas.add( new Route("autorizacao/logar", "AutorizacaoController", "logar", "logar"));
+		
 		//Dashboard
 		rotas.add( new Route("dashboard/home", "DashboardController", "home", "dashboard.home"));
 		rotas.add( new Route("dashboard/atendimento/{id}", "DashboardController", "atendimento", "dashboard.atendimento"));
@@ -252,6 +258,15 @@ public class Web implements Filter {
 		//Relatório
 		rotas.add( new Route("relatorio/listar_pendencias/", "RelatorioController", "listar_pendencias", "relatorio.listar_pendencias"));
 		rotas.add( new Route("relatorio/gerar_relatorio/", "RelatorioController", "gerar_relatorio", "relatorio.gerar_relatorio"));
+	}
+	
+	public static boolean estaLogado(ServletRequest request, ServletResponse response) {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpSession session = req.getSession();
+		boolean logado = (boolean) session.getAttribute("logado");
+		System.out.println("ele esta logado? " + logado);
+		
+		return true;
 	}
 
 	/**
