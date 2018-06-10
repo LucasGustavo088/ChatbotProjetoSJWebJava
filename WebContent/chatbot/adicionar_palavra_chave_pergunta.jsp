@@ -5,7 +5,7 @@
 <c:import url="../layouts/header_dashboard.jsp" />
 
 <div class="panel panel-default">
-	<form id="form" >
+	<form id="form" action="/ChatbotProjetoSJWebJava/chatbot/p_adicionar_palavra_chave_pergunta_ajax" method="POST">
 		<div class="panel-heading">
 			<h2 class="panel-title">
 				<strong> <i class="fas fa-sitemap"></i> Palavra-chave:
@@ -67,7 +67,7 @@
 			<div class="form-group row">
 				<label for="pergunta$id" class="col-sm-2 control-label">Pergunta</label>
 				<div class="col-sm-10">
-					<input type="pergunta$id" name="perguntas[$id][pergunta]"
+					<input type="pergunta$id" name="perguntas"
 						placeholder="Digite uma pergunta" class="form-control col-md-10"
 						id="pergunta$id" />
 				</div>
@@ -75,7 +75,7 @@
 			<div class="form-group row">
 				<label for="resposta" class="col-sm-2 control-label">Resposta</label>
 				<div class="col-sm-10">
-					<textarea type="text" name="respostas[$id][resposta]"
+					<textarea type="text" name="respostas"
 						placeholder="Resposta associada a pergunta acima"
 						class="form-control" id="resposta$id" rows="5"></textarea>
 				</div>
@@ -121,6 +121,8 @@
 	}
 
 	function salvar_cadastro() {
+		$('#form').submit();
+		return;
 		
 		$.ajax({
 			url: enderecoBack + 'chatbot/p_adicionar_palavra_chave_pergunta_ajax',

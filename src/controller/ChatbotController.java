@@ -27,6 +27,7 @@ import service.PerguntaHasRespostaService;
 import service.PerguntaService;
 import service.RespostaService;
 import service.TopicoService;
+import utils.Alerta;
 import utils.Debug;
 import utils.ResultadosAjax;
 
@@ -68,7 +69,7 @@ public class ChatbotController implements Filter {
 
 		dispatcher.forward(request, response);
 	}
-	
+
 	public void adicionar_palavra_chave_pergunta(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
 		RequestDispatcher dispatcher = request
@@ -76,15 +77,15 @@ public class ChatbotController implements Filter {
 
 		dispatcher.forward(request, response);
 	}
-	
+
 	public void listar_topicos_ajax(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
 		TopicoService topicoService = new TopicoService();
 		ArrayList<Topico> topicos = topicoService.carregarCadastro("WHERE ATIVO = 1 ORDER BY DATA_CRIACAO DESC");
 		ArrayList<ArrayList> aaData = new ArrayList<ArrayList>();
 		for(Topico topico : topicos) {
-			String botao_editar = " <a href='chatbot/editar_palavra_chave_pergunta/" + topico.getId() + "' class='btn btn-default'><i class='fas fa-pencil-alt'></i> Editar</a>"; 
-			String botao_excluir = " <a href='chatbot/excluir_palavra_chave_pergunta/" + topico.getId() + "' class='btn btn-danger'><i class='fas fa-times'></i> Excluir</a>";                                  
+			String botao_editar = " <a href='/ChatbotProjetoSJWebJava/chatbot/editar_palavra_chave_pergunta/" + topico.getId() + "' class='btn btn-default'><i class='fas fa-pencil-alt'></i> Editar</a>"; 
+			String botao_excluir = " <a href='/ChatbotProjetoSJWebJava/chatbot/excluir_palavra_chave_pergunta/" + topico.getId() + "' class='btn btn-danger'><i class='fas fa-times'></i> Excluir</a>";                                  
 
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -93,147 +94,168 @@ public class ChatbotController implements Filter {
 			data.add(topico.getNome());
 			data.add(sdf.format(topico.getData_criacao()));
 			data.add(botao_editar + botao_excluir);
-			
+
 			aaData.add(data);
 
 		}
-		
+
 		ResultadosAjax resultado = new ResultadosAjax();
 		resultado.aaData = aaData;
 		resultado.iTotalDisplayRecords = aaData.size();
 		resultado.iTotalRecords = aaData.size();
 		resultado.sEcho = 1;
 		Debug.debug(resultado, response);
-		
+
 	}
-	
+
+	public void voltarAdicionarPalavraChavePergunta(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request
+				.getRequestDispatcher("/chatbot/adicionar_palavra_chave_pergunta.jsp");
+
+		dispatcher.forward(request, response);
+	}
+
 	public void p_adicionar_palavra_chave_pergunta_ajax(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
-		
-		String topicos_principal = request.getParameter("nome");
+
+		String topicos_principal = request.getParameter("topico");
 		Topico topico = new Topico();
 		topico.setNome(topicos_principal);
 		topico.setAtivo(1);
-		
+
 		if(topicos_principal.equals("")) {
-			// alerta('O t√≥pico est√° vazio.', 'erro');
-			// copiar fun√ß√£o alerta do php e colocar no java utils
+			Alerta.alerta("O tÛpico est· vazio.", "erro", request);
+			voltarAdicionarPalavraChavePergunta(request, response);
 		}
 
 		TopicoService ts = new TopicoService();
 		if(ts.verificar_nome_topico_existente(topicos_principal)) {
-			/* alerta('O nome do t√≥pico j√° existe.', 'erro');
-            voltar_atras();*/
+			Alerta.alerta("O nome do tÛpico j· existe.", "erro", request);
+			voltarAdicionarPalavraChavePergunta(request, response);
 		}
-		//criar a array vazio, depois converter String em array 
+
 		int id_topico = ts.criar(topico);
-		Debug.debug(id_topico, response);
-		ArrayList<Pergunta> Perguntas = new ArrayList<>() ;
-		ArrayList<Resposta> Respostas = new ArrayList<>();
 
+		String[] perguntas = request.getParameterValues("perguntas");
+		String[] respostas = request.getParameterValues("perguntas");
 
-		String respostasString = request.getParameter("respostas");
-		String perguntasString = request.getParameter("perguntas");
-
-		if(perguntasString.isEmpty()) {
-			/*alerta('As perguntas est√£o vazias.', 'erro');
-            voltar_atras();*/
+		if(perguntas.length == 0) {
+			Alerta.alerta("As perguntas est„o vazias.", "erro", request);
+			voltarAdicionarPalavraChavePergunta(request, response);
 		}
-
 
 		String[] palavras_chaves_resposta;
 		String[] palavras_chaves_pergunta;
-
-		for (Resposta resposta : Respostas) {
+		for (int key = 0; key < respostas.length; key++) {
 
 			Resposta resposta_cadastro = new Resposta();
-			resposta_cadastro.setDescricao(resposta.getDescricao());
+			resposta_cadastro.setDescricao(respostas[key]);
 			resposta_cadastro.setAtivo(1);
-
 			RespostaService rs = new RespostaService();
 			int id_resposta = rs.criar(resposta_cadastro);
 
-
 			Pergunta pergunta_cadastro = new Pergunta();
-			pergunta_cadastro.setDescricao(resposta.getDescricao());
+			pergunta_cadastro.setDescricao(perguntas[key]);
 			pergunta_cadastro.setAtivo(1);
-
 			PerguntaService ps = new PerguntaService();
 			int id_pergunta = ps.criar(pergunta_cadastro);
-			
+			System.out.println("pergunta: " + id_pergunta + " id_resposta " + id_resposta);
 			PerguntaHasResposta  pergunta_has_resposta = new PerguntaHasResposta();
-			pergunta_has_resposta.setId(id_pergunta);
-			pergunta_has_resposta.setId(id_resposta);
+			pergunta_has_resposta.setId_pergunta(id_pergunta);
+			pergunta_has_resposta.setId_resposta(id_resposta);
 			pergunta_has_resposta.setPontuacao(0);
 			pergunta_has_resposta.setId_topico(id_topico);
-			
 			PerguntaHasRespostaService perguntaHasRespostaService = new PerguntaHasRespostaService();
 			perguntaHasRespostaService.criar(pergunta_has_resposta);
+
 			PalavraChave palavraChave = new PalavraChave();
 			PalavraChaveService palavraChaveService = new PalavraChaveService();
-			int id_palavra_chave = -1;
-			
+
+
 			//Quebrando a resposta em v√°rias palavras chaves.
-			palavras_chaves_resposta = transformar_string_palavras_chave(resposta.getDescricao());
-			for (String palavra_chave_resposta : palavras_chaves_resposta) {
-				
-				
-				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavra_chave_resposta)) {
-					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavra_chave_resposta + "' LIMIT 1");
+			palavras_chaves_resposta = transformar_string_palavras_chave(respostas[key]);
+			for (int key_resposta = 0; key_resposta < palavras_chaves_resposta.length; key_resposta++) {
+				int id_palavra_chave = -1;
+				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavras_chaves_resposta[key_resposta])) {
+					System.out.println("ja existe resposta");
+					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavras_chaves_resposta[key_resposta] + "' LIMIT 1");
 				}else {
 					PalavraChave palavra_chave_principal = new PalavraChave();
-					palavra_chave_principal.setNome(palavra_chave_resposta);
+					palavra_chave_principal.setNome(palavras_chaves_resposta[key_resposta]);
 					palavra_chave_principal.setAtivo(1);
+					System.out.println("criando nova palavra chave resposta");
 					id_palavra_chave = palavraChaveService.criar(palavra_chave_principal);
 				}
-				
+
+				if(id_palavra_chave == -1) {
+					System.out.println("Erro ao adicionar palavra chave de respostas");
+				}
+
+				System.out.println("id_palavra_chave: " + id_palavra_chave);
 				PalavraChaveHasResposta palavra_chave_has_resposta = new PalavraChaveHasResposta();
 				palavra_chave_has_resposta.setId_resposta(id_resposta);
 				palavra_chave_has_resposta.setId_palavra_chave(id_palavra_chave);
 				palavra_chave_has_resposta.setPont_respsota(0);
-				
+
 				PalavraChaveHasRespostaService palavraChaveHasRespostaService = new PalavraChaveHasRespostaService();
 				palavraChaveHasRespostaService.criar(palavra_chave_has_resposta);
 			}
-			
-			//Quebrando a perguntas em v√°rias palavras chaves
-			//Lucas arrumar a linha abaixo em php era $palavras_chaves_pergunta = $this->transformar_string_palavras_chave($perguntas[$key]['pergunta'])
-			palavras_chaves_pergunta = transformar_string_palavras_chave("pergunta");
-			for (String palavra_chave_pergunta : palavras_chaves_pergunta) {
-				
-				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavra_chave_pergunta)) {
-					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavra_chave_pergunta + "' LIMIT 1");
+
+			//Quebrando a resposta em v√°rias palavras chaves.
+			palavras_chaves_pergunta = transformar_string_palavras_chave(perguntas[key]);
+			for (int key_pergunta = 0; key_pergunta < palavras_chaves_pergunta.length; key_pergunta++) {
+				int id_palavra_chave = -1;
+				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavras_chaves_pergunta[key_pergunta])) {
+					System.out.println("ja existe pergunta");
+					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavras_chaves_pergunta[key_pergunta] + "' LIMIT 1");
 				}else {
 					PalavraChave palavra_chave_principal = new PalavraChave();
-					palavra_chave_principal.setNome(palavra_chave_pergunta);
+					palavra_chave_principal.setNome(palavras_chaves_pergunta[key_pergunta]);
 					palavra_chave_principal.setAtivo(1);
+					System.out.println("criando nova palavra chave pergunta");
 					id_palavra_chave = palavraChaveService.criar(palavra_chave_principal);
 				}
-				
+
+				if(id_palavra_chave == -1) {
+					System.out.println("Erro ao adicionar palavra chave de perguntas");
+				}
+
+				System.out.println("id_palavra_chave: " + id_palavra_chave);
 				PalavraChaveHasPergunta palavra_chave_has_pergunta = new PalavraChaveHasPergunta();
 				palavra_chave_has_pergunta.setId_pergunta(id_pergunta);
 				palavra_chave_has_pergunta.setId_palavra_chave(id_palavra_chave);
-				
+
 				PalavraChaveHasPerguntaService palavraChaveHasPerguntaService = new PalavraChaveHasPerguntaService();
 				palavraChaveHasPerguntaService.criar(palavra_chave_has_pergunta);
 			}
+
+
 		}
-		
-		//alerta('T√≥pico cadastrado com sucesso', 'success'); 
-		//return redirect()->route('chatbot.listar_topicos');
-		
+
+		Alerta.alerta("TÛpico cadastrado com sucesso", "success", request); 
+
 		RequestDispatcher dispatcher = request
-				.getRequestDispatcher("/ChatBot/listar_topico.jsp");
+				.getRequestDispatcher("/chatbot/listar_topicos.jsp");
 		dispatcher.forward(request, response);
 
 	}
 	
+	public void excluir_palavra_chave_pergunta(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+		TopicoService ts = new TopicoService();
+		ts.excluirTopico(Integer.parseInt(url[2]));
+		Alerta.alerta("TÛpico excluÌdo com sucesso", "success", request);
+		
+		RequestDispatcher dispatcher = request
+				.getRequestDispatcher("/chatbot/listar_topicos.jsp");
+		dispatcher.forward(request, response);
+	}
+
 	public String[] transformar_string_palavras_chave(String string) {
 		String string_filtrada = escapar_caracteres_notacao(string);
 
 		String palavras_chave[] = string_filtrada.split(" ");
 		return palavras_chave;
 	}
-	
+
 	public String escapar_caracteres_notacao(String string) {
 
 		string = string.replace("(", "");

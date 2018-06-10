@@ -107,7 +107,7 @@ public class Web implements Filter {
 		//Verificando todas as rotas criadas
 		for(Route route : this.rotas){
 			
-			if(route.getUrl() == null) {
+			if(route == null) {
 				continue;
 			}
 			
@@ -218,7 +218,7 @@ public class Web implements Filter {
 		rotas.add( new Route("chatbot/listar_topicos", "ChatbotController", "listar_topicos", "chatbot.listar_topicos"));
 		rotas.add( new Route("chatbot/adicionar_palavra_chave_pergunta/", "ChatbotController", "adicionar_palavra_chave_pergunta", "chatbot.adicionar_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/editar_palavra_chave_pergunta/{id}/", "ChatbotController", "editar_palavra_chave_pergunta", "editar_palavra_chave_pergunta"));
-		rotas.add( new Route("chatbot/excluir_palavra_chave_pergunta/{id}/", "ChatbotController", "excluir_palavra_chave_pergunta", "excluir_palavra_chave_pergunta"));
+		rotas.add( new Route("chatbot/excluir_palavra_chave_pergunta/", "ChatbotController", "excluir_palavra_chave_pergunta", "excluir_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/p_adicionar_palavra_chave_pergunta_ajax/", "ChatbotController", "p_adicionar_palavra_chave_pergunta_ajax", "chatbot.p_adicionar_palavra_chave_pergunta_ajax"));
 
 		//Chatbot Dialog

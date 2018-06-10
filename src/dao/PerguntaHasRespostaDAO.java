@@ -17,15 +17,13 @@ public class PerguntaHasRespostaDAO extends Dao {
 
 public int criar(PerguntaHasResposta perguntaHasResposta) {
 		
-		String sqlInsert = "INSERT INTO pergunta_has_resposta(ID_PERGUNTA, ID_RESPOSTA, PONTUACAO, ID_PALAVRA_CHAVE, DATA_ATUALIZACAO, DATA_CRIACAO, ID_TOPICO) VALUES (?, ?, 0, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "', ?)";
+		String sqlInsert = "INSERT INTO pergunta_has_resposta(ID_PERGUNTA, ID_RESPOSTA, PONTUACAO, ID_TOPICO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, 0, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
 			stm.setInt(1, perguntaHasResposta.getId_pergunta());
 			stm.setInt(2, perguntaHasResposta.getId_resposta());
-			stm.setInt(3, perguntaHasResposta.getPontuacao());
-			stm.setInt(4, perguntaHasResposta.getId_palavra_chave());
-			stm.setInt(7, perguntaHasResposta.getId_palavra_chave());
+			stm.setInt(3, perguntaHasResposta.getId_topico());
 			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";

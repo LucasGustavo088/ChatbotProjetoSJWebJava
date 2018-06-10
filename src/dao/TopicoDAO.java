@@ -8,22 +8,21 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import model.Topico;
+import utils.Helper;
 import model.Resposta;
 import model.Topico;
 
 
-public class TopicoDAO {
+public class TopicoDAO extends Dao{
 
 	public int criar(Topico topico) {
 		
-		String sqlInsert = "INSERT INTO topico(NOME, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, ?)";
+		String sqlInsert = "INSERT INTO topico(NOME, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
-			stm.setString(1, topico.getDescricao());
+			stm.setString(1, topico.getNome());
 			stm.setInt(2, topico.getAtivo());
-			stm.setDate(3, new java.sql.Date( topico.getData_atualizacao().getTime() ));
-			stm.setDate(4, new java.sql.Date( topico.getData_atualizacao().getTime() ));
 			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";

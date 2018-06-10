@@ -8,20 +8,19 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import model.Resposta;
+import utils.Helper;
 import model.Resposta;
 
 public class RespostaDAO {
 
 	public int criar(Resposta resposta) {
 		
-		String sqlInsert = "INSERT INTO resposta(DESCRICAO, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, ?)";
+		String sqlInsert = "INSERT INTO resposta(DESCRICAO, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
 			stm.setString(1, resposta.getDescricao());
 			stm.setInt(2, resposta.getAtivo());
-			stm.setDate(3, new java.sql.Date( resposta.getData_atualizacao().getTime() ));
-			stm.setDate(4, new java.sql.Date( resposta.getData_criacao().getTime() ));
 			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";

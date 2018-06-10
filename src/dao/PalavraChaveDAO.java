@@ -14,7 +14,7 @@ public class PalavraChaveDAO {
 
 public int criar(PalavraChave palavraChave) {
 		
-		String sqlInsert = "INSERT INTO pergunta_has_resposta(NOME, PALAVRA_CHAVE_PRINCIPAL, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
+		String sqlInsert = "INSERT INTO palavra_chave(NOME, PALAVRA_CHAVE_PRINCIPAL, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {

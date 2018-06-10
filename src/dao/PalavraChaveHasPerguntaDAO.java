@@ -46,7 +46,7 @@ public class PalavraChaveHasPerguntaDAO {
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
 			stm.setInt(1, palavraChaveHasPergunta.getId_palavra_chave());
-			stm.setInt(2, palavraChaveHasPergunta.getId_pergunta());
+			stm.setInt(2, palavraChaveHasPergunta.getId_palavra_chave());
 
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
