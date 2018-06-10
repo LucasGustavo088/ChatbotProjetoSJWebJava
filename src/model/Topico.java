@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public class Topico extends Dao{
+public class Topico {
 	private int id;
 	private String descricao;
 	private int ativo;

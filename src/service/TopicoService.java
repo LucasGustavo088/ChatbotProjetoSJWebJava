@@ -13,9 +13,9 @@ public class TopicoService {
 	public int criar(Topico topico) {
 	    return dao.criar(topico);
 	  }
-	/* public ArrayList<Topico> carregarCadastro(String query) {
+	public ArrayList<Topico> carregarCadastro(String query) {
 		return dao.carregarCadastro(query);
-	}*/
+	}
 	 
 	 public boolean verificar_nome_topico_existente(String nome) {
 		 ArrayList<Topico> topico = dao.carregarCadastro("WHERE nome ='" + nome);

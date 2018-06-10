@@ -86,11 +86,24 @@
 	</div>
 </div>
 <script>
-	var palavras_chaves_prefixo_principais = [ 'Como' ];
+	var palavras_chaves_prefixo_principais = [ 'prefixo' , ' prefixo'];
 
 	$(document).ready(function() {
 		popular_pergunta();
+		
+		popular_teste();
 	});
+	
+	function popular_teste() {
+		var numero_teste = Math.floor((Math.random() * 100) + 1);
+		$('#topico').val("topico teste " + numero_teste);
+		$('#resposta1').text("teste resposta " + numero_teste);
+		//adicionar_pergunta();
+		$('#resposta2').text("teste resposta " + numero_teste);
+		$('#pergunta2').text("teste pergunta " + numero_teste);
+		$('#pergunta1').val("teste pergunta " + numero_teste);
+		remover_pergunta(3);
+	}
 	
 	$('#salvar').click(function() {
 		salvar_cadastro();

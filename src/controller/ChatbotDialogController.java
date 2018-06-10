@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jdt.internal.compiler.env.ISourceMethod;
-import org.junit.internal.runners.model.EachTestNotifier;
+//import org.junit.internal.runners.model.EachTestNotifier;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -42,7 +42,6 @@ import service.AtendimentoHasRespostaService;
 import service.AtendimentoService;
 import service.ClienteService;
 import service.PalavraChaveHasPerguntaService;
-import service.PalavraChaveHasRespostaService;
 import service.PalavraChaveService;
 import service.PerguntaHasRespostaService;
 import service.PerguntaService;
@@ -187,8 +186,6 @@ public class ChatbotDialogController extends HttpServlet {
 				palavra_chave_perguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId(), response));
 			}
 		}
-
-
 
 		/*
 		 * Verificando a pergunta com maior peso a partir das palavras-chaves
@@ -437,126 +434,6 @@ public class ChatbotDialogController extends HttpServlet {
 		out.write(jobj.toString());
 	}
 
-
-	public void p_adicionar_palavra_chave_pergunta(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
-
-		String topicos_principal = request.getParameter("nome");
-		Topico topico = new Topico();
-		topico.setNome(topicos_principal);
-		topico.setAtivo(1);
-
-		if(topicos_principal.equals("")) {
-			// alerta('O tópico está vazio.', 'erro');
-			// copiar função alerta do php e colocar no java utils
-		}
-
-		TopicoService ts = new TopicoService();
-		if(ts.verificar_nome_topico_existente(topicos_principal)) {
-			/* alerta('O nome do tópico já existe.', 'erro');
-            voltar_atras();*/
-		}
-		//criar a array vazio, depois converter String em array 
-		int id_topico = ts.criar(topico);
-
-		ArrayList<Pergunta> Perguntas = new ArrayList<>() ;
-		ArrayList<Resposta> Respostas = new ArrayList<>();
-
-
-		String respostasString = request.getParameter("respostas");
-		String perguntasString = request.getParameter("perguntas");
-
-		if(perguntasString.isEmpty()) {
-			/*alerta('As perguntas estão vazias.', 'erro');
-            voltar_atras();*/
-		}
-
-
-		String[] palavras_chaves_resposta;
-		String[] palavras_chaves_pergunta;
-
-		for (Resposta resposta : Respostas) {
-
-			Resposta resposta_cadastro = new Resposta();
-			resposta_cadastro.setDescricao(resposta.getDescricao());
-			resposta_cadastro.setAtivo(1);
-
-			RespostaService rs = new RespostaService();
-			int id_resposta = rs.criar(resposta_cadastro);
-
-
-			Pergunta pergunta_cadastro = new Pergunta();
-			pergunta_cadastro.setDescricao(resposta.getDescricao());
-			pergunta_cadastro.setAtivo(1);
-
-			PerguntaService ps = new PerguntaService();
-			int id_pergunta = ps.criar(pergunta_cadastro);
-			
-			PerguntaHasResposta  pergunta_has_resposta = new PerguntaHasResposta();
-			pergunta_has_resposta.setId(id_pergunta);
-			pergunta_has_resposta.setId(id_resposta);
-			pergunta_has_resposta.setPontuacao(0);
-			pergunta_has_resposta.setId_topico(id_topico);
-			
-			PerguntaHasRespostaService perguntaHasRespostaService = new PerguntaHasRespostaService();
-			perguntaHasRespostaService.criar(pergunta_has_resposta);
-			PalavraChave palavraChave = new PalavraChave();
-			PalavraChaveService palavraChaveService = new PalavraChaveService();
-			int id_palavra_chave = -1;
-			
-			//Quebrando a resposta em várias palavras chaves.
-			palavras_chaves_resposta = transformar_string_palavras_chave(resposta.getDescricao());
-			for (String palavra_chave_resposta : palavras_chaves_resposta) {
-				
-				
-				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavra_chave_resposta)) {
-					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavra_chave_resposta + "' LIMIT 1");
-				}else {
-					PalavraChave palavra_chave_principal = new PalavraChave();
-					palavra_chave_principal.setNome(palavra_chave_resposta);
-					palavra_chave_principal.setAtivo(1);
-					id_palavra_chave = palavraChaveService.criar(palavra_chave_principal);
-				}
-				
-				PalavraChaveHasResposta palavra_chave_has_resposta = new PalavraChaveHasResposta();
-				palavra_chave_has_resposta.setId_resposta(id_resposta);
-				palavra_chave_has_resposta.setId_palavra_chave(id_palavra_chave);
-				palavra_chave_has_resposta.setPont_respsota(0);
-				
-				PalavraChaveHasRespostaService palavraChaveHasRespostaService = new PalavraChaveHasRespostaService();
-				palavraChaveHasRespostaService.criar(palavra_chave_has_resposta);
-			}
-			
-			//Quebrando a perguntas em várias palavras chaves
-			//Lucas arrumar a linha abaixo em php era $palavras_chaves_pergunta = $this->transformar_string_palavras_chave($perguntas[$key]['pergunta'])
-			palavras_chaves_pergunta = transformar_string_palavras_chave("pergunta");
-			for (String palavra_chave_pergunta : palavras_chaves_pergunta) {
-				
-				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavra_chave_pergunta)) {
-					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavra_chave_pergunta + "' LIMIT 1");
-				}else {
-					PalavraChave palavra_chave_principal = new PalavraChave();
-					palavra_chave_principal.setNome(palavra_chave_pergunta);
-					palavra_chave_principal.setAtivo(1);
-					id_palavra_chave = palavraChaveService.criar(palavra_chave_principal);
-				}
-				
-				PalavraChaveHasPergunta palavra_chave_has_pergunta = new PalavraChaveHasPergunta();
-				palavra_chave_has_pergunta.setId_pergunta(id_pergunta);
-				palavra_chave_has_pergunta.setId_palavra_chave(id_palavra_chave);
-				
-				PalavraChaveHasPerguntaService palavraChaveHasPerguntaService = new PalavraChaveHasPerguntaService();
-				palavraChaveHasPerguntaService.criar(palavra_chave_has_pergunta);
-			}
-		}
-		
-		//alerta('Tópico cadastrado com sucesso', 'success'); 
-		//return redirect()->route('chatbot.listar_topicos');
-		
-		RequestDispatcher dispatcher = request
-				.getRequestDispatcher("/ChatBot/listar_topico.jsp");
-		dispatcher.forward(request, response);
-
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
