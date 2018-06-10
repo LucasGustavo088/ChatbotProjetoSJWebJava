@@ -1,5 +1,4 @@
 package routes;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +16,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import utils.Alerta;
 
 /**
  * Servlet Filter implementation class Web
@@ -44,12 +45,8 @@ public class Web implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		/*
-    /*  Web filter - Rotas
+    	/*  Web filter - Rotas
 		 */
-		//Cors
-		// Authorize (allow) all domains to consume the content
-        //((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
-        //((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
 
 		//Configurações de enconding
 		request.setCharacterEncoding("UTF-8");
@@ -58,9 +55,6 @@ public class Web implements Filter {
 		//Obtendo dados de session
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession();
-
-		//Obtendo dados do usuario na session
-		//Users logado = (Usuario) session.getAttribute("logado");
 
 		//Caminho de url
 		String path = req.getContextPath();
@@ -75,8 +69,6 @@ public class Web implements Filter {
 		//Inicializando rotas
 		inicializar_rotas();
 		uri = uri.replace("/ChatbotProjetoSJWebJava/", "");
-		
-		System.out.println(uri);
     	
 		try {
 			runRoute(uri, request, response);
@@ -102,40 +94,36 @@ public class Web implements Filter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		//Mandando o usuário para a página de login caso ele não esteja logado.
-		/*if (logado == null && !uri.equals(path + "/login.jsp")
-				&& !comando.equals("FazerLogin")) {
-			((HttpServletResponse) response).sendRedirect(path + "/login.jsp");
-		}*/
-
-		//chain.doFilter(request, response);
-
 	}
 
-	public void runRoute(String url, ServletRequest request, ServletResponse response) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException {
-		//get current url
+	public void runRoute(String url, ServletRequest request, ServletResponse response) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, IOException, ServletException {
+		//Obtendo a url atual
 		String urlArray[];
 		urlArray = url.split("/");
 		boolean found = false;
 		ArrayList< String > param = new ArrayList< String >();
 		Route rotaEncontrada = new Route(null, null, null, null);
 
-		//Verify all of the url of routes.php is equal to current url
+		//Verificando todas as rotas criadas
 		for(Route route : this.rotas){
-			String routeArray[] = route.getUrl().split("/");
 			
-			/*for(int i = 0; i < routeArray.length; i++){
-				if(routeArray[i].contains("{") != false && urlArray.length == routeArray.length){
-					routeArray[i] = urlArray[i];
-					param.add(urlArray[i]);
-				}
-				route.setUrl(String.join("/", routeArray));
-			}*/
+			if(route.getUrl() == null) {
+				continue;
+			}
+			
+			String routeArray[] = route.getUrl().split("/");
 			
 			if(urlArray.length < 2) {
 				PrintWriter out = response.getWriter();
 				out.println("Página não encontrada");
+				return;
+			}
+			
+			if(urlArray[0].equals("public")) {
+				
+				RequestDispatcher dispatcher = request
+						.getRequestDispatcher("/" + url);
+				dispatcher.forward(request, response);
 				return;
 			}
 			
@@ -150,42 +138,46 @@ public class Web implements Filter {
 
 				break;
 			} 
-			// else if(1 == 1){
-			//  echo 'verificar se o controller e método existe';
-			// } else {
-			//  throw new Exception("Erro 404", 1);
-			// } 
-		}
 		
+		}
+		System.out.println("web");
 		if(found){
+			
+			/*Inicializando Session */		
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpSession session = req.getSession();
+			
+			//Alertas
+			session.setAttribute("alertas", null);
+			
+			//Autorização
+			int logado = 0;
+			if(session.getAttribute("logado") != null) {
+				if((int) session.getAttribute("logado") == 1) {
+					logado = 1;
+				}
+				
+			}
+			
+			if(logado == 0) {
+				if(rotaEncontrada.getController().equals("DashboardController")) {
+					Alerta.alerta("Por favor, realize o login.", "danger", request);
+					//Request
+					RequestDispatcher dispatcher = request
+							.getRequestDispatcher("/autorizacao/login.jsp");
+					dispatcher.forward(request, response);
+				}
+			}
+
 			System.out.println(rotaEncontrada.toString());
 
-		    //load the AppTest at runtime
 			Class cls = Class.forName("controller." + rotaEncontrada.getController());
-			Object obj = cls.newInstance();
-				
-			//call the printIt method
+			Object obj = cls.newInstance();	
+			
 			Method method = cls.getDeclaredMethod(rotaEncontrada.getFuncao(), String[].class, ServletRequest.class, ServletResponse.class);
 			method.invoke(obj, url.split("/"),request, response);
 
-			//controller->action();
-			//mudar o request e deixar apenas como 2 parametros
-			/*switch (count(param)){
-			case 1:
-				controller->action(param[0], this->get_request());
-				break;
-			case 2:
-				controller->action(param[0], param[1], this->get_request());
-				break;
-			case 3:
-				controller->action(param[0], param[1], param[2], this->get_request());
-				break;
-			default:
-				controller->action(this->get_request());
-				break;
-			}*/
 		} else {
-			//Container::page_not_found();
 			System.out.println("Página não encontrada");
 		}
 	}
@@ -206,12 +198,13 @@ public class Web implements Filter {
 
 	public void inicializar_rotas() {
 		//Autorização
-		rotas.add( new Route("auth/logout", "Auth/LogoutController", "logout", "logout"));
-		rotas.add( new Route("", "HomeController", "index", "home"));
+		rotas.add( new Route("autorizacao/logout", "AutorizacaoController", "logout", "logout"));
+		//rotas.add( new Route("", "HomeController", "index", "home"));
 		rotas.add( new Route("autorizacao/login", "AutorizacaoController", "login", "login"));
 		rotas.add( new Route("autorizacao/logar", "AutorizacaoController", "logar", "logar"));
+		
 		//Dashboard
-		rotas.add( new Route("dashboard", "DashboardController", "home", "dashboard.home"));
+		rotas.add( new Route("dashboard/home", "DashboardController", "home", "dashboard.home"));
 		rotas.add( new Route("dashboard/atendimento/{id}", "DashboardController", "atendimento", "dashboard.atendimento"));
 		rotas.add( new Route("dashboard/listar_pendencias_ajax", "DashboardController", "listar_pendencias_ajax", "dashboard.listar_pendencias_ajax"));
 
@@ -222,11 +215,11 @@ public class Web implements Filter {
 		rotas.add( new Route("chatbot/listar_topicos_ajax/", "ChatbotController", "listar_topicos_ajax", "chatbot.listar_topicos_ajax"));
 		rotas.add( new Route("chatbot/configuracoes/", "ChatbotController", "configuracoes", "chatbot.configuracoes"));
 		rotas.add( new Route("chatbot/listar_perguntas_respostas_ajax/", "ChatbotController", "listar_perguntas_respostas_ajax", "chatbot.listar_perguntas_respostas_ajax"));
-		rotas.add( new Route("chatbot/listar_topicos/", "ChatbotController", "listar_topicos", "chatbot.listar_topicos"));
+		rotas.add( new Route("chatbot/listar_topicos", "ChatbotController", "listar_topicos", "chatbot.listar_topicos"));
 		rotas.add( new Route("chatbot/adicionar_palavra_chave_pergunta/", "ChatbotController", "adicionar_palavra_chave_pergunta", "chatbot.adicionar_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/editar_palavra_chave_pergunta/{id}/", "ChatbotController", "editar_palavra_chave_pergunta", "editar_palavra_chave_pergunta"));
 		rotas.add( new Route("chatbot/excluir_palavra_chave_pergunta/{id}/", "ChatbotController", "excluir_palavra_chave_pergunta", "excluir_palavra_chave_pergunta"));
-		rotas.add( new Route("p_adicionar_palavra_chave_pergunta/", "ChatbotController", "p_adicionar_palavra_chave_pergunta", "chatbot.p_adicionar_palavra_chave_pergunta"));
+		rotas.add( new Route("chatbot/p_adicionar_palavra_chave_pergunta_ajax/", "ChatbotController", "p_adicionar_palavra_chave_pergunta_ajax", "chatbot.p_adicionar_palavra_chave_pergunta_ajax"));
 
 		//Chatbot Dialog
 		rotas.add( new Route("chatbot_dialog/obter_resposta_ajax/", "ChatbotDialogController", "obter_resposta_ajax", "chatbotdialog.obter_resposta_ajax"));
@@ -241,6 +234,15 @@ public class Web implements Filter {
 		//Relatório
 		rotas.add( new Route("relatorio/listar_pendencias/", "RelatorioController", "listar_pendencias", "relatorio.listar_pendencias"));
 		rotas.add( new Route("relatorio/gerar_relatorio/", "RelatorioController", "gerar_relatorio", "relatorio.gerar_relatorio"));
+	}
+
+	
+	public static boolean estaLogado(ServletRequest request, ServletResponse response) {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpSession session = req.getSession();
+		boolean logado = (boolean) session.getAttribute("logado");
+		
+		return true;
 	}
 
 	/**

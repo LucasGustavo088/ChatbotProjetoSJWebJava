@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
+import model.Atendimento;
 import model.Atendimento;
 import utils.*;
 
@@ -49,5 +51,37 @@ public class AtendimentoDAO extends Dao{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public ArrayList<Atendimento> carregarCadastro(String query) {
+		Atendimento tabela;
+		ArrayList<Atendimento> lista = new ArrayList<>();
+
+		String sqlSelect = "SELECT * FROM atendimento " + query;
+
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = ConnectionFactory.obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+
+			try (ResultSet rs = stm.executeQuery();) {
+				while (rs.next()) {
+					tabela = new Atendimento();
+					tabela.setId(rs.getInt("ID"));
+					tabela.setAtivo(rs.getInt("ATIVO"));
+					tabela.setData_atualizacao(rs.getTimestamp("DATA_ATUALIZACAO"));
+					tabela.setData_criacao(rs.getTimestamp("DATA_CRIACAO"));
+					tabela.setId_atendente(rs.getInt("ID_ATENDENTE"));
+					tabela.setStatus(rs.getString("STATUS"));
+					tabela.setId_cliente(rs.getInt("ID_CLIENTE"));
+					tabela.setData_finalizacao(rs.getTimestamp("DATA_FINALIZACAO"));
+					lista.add(tabela);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException e1) {
+			System.out.print(e1.getStackTrace());
+		}
+		return lista;
 	}
 }

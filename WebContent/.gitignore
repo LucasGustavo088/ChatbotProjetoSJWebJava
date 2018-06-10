@@ -1,1 +1,2 @@
-/build/
+.settings/*
+src/dao/ConnectionFactory.java

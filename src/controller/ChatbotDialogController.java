@@ -4,7 +4,10 @@ import java.io.IOException;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,6 +27,7 @@ import com.google.gson.JsonObject;
 import model.Atendimento;
 import model.AtendimentoHasPergunta;
 import model.AtendimentoHasResposta;
+import model.Chat;
 import model.Cliente;
 import model.PalavraChave;
 import model.PalavraChaveHasPergunta;
@@ -43,8 +47,10 @@ import service.PalavraChaveService;
 import service.PerguntaHasRespostaService;
 import service.PerguntaService;
 import service.RespostaService;
+
 import service.TopicoService;
 import utils.Debug;
+
 import utils.Json;
 
 
@@ -55,7 +61,7 @@ import model.Topico;
 @WebServlet("/ChatbotDialogController")
 public class ChatbotDialogController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public String mensagemRespostaNaoEncontrada = "Desculpe, não encontrei nada correspondente.";
+	public String mensagemRespostaNaoEncontrada = "Desculpe, nÃ£o encontrei nada correspondente.";
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -91,7 +97,7 @@ public class ChatbotDialogController extends HttpServlet {
 		//atendimento
 		Atendimento atendimento = new Atendimento();
 		atendimento.setAtivo(1);
-		atendimento.setStatus("Não finalizado");
+		atendimento.setStatus("NÃ£o finalizado");
 		atendimento.setId_cliente(idCliente);
 		atendimento.setData_atualizacao(new Date());
 		atendimento.setData_criacao(new Date());
@@ -112,9 +118,8 @@ public class ChatbotDialogController extends HttpServlet {
 	public void salvar_mensagem_banco(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
 
 		if(url[2].equals("pergunta")) {
-			System.out.println("pergunta");
 			Pergunta pergunta = new Pergunta();
-			pergunta.setDescricao(request.getParameter("mensagem"));
+			pergunta.setDescricao(request.getParameter("dados_mensagem[mensagem]"));
 			pergunta.setAtivo(1);
 			pergunta.setData_atualizacao(data_atual());
 			pergunta.setData_criacao(data_atual());
@@ -134,18 +139,17 @@ public class ChatbotDialogController extends HttpServlet {
 
 			ahps.criar(atendimento_has_pergunta);
 		} else {
-			System.out.println("resposta");
 			Resposta resposta = new Resposta();
-			resposta.setDescricao(request.getParameter("mensagem"));
+			resposta.setDescricao(request.getParameter("dados_mensagem[mensagem]"));
 			resposta.setAtivo(1);
 			resposta.setData_criacao(data_atual());
-
+			resposta.setData_atualizacao(data_atual());
 			RespostaService rs = new RespostaService();
 			int idResposta = rs.criar(resposta);
 
 			AtendimentoHasResposta atendimento_has_resposta = new AtendimentoHasResposta();
 			atendimento_has_resposta.setId_resposta(idResposta);
-			atendimento_has_resposta.setId_atendimento(Integer.parseInt(request.getParameter("id_atendimento")));
+			atendimento_has_resposta.setId_atendimento(Integer.parseInt(url[3]));
 			atendimento_has_resposta.setData_atualizacao(data_atual());
 			atendimento_has_resposta.setData_criacao(data_atual());
 
@@ -195,22 +199,22 @@ public class ChatbotDialogController extends HttpServlet {
 					continue;
 				}
 
-				/* ==== PESOS DE DEFINIÇÃO DE MELHOR RESPOSTA =====*/
+				/* ==== PESOS DE DEFINIÃ‡ÃƒO DE MELHOR RESPOSTA =====*/
 				int peso = 0;
 
-				//1) Número de ocorrências 
+				//1) NÃºmero de ocorrÃªncias 
 				peso += obterPesoComparacaoString(
 						palavra_chave_has_pergunta.pergunta.getDescricao(),
 						palavras_chave_mensagem
 						);
 
-				//2) Respostas satisfatórias
+				//2) Respostas satisfatÃ³rias
 				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() != 0) {
 					peso += palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao();
 				}
 
 
-				//3) Palavras-chaves contém no tópico principal
+				//3) Palavras-chaves contÃ©m no tÃ³pico principal
 				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico != null) {
 					peso += obterPesoComparacaoString(
 							palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico.getNome(),
@@ -223,7 +227,7 @@ public class ChatbotDialogController extends HttpServlet {
 		}
 
 		/*
-		 * Verificando qual pergunta_has_resposta tem maior peso de provável resposta.
+		 * Verificando qual pergunta_has_resposta tem maior peso de provÃ¡vel resposta.
 		 */
 		Pergunta respostaFinal = new Pergunta();
 		int maior_peso = -1;
@@ -249,7 +253,7 @@ public class ChatbotDialogController extends HttpServlet {
 		}
 
 		//$this->salvar_pergunta_usuario_externo($mensagem_usuario);
-
+    
 		if(respostaFinal.getId() == 0) {
 			PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
 			perguntaHasResposta.setId_resposta(-1);
@@ -265,7 +269,7 @@ public class ChatbotDialogController extends HttpServlet {
 	public int obterPesoComparacaoString(String texto, String[] possiveis_ocorrencias) {
 		/*
 		 * Pesos:
-		 * Ocorrências no texto: 1 ponto;
+		 * OcorrÃªncias no texto: 1 ponto;
 		 */
 
 		int peso = 0;
@@ -333,6 +337,29 @@ public class ChatbotDialogController extends HttpServlet {
 
 	}
 
+
+	public void atualizar_status_atendimento(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
+		//atendimento
+		boolean status = false;
+		if(request.getParameter("status").equals("") != true) {
+			Atendimento atendimento = new Atendimento();
+			atendimento.setStatus(request.getParameter("status"));
+			atendimento.setId(Integer.parseInt(request.getParameter("id_atendimento")));
+
+			AtendimentoService as = new AtendimentoService();
+			as.query("UPDATE atendimento SET STATUS = '" + atendimento.getStatus() + "' WHERE ID = " + atendimento.getId());
+			status = true;
+
+		}
+
+		//JSON
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("status", "1");
+		out.write(jobj.toString());
+
+	}
+  
 	public void resposta_satisfatoria(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
 		boolean retorno = false;
 
@@ -351,6 +378,65 @@ public class ChatbotDialogController extends HttpServlet {
 		jobj.addProperty("status", retorno);
 		out.write(jobj.toString());
 	}
+  
+	public void carregar_mensagens_chat(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
+		boolean retorno = true;
+
+		AtendimentoService atendimentoService = new AtendimentoService();
+		ArrayList<Atendimento> atendimentos = atendimentoService.carregarCadastroCompleto("WHERE ID = " + url[2], response);
+
+		if(atendimentos.isEmpty()) {
+			retorno = false;
+			return;
+		}
+
+		Atendimento atendimento = atendimentos.get(0);
+
+		List<Chat> chat = new ArrayList<Chat>();
+
+		if(atendimento.atendimentoHasPergunta != null) {
+			for(AtendimentoHasPergunta atendimentoHasPergunta : atendimento.atendimentoHasPergunta) {
+				Chat chatPergunta = new Chat();
+				chatPergunta.data_criacao = atendimentoHasPergunta.getData_criacao();
+				chatPergunta.pergunta = atendimentoHasPergunta.pergunta;
+				chatPergunta.id_atendimento = atendimentoHasPergunta.getId_atendimento();
+				chat.add(chatPergunta);
+			}
+		}
+
+		if(atendimento.atendimentoHasResposta != null) {
+			for(AtendimentoHasResposta atendimentoHasResposta : atendimento.atendimentoHasResposta) {
+				Chat chatResposta = new Chat();
+				chatResposta.data_criacao = atendimentoHasResposta.getData_criacao();
+				chatResposta.resposta = atendimentoHasResposta.resposta;
+				chatResposta.id_atendimento = atendimentoHasResposta.getId_atendimento();
+				chat.add(chatResposta);
+			}
+		}
+
+		if(!chat.isEmpty()) {
+			Collections.sort(chat, new Comparator<Chat>() {
+				@Override
+				public int compare(Chat o1, Chat o2) {
+					if (((Chat) o1).getData_criacao() == null || ((Chat) o1).getData_criacao() == null)
+						return 0;
+					return o1.getData_criacao().compareTo(o2.getData_criacao());
+				}
+			});
+		}
+
+		atendimento.chat = chat;
+
+
+
+		//JSON
+		PrintWriter out = response.getWriter();
+		JsonObject jobj = new JsonObject();
+		jobj.addProperty("status", retorno);
+		jobj.add("atendimento", new Gson().toJsonTree(atendimento));
+		out.write(jobj.toString());
+	}
+
 
 	public void p_adicionar_palavra_chave_pergunta(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
 
@@ -360,13 +446,13 @@ public class ChatbotDialogController extends HttpServlet {
 		topico.setAtivo(1);
 
 		if(topicos_principal.equals("")) {
-			// alerta('O tópico está vazio.', 'erro');
-			// copiar função alerta do php e colocar no java utils
+			// alerta('O tÃ³pico estÃ¡ vazio.', 'erro');
+			// copiar funÃ§Ã£o alerta do php e colocar no java utils
 		}
 
 		TopicoService ts = new TopicoService();
 		if(ts.verificar_nome_topico_existente(topicos_principal)) {
-			/* alerta('O nome do tópico já existe.', 'erro');
+			/* alerta('O nome do tÃ³pico jÃ¡ existe.', 'erro');
             voltar_atras();*/
 		}
 		//criar a array vazio, depois converter String em array 
@@ -380,7 +466,7 @@ public class ChatbotDialogController extends HttpServlet {
 		String perguntasString = request.getParameter("perguntas");
 
 		if(perguntasString.isEmpty()) {
-			/*alerta('As perguntas estão vazias.', 'erro');
+			/*alerta('As perguntas estÃ£o vazias.', 'erro');
             voltar_atras();*/
 		}
 
@@ -417,7 +503,7 @@ public class ChatbotDialogController extends HttpServlet {
 			PalavraChaveService palavraChaveService = new PalavraChaveService();
 			int id_palavra_chave = -1;
 			
-			//Quebrando a resposta em várias palavras chaves.
+			//Quebrando a resposta em vÃ¡rias palavras chaves.
 			palavras_chaves_resposta = transformar_string_palavras_chave(resposta.getDescricao());
 			for (String palavra_chave_resposta : palavras_chaves_resposta) {
 				
@@ -440,7 +526,7 @@ public class ChatbotDialogController extends HttpServlet {
 				palavraChaveHasRespostaService.criar(palavra_chave_has_resposta);
 			}
 			
-			//Quebrando a perguntas em várias palavras chaves
+			//Quebrando a perguntas em vÃ¡rias palavras chaves
 			//Lucas arrumar a linha abaixo em php era $palavras_chaves_pergunta = $this->transformar_string_palavras_chave($perguntas[$key]['pergunta'])
 			palavras_chaves_pergunta = transformar_string_palavras_chave("pergunta");
 			for (String palavra_chave_pergunta : palavras_chaves_pergunta) {
@@ -463,7 +549,7 @@ public class ChatbotDialogController extends HttpServlet {
 			}
 		}
 		
-		//alerta('Tópico cadastrado com sucesso', 'success'); 
+		//alerta('TÃ³pico cadastrado com sucesso', 'success'); 
 		//return redirect()->route('chatbot.listar_topicos');
 		
 		RequestDispatcher dispatcher = request

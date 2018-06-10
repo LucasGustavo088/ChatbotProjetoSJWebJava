@@ -10,33 +10,13 @@ public class Atendimento{
 	private int id_atendente;
 	private String status;
 	private int id_cliente;
-	private int duracao_atendimento;
+	public String duracao_atendimento;
 	private int qtd_tentativa;
 	private Date data_finalizacao;
-	
-	
-	
-	public Date getData_finalizacao() {
-		return data_finalizacao;
-	}
-	public void setData_finalizacao(Date data_finalizacao) {
-		this.data_finalizacao = data_finalizacao;
-	}
-	private Cliente cliente;
-	private Users users;	
-	
-	public Users getUsers() {
-		return users;
-	}
-	public void setUsers(Users users) {
-		this.users = users;
-	}
-	public Cliente getCliente() {
-		return cliente;
-	}
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
+	public Cliente cliente;
+	public ArrayList<AtendimentoHasPergunta> atendimentoHasPergunta = new ArrayList<AtendimentoHasPergunta>();
+	public ArrayList<AtendimentoHasResposta> atendimentoHasResposta = new ArrayList<AtendimentoHasResposta>();
+	public List<Chat> chat;
 	public int getId() {
 		return id;
 	}
@@ -79,10 +59,10 @@ public class Atendimento{
 	public void setId_cliente(int id_cliente) {
 		this.id_cliente = id_cliente;
 	}
-	public int getDuracao_atendimento() {
+	public String getDuracao_atendimento() {
 		return duracao_atendimento;
 	}
-	public void setDuracao_atendimento(int duracao_atendimento) {
+	public void setDuracao_atendimento(String duracao_atendimento) {
 		this.duracao_atendimento = duracao_atendimento;
 	}
 	public int getQtd_tentativa() {
@@ -91,6 +71,38 @@ public class Atendimento{
 	public void setQtd_tentativa(int qtd_tentativa) {
 		this.qtd_tentativa = qtd_tentativa;
 	}
+	public Date getData_finalizacao() {
+		return data_finalizacao;
+	}
+	public void setData_finalizacao(Date data_finalizacao) {
+		this.data_finalizacao = data_finalizacao;
+	}
+	public Cliente getCliente() {
+		return cliente;
+	}
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	public ArrayList<AtendimentoHasPergunta> getAtendimentoHasPergunta() {
+		return atendimentoHasPergunta;
+	}
+	public void setAtendimentoHasPergunta(ArrayList<AtendimentoHasPergunta> atendimentoHasPergunta) {
+		this.atendimentoHasPergunta = atendimentoHasPergunta;
+	}
+	public ArrayList<AtendimentoHasResposta> getAtendimentoHasResposta() {
+		return atendimentoHasResposta;
+	}
+	public void setAtendimentoHasResposta(ArrayList<AtendimentoHasResposta> atendimentoHasResposta) {
+		this.atendimentoHasResposta = atendimentoHasResposta;
+	}
+	public List<Chat> getChat() {
+		return chat;
+	}
+	public void setChat(List<Chat> chat) {
+		this.chat = chat;
+	}
+	
+	
 	
 	
 	

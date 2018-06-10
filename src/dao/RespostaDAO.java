@@ -21,7 +21,7 @@ public class RespostaDAO {
 			stm.setString(1, resposta.getDescricao());
 			stm.setInt(2, resposta.getAtivo());
 			stm.setDate(3, new java.sql.Date( resposta.getData_atualizacao().getTime() ));
-			stm.setDate(4, new java.sql.Date( resposta.getData_atualizacao().getTime() ));
+			stm.setDate(4, new java.sql.Date( resposta.getData_criacao().getTime() ));
 			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";
