@@ -112,7 +112,9 @@
 		$.ajax({
 			url: enderecoBack + 'chatbot/p_adicionar_palavra_chave_pergunta_ajax',
 			method: 'POST',
-			data: $('#form').serialize();
+			data: {
+				formulario: $('#form').serialize()
+			},
 			success: function(retorno) {
 				console.log(retorno);
 			}
