@@ -26,8 +26,8 @@ public class PalavraChaveHasPerguntaDAO {
 				while (rs.next()) {
 					tabela = new PalavraChaveHasPergunta();
 					tabela.setId(rs.getInt("ID"));
-					tabela.setId(rs.getInt("ID_PERGUNTA"));
-					tabela.setId(rs.getInt("ID_PALAVRA_CHAVE"));
+					tabela.setId_pergunta(rs.getInt("ID_PERGUNTA"));
+					tabela.setId_palavra_chave(rs.getInt("ID_PALAVRA_CHAVE"));
 					lista.add(tabela);
 				}
 			} catch (SQLException e) {
@@ -45,7 +45,7 @@ public class PalavraChaveHasPerguntaDAO {
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
-			stm.setInt(1, palavraChaveHasPergunta.getId_palavra_chave());
+			stm.setInt(1, palavraChaveHasPergunta.getId_pergunta());
 			stm.setInt(2, palavraChaveHasPergunta.getId_palavra_chave());
 
 			stm.execute();

@@ -136,15 +136,15 @@ public class ChatbotController implements Filter {
 		int id_topico = ts.criar(topico);
 
 		String[] perguntas = request.getParameterValues("perguntas");
-		String[] respostas = request.getParameterValues("perguntas");
+		String[] respostas = request.getParameterValues("respostas");
 
 		if(perguntas.length == 0) {
 			Alerta.alerta("As perguntas estão vazias.", "erro", request);
 			voltarAdicionarPalavraChavePergunta(request, response);
 		}
 
-		String[] palavras_chaves_resposta;
-		String[] palavras_chaves_pergunta;
+		String[] palavrasChavesResposta;
+		String[] palavrasChavesPergunta;
 		for (int key = 0; key < respostas.length; key++) {
 
 			Resposta resposta_cadastro = new Resposta();
@@ -158,7 +158,7 @@ public class ChatbotController implements Filter {
 			pergunta_cadastro.setAtivo(1);
 			PerguntaService ps = new PerguntaService();
 			int id_pergunta = ps.criar(pergunta_cadastro);
-			System.out.println("pergunta: " + id_pergunta + " id_resposta " + id_resposta);
+
 			PerguntaHasResposta  pergunta_has_resposta = new PerguntaHasResposta();
 			pergunta_has_resposta.setId_pergunta(id_pergunta);
 			pergunta_has_resposta.setId_resposta(id_resposta);
@@ -171,19 +171,19 @@ public class ChatbotController implements Filter {
 			PalavraChaveService palavraChaveService = new PalavraChaveService();
 
 
-			//Quebrando a resposta em vÃ¡rias palavras chaves.
-			palavras_chaves_resposta = transformar_string_palavras_chave(respostas[key]);
-			for (int key_resposta = 0; key_resposta < palavras_chaves_resposta.length; key_resposta++) {
+			//Quebrando a resposta em várias palavras chaves.
+			palavrasChavesResposta = transformar_string_palavras_chave(respostas[key]);
+			for (int keyResposta = 0; keyResposta < palavrasChavesResposta.length; keyResposta++) {
 				int id_palavra_chave = -1;
-				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavras_chaves_resposta[key_resposta])) {
+				if(palavraChaveService.verificarJaExistePalavraChave(palavrasChavesResposta[keyResposta])) {
 					System.out.println("ja existe resposta");
-					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavras_chaves_resposta[key_resposta] + "' LIMIT 1");
+					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavrasChavesResposta[keyResposta] + "' LIMIT 1");
 				}else {
-					PalavraChave palavra_chave_principal = new PalavraChave();
-					palavra_chave_principal.setNome(palavras_chaves_resposta[key_resposta]);
-					palavra_chave_principal.setAtivo(1);
+					PalavraChave palavraChavePrincipal = new PalavraChave();
+					palavraChavePrincipal.setNome(palavrasChavesResposta[keyResposta]);
+					palavraChavePrincipal.setAtivo(1);
 					System.out.println("criando nova palavra chave resposta");
-					id_palavra_chave = palavraChaveService.criar(palavra_chave_principal);
+					id_palavra_chave = palavraChaveService.criar(palavraChavePrincipal);
 				}
 
 				if(id_palavra_chave == -1) {
@@ -200,19 +200,19 @@ public class ChatbotController implements Filter {
 				palavraChaveHasRespostaService.criar(palavra_chave_has_resposta);
 			}
 
-			//Quebrando a resposta em vÃ¡rias palavras chaves.
-			palavras_chaves_pergunta = transformar_string_palavras_chave(perguntas[key]);
-			for (int key_pergunta = 0; key_pergunta < palavras_chaves_pergunta.length; key_pergunta++) {
+			//Quebrando a pergunta em várias palavras chaves.
+			palavrasChavesPergunta = transformar_string_palavras_chave(perguntas[key]);
+			for (int keyPergunta = 0; keyPergunta < palavrasChavesPergunta.length; keyPergunta++) {
 				int id_palavra_chave = -1;
-				if(palavraChaveService.verificar_ja_existe_palavra_chave(palavras_chaves_pergunta[key_pergunta])) {
+				if(palavraChaveService.verificarJaExistePalavraChave(palavrasChavesPergunta[keyPergunta])) {
 					System.out.println("ja existe pergunta");
-					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavras_chaves_pergunta[key_pergunta] + "' LIMIT 1");
+					id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavrasChavesPergunta[keyPergunta] + "' LIMIT 1");
 				}else {
-					PalavraChave palavra_chave_principal = new PalavraChave();
-					palavra_chave_principal.setNome(palavras_chaves_pergunta[key_pergunta]);
-					palavra_chave_principal.setAtivo(1);
+					PalavraChave palavraChavePrincipal = new PalavraChave();
+					palavraChavePrincipal.setNome(palavrasChavesPergunta[keyPergunta]);
+					palavraChavePrincipal.setAtivo(1);
 					System.out.println("criando nova palavra chave pergunta");
-					id_palavra_chave = palavraChaveService.criar(palavra_chave_principal);
+					id_palavra_chave = palavraChaveService.criar(palavraChavePrincipal);
 				}
 
 				if(id_palavra_chave == -1) {

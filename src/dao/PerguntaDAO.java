@@ -15,12 +15,13 @@ public class PerguntaDAO {
 
 	public int criar(Pergunta pergunta) {
 		
-		String sqlInsert = "INSERT INTO pergunta(DESCRICAO, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
+		String sqlInsert = "INSERT INTO pergunta(DESCRICAO, ATIVO, DATA_ATUALIZACAO, DATA_CRIACAO, USUARIO_EXTERNO) VALUES (?, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "', ?)";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
 			stm.setString(1, pergunta.getDescricao());
 			stm.setInt(2, pergunta.getAtivo());
+			stm.setInt(3, pergunta.getUsuario_externo());
 			
 			stm.execute();
 			String sqlQuery = "SELECT LAST_INSERT_ID()";

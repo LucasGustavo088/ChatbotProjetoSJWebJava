@@ -42,6 +42,7 @@ import service.AtendimentoHasRespostaService;
 import service.AtendimentoService;
 import service.ClienteService;
 import service.PalavraChaveHasPerguntaService;
+import service.PalavraChaveHasRespostaService;
 import service.PalavraChaveService;
 import service.PerguntaHasRespostaService;
 import service.PerguntaService;
@@ -60,7 +61,7 @@ import model.Topico;
 @WebServlet("/ChatbotDialogController")
 public class ChatbotDialogController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public String mensagemRespostaNaoEncontrada = "Desculpe, n√£o encontrei nada correspondente.";
+	public String mensagemRespostaNaoEncontrada = "Desculpe, n„o encontrei algo correspondente.";
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -165,92 +166,95 @@ public class ChatbotDialogController extends HttpServlet {
 
 
 	public void obter_resposta_ajax (String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException  {
-		String mensagem_usuario = request.getParameter("mensagem_usuario");
+		String mensagemUsuario = request.getParameter("mensagem_usuario");
 
-		String[] palavras_chave_mensagem = transformar_string_palavras_chave(mensagem_usuario);
+		String[] palavrasChaveMensagem = trasformarStringPalavraChave(mensagemUsuario);
 
-		ArrayList <PalavraChave> palavra_chave_perguntas = new ArrayList <PalavraChave> ();
-
+		ArrayList <PalavraChave> palavraChavePerguntas = new ArrayList <PalavraChave> ();
+		
 		/*
 		 * Obtendo todas as perguntas com as palavras-chaves da mensagem perguntada. 
 		 */ 
-		for(int i =0; i < palavras_chave_mensagem.length; i++) {
+		for(int i =0; i < palavrasChaveMensagem.length; i++) {
 			PalavraChaveService pcs = new PalavraChaveService();
-			ArrayList<PalavraChave> palavra_chave_cadastro = pcs.obter_palavra_chave_com_string(palavras_chave_mensagem[i]);
+			ArrayList<PalavraChave> palavraChaveCadastro = pcs.obterPalavraChaveComString(palavrasChaveMensagem[i]);
 
-			if(palavra_chave_cadastro.size() == 0) {
+			if(palavraChaveCadastro.size() == 0) {
 				continue;
 			}
 
-			for(PalavraChave palavra_chave : palavra_chave_cadastro) {
-				palavra_chave_perguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId(), response));
+			for(PalavraChave palavra_chave : palavraChaveCadastro) {
+				palavraChavePerguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId(), response));
 			}
 		}
-
+		
 		/*
 		 * Verificando a pergunta com maior peso a partir das palavras-chaves
 		 */
-		for (PalavraChave palavra_chave_pergunta : palavra_chave_perguntas) {
-			for(PalavraChaveHasPergunta palavra_chave_has_pergunta : palavra_chave_pergunta.palavraChaveHasPergunta) {
-				if(palavra_chave_has_pergunta.pergunta == null) {
+		for (PalavraChave palavraChavePergunta : palavraChavePerguntas) {
+			for(PalavraChaveHasPergunta palavraChaveHasPergunta : palavraChavePergunta.palavraChaveHasPergunta) {
+				if(palavraChaveHasPergunta.pergunta == null) {
 					continue;
 				}
 
-				/* ==== PESOS DE DEFINI√á√ÉO DE MELHOR RESPOSTA =====*/
+				/* ==== PESOS DE DEFINI«√O DE MELHOR RESPOSTA =====*/
 				int peso = 0;
 
-				//1) N√∫mero de ocorr√™ncias 
+				//1) N˙mero de ocorrÍncias 
 				peso += obterPesoComparacaoString(
-						palavra_chave_has_pergunta.pergunta.getDescricao(),
-						palavras_chave_mensagem
+						palavraChaveHasPergunta.pergunta.getDescricao(),
+						palavrasChaveMensagem
 						);
 
-				//2) Respostas satisfat√≥rias
-				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() != 0) {
-					peso += palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao();
+				//2) Respostas satisfatÛrias
+				if(palavraChaveHasPergunta.pergunta.perguntaHasResposta != null && palavraChaveHasPergunta.pergunta.perguntaHasResposta.getPontuacao() != 0) {
+					peso += palavraChaveHasPergunta.pergunta.perguntaHasResposta.getPontuacao();
 				}
 
 
-				//3) Palavras-chaves cont√©m no t√≥pico principal
-				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta != null && palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico != null) {
+				//3) Palavras-chaves contÈm no tÛpico principal
+				if(palavraChaveHasPergunta.pergunta.perguntaHasResposta != null && palavraChaveHasPergunta.pergunta.perguntaHasResposta.topico != null) {
 					peso += obterPesoComparacaoString(
-							palavra_chave_has_pergunta.pergunta.perguntaHasResposta.topico.getNome(),
-							palavras_chave_mensagem
+							palavraChaveHasPergunta.pergunta.perguntaHasResposta.topico.getNome(),
+							palavrasChaveMensagem
 							);
 				}
 
-				palavra_chave_has_pergunta.pergunta.peso_pergunta = peso; 
+				palavraChaveHasPergunta.pergunta.peso_pergunta = peso; 
 			}
 		}
 
 		/*
-		 * Verificando qual pergunta_has_resposta tem maior peso de prov√°vel resposta.
+		 * Verificando qual pergunta_has_resposta tem maior peso de prov·vel resposta.
 		 */
 		Pergunta respostaFinal = new Pergunta();
-		int maior_peso = -1;
-		for(PalavraChave palavra_chave_pergunta : palavra_chave_perguntas) {
-			for(PalavraChaveHasPergunta palavra_chave_has_pergunta : palavra_chave_pergunta.palavraChaveHasPergunta) {
-				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta == null ) {
+		int maiorPeso = -1;
+		for(PalavraChave palavraChavePergunta : palavraChavePerguntas) {
+			for(PalavraChaveHasPergunta palavraChaveHasPergunta : palavraChavePergunta.palavraChaveHasPergunta) {
+				 if(palavraChaveHasPergunta.pergunta == null ) {
+
+						continue;
+				} else if(palavraChaveHasPergunta.pergunta.perguntaHasResposta == null ) {
 
 					continue;
 
-				} else if (palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta == null) {
+				} else if (palavraChaveHasPergunta.pergunta.perguntaHasResposta.resposta == null) {
 
 					continue;
 
-				} else if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.resposta.getDescricao().equals("")) {
+				} else if(palavraChaveHasPergunta.pergunta.perguntaHasResposta.resposta.getDescricao().equals("")) {
 
 					continue;
 				}
 
-				if(palavra_chave_has_pergunta.pergunta.perguntaHasResposta.getPontuacao() > maior_peso) {
-					respostaFinal = palavra_chave_has_pergunta.pergunta;
+				if(palavraChaveHasPergunta.pergunta.perguntaHasResposta.getPontuacao() > maiorPeso) {
+					respostaFinal = palavraChaveHasPergunta.pergunta;
 				}
 			}
 		}
 
-		//$this->salvar_pergunta_usuario_externo($mensagem_usuario);
-    
+		salvarPerguntaUsuarioExterno(mensagemUsuario);
+
 		if(respostaFinal.getId() == 0) {
 			PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
 			perguntaHasResposta.setId_resposta(-1);
@@ -261,6 +265,42 @@ public class ChatbotDialogController extends HttpServlet {
 		}
 
 		Json.jsonEncode(respostaFinal, response);
+	}
+
+	public void salvarPerguntaUsuarioExterno(String mensagemUsuario) {
+		Pergunta pergunta_cadastro = new Pergunta();
+		pergunta_cadastro.setDescricao(mensagemUsuario);
+		pergunta_cadastro.setAtivo(1);
+		pergunta_cadastro.setUsuario_externo(1);
+		PerguntaService ps = new PerguntaService();
+		int id_pergunta = ps.criar(pergunta_cadastro);
+		System.out.println(id_pergunta);
+		PalavraChaveService palavraChaveService = new PalavraChaveService();
+
+		//Quebrando a pergunta em v·rias palavras chaves.
+		String[] palavrasChavesPergunta = trasformarStringPalavraChave(mensagemUsuario);
+		for (int keyPergunta = 0; keyPergunta < palavrasChavesPergunta.length; keyPergunta++) {
+			int id_palavra_chave = -1;
+			if(palavraChaveService.verificarJaExistePalavraChave(palavrasChavesPergunta[keyPergunta])) {
+				id_palavra_chave = palavraChaveService.carregar_id("WHERE NOME = '" + palavrasChavesPergunta[keyPergunta] + "' LIMIT 1");
+			}else {
+				PalavraChave palavra_chave_principal = new PalavraChave();
+				palavra_chave_principal.setNome(palavrasChavesPergunta[keyPergunta]);
+				palavra_chave_principal.setAtivo(1);
+				id_palavra_chave = palavraChaveService.criar(palavra_chave_principal);
+			}
+
+			if(id_palavra_chave == -1) {
+				System.out.println("Erro ao adicionar palavra chave de perguntas");
+			}
+
+			PalavraChaveHasPergunta palavraChaveHasPergunta = new PalavraChaveHasPergunta();
+			palavraChaveHasPergunta.setId_pergunta(id_pergunta);
+			palavraChaveHasPergunta.setId_palavra_chave(id_palavra_chave);
+
+			PalavraChaveHasPerguntaService palavraChaveHasPerguntaService = new PalavraChaveHasPerguntaService();
+			palavraChaveHasPerguntaService.criar(palavraChaveHasPergunta);
+		}
 	}
 
 	public int obterPesoComparacaoString(String texto, String[] possiveis_ocorrencias) {
@@ -289,7 +329,7 @@ public class ChatbotDialogController extends HttpServlet {
 		System.out.println(results);
 	}
 
-	public String[] transformar_string_palavras_chave(String string) {
+	public String[] trasformarStringPalavraChave(String string) {
 		String string_filtrada = escapar_caracteres_notacao(string);
 
 		String palavras_chave[] = string_filtrada.split(" ");
@@ -356,7 +396,7 @@ public class ChatbotDialogController extends HttpServlet {
 		out.write(jobj.toString());
 
 	}
-  
+
 	public void resposta_satisfatoria(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
 		boolean retorno = false;
 
@@ -375,7 +415,7 @@ public class ChatbotDialogController extends HttpServlet {
 		jobj.addProperty("status", retorno);
 		out.write(jobj.toString());
 	}
-  
+
 	public void carregar_mensagens_chat(String[] url, ServletRequest request, ServletResponse response)throws ServletException, IOException {
 		boolean retorno = true;
 

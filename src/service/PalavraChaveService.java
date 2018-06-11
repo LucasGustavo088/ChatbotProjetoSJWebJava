@@ -27,7 +27,7 @@ public class PalavraChaveService {
 	public PalavraChaveDAO dao = new PalavraChaveDAO();
 
 
-	public ArrayList<PalavraChave> obter_palavra_chave_com_string(String palavra_chave) {
+	public ArrayList<PalavraChave> obterPalavraChaveComString(String palavra_chave) {
 		return dao.carregarCadastro("where NOME = '" + palavra_chave + "'");
 	}
 	
@@ -58,13 +58,13 @@ public class PalavraChaveService {
 
 			//Pergunta
 			PerguntaService perguntaService = new PerguntaService();
-			ArrayList<Pergunta> perguntas = perguntaService.carregarCadastro("WHERE ID = '" + palavraChaveHasPerguntas.getId_pergunta() + "'");
+			ArrayList<Pergunta> perguntas = perguntaService.carregarCadastro("WHERE ID = '" + palavraChaveHasPerguntas.getId_pergunta() + "' AND USUARIO_EXTERNO != 1");
 			if(!perguntas.isEmpty()) {
 				palavraChaveHasPerguntas.pergunta = perguntas.get(0);
 
 				//perguntaHasResposta
 				PerguntaHasRespostaService perguntaHasRespostaService = new PerguntaHasRespostaService();
-				ArrayList<PerguntaHasResposta> perguntaHasRespostas = perguntaHasRespostaService.carregarCadastro("WHERE ID_PERGUNTA = " + palavraChaveHasPerguntas.pergunta.getId() + "");
+				ArrayList<PerguntaHasResposta> perguntaHasRespostas = perguntaHasRespostaService.carregarCadastro("WHERE ID_PERGUNTA = " + palavraChaveHasPerguntas.pergunta.getId() + " AND ATIVO = 1");
 				palavraChaveHasPerguntas.pergunta.perguntaHasResposta = null;
 				
 				if(!perguntaHasRespostas.isEmpty()) {
@@ -106,7 +106,7 @@ public class PalavraChaveService {
 	}
   
 	
-	public boolean verificar_ja_existe_palavra_chave(String palavra_chave) {
+	public boolean verificarJaExistePalavraChave(String palavra_chave) {
 		ArrayList<PalavraChave> palavras_chave = dao.carregarCadastro("WHERE NOME = '" + palavra_chave + "'");
 		if(palavras_chave.isEmpty()) {
 			return false;

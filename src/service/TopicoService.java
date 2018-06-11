@@ -2,13 +2,13 @@ package service;
 
 import java.util.ArrayList;
 
+import dao.PerguntaHasRespostaDAO;
 import dao.TopicoDAO;
-import model.Atendimento;
 import model.Topico;
-import model.Users;
 
 public class TopicoService {
 	TopicoDAO dao = new TopicoDAO();
+	PerguntaHasRespostaDAO perguntaHasRespostaDao = new PerguntaHasRespostaDAO();
 
 	public int criar(Topico topico) {
 		return dao.criar(topico);
@@ -34,6 +34,7 @@ public class TopicoService {
 
 	public void excluirTopico(int id_topico) {
 		dao.query("UPDATE topico SET ATIVO = 0 WHERE ID = " + id_topico);
+		perguntaHasRespostaDao.query("UPDATE pergunta_has_resposta SET ATIVO = 0 WHERE ID_TOPICO = " + id_topico);
 	}
 
 

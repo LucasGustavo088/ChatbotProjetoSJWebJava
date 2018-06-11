@@ -17,7 +17,7 @@ public class PerguntaHasRespostaDAO extends Dao {
 
 public int criar(PerguntaHasResposta perguntaHasResposta) {
 		
-		String sqlInsert = "INSERT INTO pergunta_has_resposta(ID_PERGUNTA, ID_RESPOSTA, PONTUACAO, ID_TOPICO, DATA_ATUALIZACAO, DATA_CRIACAO) VALUES (?, ?, 0, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "')";
+		String sqlInsert = "INSERT INTO pergunta_has_resposta(ID_PERGUNTA, ID_RESPOSTA, PONTUACAO, ID_TOPICO, DATA_ATUALIZACAO, DATA_CRIACAO, ATIVO) VALUES (?, ?, 0, ?, '" + Helper.dataAtual() + "', '" + Helper.dataAtual() + "', 1)";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = ConnectionFactory.obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlInsert);) {
