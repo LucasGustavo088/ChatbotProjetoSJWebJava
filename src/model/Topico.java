@@ -9,6 +9,7 @@ public class Topico {
 	private Date data_atualizacao;
 	private Date data_criacao;
 	private String nome;
+	public ArrayList<PerguntaHasResposta> perguntaHasResposta = new ArrayList<PerguntaHasResposta>();
 	
 	public int getId() {
 		return id;

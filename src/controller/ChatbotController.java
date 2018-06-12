@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import utils.Json;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -12,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+
+import com.google.gson.Gson;
 
 import model.PalavraChave;
 import model.PalavraChaveHasPergunta;
@@ -79,9 +82,17 @@ public class ChatbotController implements Filter {
 	}
 	
 	public void editar_palavra_chave_pergunta(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
-
+		
+		Topico topico = new Topico();
+		TopicoService ts = new TopicoService();
+		topico = ts.carregarCadastroCompleto(Integer.parseInt(url[2]));
+		
+		Gson gson = new Gson();
+		String jsonString = gson.toJson(topico);
+		request.setAttribute("cadastro", jsonString);
+		
 		RequestDispatcher dispatcher = request
-				.getRequestDispatcher("/chatbot/adicionar_palavra_chave_pergunta.jsp");
+				.getRequestDispatcher("/chatbot/editar_palavra_chave_pergunta.jsp");
 
 		dispatcher.forward(request, response);
 	}
@@ -113,7 +124,6 @@ public class ChatbotController implements Filter {
 		resultado.iTotalRecords = aaData.size();
 		resultado.sEcho = 1;
 		Debug.debug(resultado, response);
-
 	}
 
 	public void voltarAdicionarPalavraChavePergunta(ServletRequest request, ServletResponse response) throws ServletException, IOException {
@@ -178,7 +188,6 @@ public class ChatbotController implements Filter {
 			PalavraChave palavraChave = new PalavraChave();
 			PalavraChaveService palavraChaveService = new PalavraChaveService();
 
-
 			//Quebrando a resposta em várias palavras chaves.
 			palavrasChavesResposta = transformar_string_palavras_chave(respostas[key]);
 			for (int keyResposta = 0; keyResposta < palavrasChavesResposta.length; keyResposta++) {
@@ -235,8 +244,6 @@ public class ChatbotController implements Filter {
 				PalavraChaveHasPerguntaService palavraChaveHasPerguntaService = new PalavraChaveHasPerguntaService();
 				palavraChaveHasPerguntaService.criar(palavra_chave_has_pergunta);
 			}
-
-
 		}
 
 		Alerta.alerta("Tópico cadastrado com sucesso", "success", request); 

@@ -276,10 +276,11 @@ alter table pergunta_has_resposta add ID_TOPICO INT(11) NULL;
 alter table pergunta_has_resposta ADD CONSTRAINT pergunta_has_resposta_fk2 FOREIGN KEY (ID_TOPICO) REFERENCES topico(ID);
 alter table pergunta_has_resposta CHANGE PONT_RESPOSTA PONTUACAO INT(11) NULL;
 ALTER TABLE atendimento add DATA_FINALIZACAO DATETIME NULL;
-update users set password = "funcionario" where id = 1;
+insert into `users` (`email`, `name`, `password`, `updated_at`, `created_at`) values ('funcionario@email.com', 'Funcionario', 'funcionario', '2018-03-24 16:04:24', '2018-03-24 16:04:24');
+ALTER TABLE pergunta_has_resposta add ATIVO TINYINT(1) NULL;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-insert into `users` (`email`, `name`, `password`, `updated_at`, `created_at`) values ('funcionario@email.com', 'Funcionario', '$2y$10$cf22WIcjgw99j1E1DS16wOgma1ofXdAqPc/XjN/7uyKl8zZx0E84.', '2018-03-24 16:04:24', '2018-03-24 16:04:24');
+

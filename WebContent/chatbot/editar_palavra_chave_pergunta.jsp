@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+ <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page import="java.util.*,
+                  utils.*,
+                 	model.*" %>
 
 <c:import url="../layouts/header_dashboard.jsp" />
 
@@ -22,7 +27,7 @@
 				<div class="col-sm-10">
 					<input type="text" required name="topico"
 						placeholder="Digite o tópico principal das perguntas e respostas. Ex: Certidão de nascimento"
-						class="form-control" id="topico" rows="5">
+						class="form-control" value="${topico.nome}" id="topico" rows="5">
 				</div>
 			</div>
 			<div class="panel panel-default">
@@ -48,7 +53,7 @@
 			<div class="salvar_cancelar row" style="margin-top: 200px;">
 				<div class="col-md-2" style="float: right">
 					<button type="button" class="btn btn-danger" id="cancelar">Cancelar</button>
-					<button type="button" class="btn btn-success" id="salvar">Salvar</button>
+					
 				</div>
 			</div>
 		</div>
@@ -86,12 +91,23 @@
 	</div>
 </div>
 <script>
-	var palavras_chaves_prefixo_principais = [ 'prefixo' , ' prefixo'];
-
+	var topico = ${cadastro};
+	
 	$(document).ready(function() {
-		popular_pergunta();
+		//popular_pergunta();
 		
-		popular_teste();
+		$('#topico').val(topico.nome);
+		if(topico.perguntaHasResposta.length != 0) {
+			topico.perguntaHasResposta.forEach(function(pergunta_resposta) {
+				var id = adicionar_pergunta();
+				$('#pergunta' + id).val(pergunta_resposta.pergunta.descricao);
+				$('#resposta' + id).val(pergunta_resposta.resposta.descricao);
+			});
+		}
+		
+		$('input').prop('disabled', 'disabled');
+		$('textarea').prop('disabled', 'disabled');
+		//popular_teste();
 	});
 	
 	function popular_teste() {
@@ -144,6 +160,7 @@
 		$('#respostas_container').append(clone_pergunta);
 
 		contador_pergunta++;
+		return id;
 	}
 
 	function remover_pergunta(id) {
