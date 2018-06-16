@@ -187,6 +187,7 @@ table.dataTable thead th {
 				var path = location.pathname.replace("/ChatbotProjetoSJWebJava/", "");
 				path = path.split("/");
 				
+				path = ['Chatbot System'];
 				path.forEach(function(valor) {
 					var link = str_replace("_", " ", ucwords(valor))
 					$('#breadcrumb').append("<li>" + link + "</li>");	

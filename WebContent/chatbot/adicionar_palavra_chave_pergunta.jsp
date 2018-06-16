@@ -86,12 +86,12 @@
 	</div>
 </div>
 <script>
-	var palavras_chaves_prefixo_principais = [ 'prefixo' , ' prefixo'];
+	var palavras_chaves_prefixo_principais = [ 'Como' , ' O que é', 'Para que serve', 'Quais são os documentos necessários'];
 
 	$(document).ready(function() {
 		popular_pergunta();
 		
-		popular_teste();
+		//popular_teste();
 	});
 	
 	function popular_teste() {

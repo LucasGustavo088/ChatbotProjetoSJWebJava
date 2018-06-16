@@ -103,7 +103,14 @@ public class Web implements Filter {
 		boolean found = false;
 		ArrayList< String > param = new ArrayList< String >();
 		Route rotaEncontrada = new Route(null, null, null, null);
-
+		
+		//Primeira inicialização
+		if(url.equals("")) {
+			RequestDispatcher dispatcher = request
+					.getRequestDispatcher("/autorizacao/login.jsp");
+			dispatcher.forward(request, response);
+		}
+		
 		//Verificando todas as rotas criadas
 		for(Route route : this.rotas){
 			
@@ -140,7 +147,7 @@ public class Web implements Filter {
 			} 
 		
 		}
-		System.out.println("web");
+		
 		if(found){
 			
 			/*Inicializando Session */		

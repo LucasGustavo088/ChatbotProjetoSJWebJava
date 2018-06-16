@@ -171,7 +171,7 @@ public class ChatbotDialogController extends HttpServlet {
 		String[] palavrasChaveMensagem = trasformarStringPalavraChave(mensagemUsuario);
 
 		ArrayList <PalavraChave> palavraChavePerguntas = new ArrayList <PalavraChave> ();
-		
+
 		/*
 		 * Obtendo todas as perguntas com as palavras-chaves da mensagem perguntada. 
 		 */ 
@@ -187,7 +187,7 @@ public class ChatbotDialogController extends HttpServlet {
 				palavraChavePerguntas.add(pcs.carregar_cadastro_completo(palavra_chave.getId(), response));
 			}
 		}
-		
+
 		/*
 		 * Verificando a pergunta com maior peso a partir das palavras-chaves
 		 */
@@ -231,9 +231,9 @@ public class ChatbotDialogController extends HttpServlet {
 		int maiorPeso = -1;
 		for(PalavraChave palavraChavePergunta : palavraChavePerguntas) {
 			for(PalavraChaveHasPergunta palavraChaveHasPergunta : palavraChavePergunta.palavraChaveHasPergunta) {
-				 if(palavraChaveHasPergunta.pergunta == null ) {
+				if(palavraChaveHasPergunta.pergunta == null ) {
 
-						continue;
+					continue;
 				} else if(palavraChaveHasPergunta.pergunta.perguntaHasResposta == null ) {
 
 					continue;
