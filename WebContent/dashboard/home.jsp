@@ -42,7 +42,7 @@
             <th>ID</th>
             <th>Nome do cliente</th>
             <th>Email</th>
-            <th>Data</th>
+            <th>Data de inicio</th>
             <th>Status</th>
             <th style="width: 200px;">Ações</th>
         </tr>

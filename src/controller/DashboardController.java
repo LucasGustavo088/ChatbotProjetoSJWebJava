@@ -68,15 +68,18 @@ public class DashboardController implements Filter {
 		for(Atendimento atendimento : atendimentos) {
 			String botao_atender = " <a onclick='redirecionar_para_atendimento(" + atendimento.getId() + ");' class='btn btn-success'> Atender</a>"; 
 
-			String status = "Chatbot";
-
-			if(atendimento.getStatus().equals("atendimento_iniciado")) {
-				status = "Atendimento iniciado";
+			String status = "<strong>Não finalizado</strong>";
+			
+			if(atendimento.getStatus().equals("finalizado")) {
+				status = "<strong><span style='color: green'>Finalizado</span></strong>";
+				botao_atender = " <a onclick='redirecionar_para_atendimento(" + atendimento.getId() + ");' class='btn btn-primary'> Visualizar</a>";
+			} else if(atendimento.getStatus().equals("atendimento_iniciado")) {
+				status = "<strong>Atendimento iniciado</strong>";
 			} else {
 				botao_atender = " <a onclick='redirecionar_para_atendimento(" + atendimento.getId() + ");' class='btn btn-primary'> Visualizar</a>";
 			}
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm:ss");
 
 			ArrayList<String> data = new ArrayList<String>();
 			data.add(String.valueOf(atendimento.getId()));

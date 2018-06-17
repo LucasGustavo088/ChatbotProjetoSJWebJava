@@ -125,7 +125,7 @@
 
   function desabilitar_envio() {
     $('#mensagem_input').prop('disabled', true);
-    $('#mensagem_input').attr('placeholder', 'Atendimento ainda não solicitado...');
+    $('#mensagem_input').attr('placeholder', 'O atendimento está desabilitado...');
     $('#botao_enviar_mensagem').hide();
   }
 

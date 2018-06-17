@@ -97,7 +97,7 @@ public class ChatbotDialogController extends HttpServlet {
 		//atendimento
 		Atendimento atendimento = new Atendimento();
 		atendimento.setAtivo(1);
-		atendimento.setStatus("NÃ£o finalizado");
+		atendimento.setStatus("Não finalizado");
 		atendimento.setId_cliente(idCliente);
 		atendimento.setData_atualizacao(new Date());
 		atendimento.setData_criacao(new Date());
@@ -223,11 +223,14 @@ public class ChatbotDialogController extends HttpServlet {
 				palavraChaveHasPergunta.pergunta.peso_pergunta = peso; 
 			}
 		}
-
+		
+		
 		/*
 		 * Verificando qual pergunta_has_resposta tem maior peso de provável resposta.
 		 */
 		Pergunta respostaFinal = new Pergunta();
+		ArrayList<Pergunta> respostasFinais = new ArrayList<Pergunta>();
+		
 		int maiorPeso = -1;
 		for(PalavraChave palavraChavePergunta : palavraChavePerguntas) {
 			for(PalavraChaveHasPergunta palavraChaveHasPergunta : palavraChavePergunta.palavraChaveHasPergunta) {
@@ -248,23 +251,32 @@ public class ChatbotDialogController extends HttpServlet {
 				}
 
 				if(palavraChaveHasPergunta.pergunta.perguntaHasResposta.getPontuacao() > maiorPeso) {
-					respostaFinal = palavraChaveHasPergunta.pergunta;
+					boolean jaExiste = false;
+					
+					//1) Retirando redundância e deixando as respostas integras
+					for(Pergunta respostaFinalBusca : respostasFinais) {
+						if(palavraChaveHasPergunta.pergunta.getId() == respostaFinalBusca.getId()) {
+							jaExiste = true;
+						}
+					}
+					
+					if(!jaExiste) {
+						respostasFinais.add(palavraChaveHasPergunta.pergunta);
+					}
+					
 				}
 			}
 		}
-
-		salvarPerguntaUsuarioExterno(mensagemUsuario);
-
+		
+		//salvarPerguntaUsuarioExterno(mensagemUsuario);
+		
+		
 		if(respostaFinal.getId() == 0) {
-			PerguntaHasResposta perguntaHasResposta = new PerguntaHasResposta();
-			perguntaHasResposta.setId_resposta(-1);
-			respostaFinal.perguntaHasResposta = perguntaHasResposta;
-			Resposta resposta = new Resposta();
-			resposta.setDescricao(this.mensagemRespostaNaoEncontrada);
-			respostaFinal.perguntaHasResposta.resposta = resposta;
+			
 		}
-
-		Json.jsonEncode(respostaFinal, response);
+		
+		Json.jsonEncode(respostasFinais, response);
+		
 	}
 
 	public void salvarPerguntaUsuarioExterno(String mensagemUsuario) {

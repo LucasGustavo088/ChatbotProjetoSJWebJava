@@ -54,7 +54,8 @@
 					<li><a href="#red">OBJETIVO</a></li>
 					<li><a href="#eq">EQUIPE</a></li>
 					<li><a href="#ser">COMO FUNCIONA</a></li>
-					<li><a href="http://localhost:8080/ChatbotProjetoSJWebJava/autorizacao/login">LOGIN</a></li>
+					<li><a
+						href="http://localhost:8080/ChatbotProjetoSJWebJava/autorizacao/login">LOGIN</a></li>
 					<li><a data-toggle="modal" data-target="#myModal"
 						href="#myModal"><i class="fa fa-envelope-o"></i></a></li>
 				</ul>
@@ -145,7 +146,7 @@
 							Computação<br> Brasileira <br> RA: 817124071
 						</p>
 						<p>
-							<a href="#">@Bruna_Gabriella</a> 
+							<a href="#">@Bruna_Gabriella</a>
 						</p>
 					</div>
 					<!-- col-lg-3 -->
@@ -188,10 +189,10 @@
 				<ol class="carousel-indicators">
 					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 					<li data-target="#myCarousel" data-slide-to="1"></li>
-                    <li data-target="#myCarousel" data-slide-to="2"></li>
-                    <li data-target="#myCarousel" data-slide-to="3"></li>
-                    <li data-target="#myCarousel" data-slide-to="4"></li>
-                    <li data-target="#myCarousel" data-slide-to="5"></li>
+					<li data-target="#myCarousel" data-slide-to="2"></li>
+					<li data-target="#myCarousel" data-slide-to="3"></li>
+					<li data-target="#myCarousel" data-slide-to="4"></li>
+					<li data-target="#myCarousel" data-slide-to="5"></li>
 					<li data-target="#myCarousel" data-slide-to="6"></li>
 				</ol>
 				<!-- Wrapper for carousel items -->
@@ -205,18 +206,18 @@
 					<div class="item">
 						<img src="slides/Slide3.jpg" alt="Third Slide">
 					</div>
-                    <div class="item">
-                        <img src="slides/Slide4.jpg" alt="Third Slide">
-                    </div>
-                    <div class="item">
-                        <img src="slides/Slide5.jpg" alt="Third Slide">
-                    </div>
-                    <div class="item">
-                        <img src="slides/Slide6.jpg" alt="Third Slide">
-                    </div>
-                    <div class="item">
-                        <img src="slides/Slide7.jpg" alt="Third Slide">
-                    </div>
+					<div class="item">
+						<img src="slides/Slide4.jpg" alt="Third Slide">
+					</div>
+					<div class="item">
+						<img src="slides/Slide5.jpg" alt="Third Slide">
+					</div>
+					<div class="item">
+						<img src="slides/Slide6.jpg" alt="Third Slide">
+					</div>
+					<div class="item">
+						<img src="slides/Slide7.jpg" alt="Third Slide">
+					</div>
 				</div>
 				<!-- Carousel controls -->
 				<a class="carousel-control left" href="#myCarousel"
@@ -299,11 +300,16 @@
 					<div class="messages msg_receive">
 						<p>$mensagem</p>
 						<time datetime="2009-11-13T20:00">
-							Chatbot • Agora mesmo
+							<span id="entidade$id">Chatbot • Agora mesmo</span>
+							<br>
 							<button
 								onclick="finalizar_atendimento(); resposta_satisfatoria($id_pergunta_resposta)"
 								style="width: 57px; height: 20px; font-size: 8px;"
-								class="btn btn-success satisfacao" type="button">Satisfeito?</button>
+								class="btn btn-success satisfacao" type="button">Satisfeito</button>
+							<button
+								onclick="proxima_resposta();"
+								style="width: 70px; height: 20px; font-size: 8px;"
+								class="btn btn-danger satisfacao nao_satisfeito" type="button">Não satisfeito</button>
 						</time>
 					</div>
 				</div>
@@ -439,18 +445,39 @@
         clone_usuario_chatbot = str_replace('$mensagem', mensagem, clone_usuario_chatbot);
         clone_usuario_chatbot = str_replace('$id_pergunta_resposta', null, clone_usuario_chatbot);
         clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
-
+		
         $('#base_mensagens').append(clone_usuario_chatbot);
+        
+        if(contador_resposta > 2) {
+        	  $('#entidade' + contador_clone_chatbot_mensagem).text('Atendente • Agora mesmo');
+        	  $('#clone_chatbot_mensagem' + contador_clone_chatbot_mensagem + ' .nao_satisfeito').remove();
+          }
+        
+        contador_clone_chatbot_mensagem++;
       }
+      
+      function desabilitar_envio() {
+    	    $('#mensagem_input').prop('disabled', true);
+    	    $('#mensagem_input').attr('placeholder', '...');
+    	    $('#botao_enviar_mensagem').hide();
+   	  }
+
+   	  function habilitar_envio() {
+   	    $('#mensagem_input').prop('disabled', false);
+   	    $('#mensagem_input').attr('placeholder', 'Escreva aqui...');
+   	    $('#botao_enviar_mensagem').show();
+   	  }
 
       function enviar_mensagem() {
         if($('#mensagem_input').val() != '') {
             adicionar_mensagem_usuario();
-
+			
+            obter_resposta_ajax($('#mensagem_input').val());
+            
             scroll_down_mensagem_enviada();
             
             setTimeout(function() {
-                adicionar_mensagem_bot();
+                proxima_resposta();
                 scroll_down_mensagem_enviada();
             }, 200);
         } 
@@ -486,8 +513,12 @@
 
           $('#base_mensagens #identificacao').remove();
           $('#mensagem_input').prop('disabled', false);
-
-          adicionar_mensagem_bot("Olá " + dados_usuario.nome + ". Em que posso te ajudar?", true);
+			
+          var mensagem_chatbot = {};
+          mensagem_chatbot.resposta = "Olá " + dados_usuario.nome + ". Em que posso te ajudar?";
+          mensagem_chatbot.id_pergunta_resposta = -1;
+          
+          adicionar_mensagem_chatbot_caixa(mensagem_chatbot, true);
         }
       }
 
@@ -589,39 +620,56 @@
             return 'Olá';
         }
       }
-
-      function adicionar_mensagem_bot(mensagem, nao_perguntar_satisfacao) {
-        if(contador_resposta == 3) {
-          contador_resposta++;
-          alert('Por favor, aguarde. Estamos iniciando o atendimento');
-          setInterval(atualizar_chat, 3000);
+      
+      function inicializar_atendimento() {
+    	  habilitar_envio();
+    	  alert('Por favor, aguarde. Estamos iniciando o atendimento');
+          setInterval(atualizar_chat, 1500);
           atualizar_status_atendimento('atendimento_iniciado');
+      }
+
+      function proxima_resposta(mensagem, nao_perguntar_satisfacao) {
+    	  desabilitar_envio();
+    	  
+        if(contador_resposta == 2) {
+          contador_resposta++;
+          inicializar_atendimento();
           return false;
-        }
-
-        if(contador_resposta >= 3) {
-            return false;
-        }
-
-        var mensagem_chatbot = {};
-        if(typeof mensagem != 'undefined') {
-          mensagem_chatbot.resposta = mensagem;
-          mensagem_chatbot.id_pergunta_resposta = -1;
         } else {
-          mensagem_chatbot = obter_resposta_ajax($('#mensagem_input').val());
+        	contador_resposta++;
         }
-
-        var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
-        clone_usuario_chatbot = str_replace('$id_pergunta_resposta', mensagem_chatbot.id_pergunta_resposta, clone_usuario_chatbot);
-        clone_usuario_chatbot = str_replace('$mensagem', mensagem_chatbot.resposta, clone_usuario_chatbot);
-        clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
-
-        $('#base_mensagens').append(clone_usuario_chatbot);
-        contador_resposta++;
-        if(nao_perguntar_satisfacao) {
-          $('#clone_chatbot_mensagem' + contador_clone_chatbot_mensagem + ' .satisfacao').remove();
+        
+       
+        if(typeof respostas_chatbot[contador_resposta] != 'undefined') {
+        	adicionar_mensagem_chatbot_caixa(respostas_chatbot[contador_resposta]);	
         }
-        contador_clone_chatbot_mensagem++;
+        
+        if(contador_resposta >= 2) {
+            return false;
+        }       
+        
+        //adicionar_mensagem_chatbot_caixa();
+      }
+      
+      function adicionar_mensagem_chatbot_caixa(mensagem_chatbot, nao_perguntar_satisfacao) {
+    	  var clone_usuario_chatbot = $('#clone_chatbot_mensagem').html();
+          clone_usuario_chatbot = str_replace('$id_pergunta_resposta', mensagem_chatbot.id_pergunta_resposta, clone_usuario_chatbot);
+          clone_usuario_chatbot = str_replace('$mensagem', mensagem_chatbot.resposta, clone_usuario_chatbot);
+          clone_usuario_chatbot = str_replace('$id', contador_clone_chatbot_mensagem, clone_usuario_chatbot);
+		
+          $('#base_mensagens').append(clone_usuario_chatbot);
+          
+          if(nao_perguntar_satisfacao) {
+          	$('#clone_chatbot_mensagem' + contador_clone_chatbot_mensagem + ' .satisfacao').remove();
+          }
+          
+          if(contador_resposta > 2) {
+        	  $('#entidade' + contador_clone_chatbot_mensagem).text('Atendente • Agora mesmo');
+        	  $('#clone_chatbot_mensagem' + contador_clone_chatbot_mensagem + ' .nao_satisfeito').remove();
+          }
+          
+          scroll_down_mensagem_enviada();
+          contador_clone_chatbot_mensagem++;
       }
 
       function atualizar_status_atendimento(status) {
@@ -648,12 +696,15 @@
 
           return str;
       }
-
+      
+      var respostas_chatbot = [];
       function obter_resposta_ajax(mensagem_usuario) {
         
         var resposta_chatbot = {};
+        
         resposta_chatbot.resposta = 'Ops, houve um erro interno e não consegui achar o que procura. Verifique minha conexão.';
         resposta_chatbot.id_pergunta_resposta = -1;
+        
         $.ajax({
             url: enderecoBack + 'chatbot_dialog/obter_resposta_ajax',
             dataType: 'json',
@@ -664,14 +715,94 @@
                 'mensagem_usuario': obter_log_ultima_mensagem_usuario().mensagem,
             },
             success: function(retorno) {
-                resposta_chatbot.resposta = retorno.perguntaHasResposta.resposta.descricao;
-                resposta_chatbot.id_pergunta_resposta = retorno.perguntaHasResposta.id;
-            },
+            	console.log(retorno);
+            	if(retorno.length != 0) {
+            		respostas_chatbot = [];
+            		respostas_chatbot.push(retorno);	
+            	} else {
+            		respostas_chatbot = [];
+            	}
+            	
+                //resposta_chatbot.resposta = retorno.perguntaHasResposta.resposta.descricao;
+                //resposta_chatbot.id_pergunta_resposta = retorno.perguntaHasResposta.id;
+            }, 
             error: function() {
               alerta_erro();
             }
         });
-        return resposta_chatbot;
+        
+        organizar_respostas();
+      }
+      
+      
+      function organizar_respostas() {
+    	  if(respostas_chatbot.length != 0) {
+    		  respostas_chatbot = 
+        		  respostas_chatbot[0].sort(function (a, b) {
+        			  if (a.peso_pergunta > b.peso_pergunta) {
+        			    return 1;
+        			  }
+        			  if (a.peso_pergunta < b.peso_pergunta) {
+        			    return -1;
+        			  }
+        			  // a must be equal to b
+        			  return 0;
+        			}).reverse();
+  
+    	  }
+    	  
+    	  console.log("respostas chatbot ordenadas")
+    	  console.log(respostas_chatbot);
+    	  var novas_respostas = [];
+    	  var resposta_indefinida = 'Desculpe, não encontrei algo correspondente.';
+    	  for(var i = 0; i < 3; i++) {
+    		  
+  		  	  if(typeof respostas_chatbot[i] == 'undefined') {
+  		  		resposta_chatbot = {};
+				resposta_chatbot.resposta = resposta_indefinida;
+		        resposta_chatbot.id_pergunta_resposta = -1;
+		        
+		        novas_respostas.push(resposta_chatbot);
+		        console.log('1: ' + i);
+  		  	  } else {
+  		  		console.log('2: ' + i)
+  		  		resposta_chatbot = {};
+  		  		resposta_chatbot.id_pergunta_resposta = -1;	  
+  		  	
+  		  		if(typeof respostas_chatbot[i].perguntaHasResposta == 'undefined' || respostas_chatbot[i].perguntaHasResposta.length == 0) {
+  		  			resposta_chatbot.resposta = resposta_indefinida;	
+  		  		} else if(typeof respostas_chatbot[i].perguntaHasResposta.resposta == 'undefined' || respostas_chatbot[i].perguntaHasResposta.resposta.length == 0) {
+  		  			resposta_chatbot.resposta = resposta_indefinida;
+  		  		} else if (typeof respostas_chatbot[i].perguntaHasResposta.resposta.descricao == ''){
+  		  			resposta_chatbot.resposta = resposta_indefinida;
+  		  		} else {
+  		  			resposta_chatbot.resposta = '';
+  		  			if(i > 0) {
+  		  				resposta_chatbot.resposta += 'Ok, vamos tentar de novo: '; 
+  		  			}
+  		  			resposta_chatbot.resposta += respostas_chatbot[i].perguntaHasResposta.resposta.descricao;
+  		  			resposta_chatbot.id_pergunta_resposta = respostas_chatbot[i].perguntaHasResposta.id;
+  		  		}
+  		  		
+  		  		novas_respostas.push(resposta_chatbot);
+
+  		  	  }
+  		  	  
+    	  }
+    	  
+    	  respostas_chatbot = novas_respostas;
+    }
+
+      function compare(a, b){
+        let comparison = 0;
+
+        if (a.peso_pergunta > b.peso_pergunta) {
+          comparison = 1;
+        } else if (b.peso_pergunta > a.peso_pergunta) {
+          comparison = -1;
+        }
+
+        return comparison;
       }
 
       function scroll_down_mensagem_enviada() {
