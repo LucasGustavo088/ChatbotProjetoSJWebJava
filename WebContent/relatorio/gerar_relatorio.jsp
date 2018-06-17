@@ -1,21 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
- <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page import="java.util.*,
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page
+	import="java.util.*,
                   utils.*,
-                 	model.*" %>
+                        model.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Laravel</title>
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Raleway:100,600"
-	rel="stylesheet" type="text/css">
+<title>Relatório</title>
+
+<link rel="shortcut icon"
+	href="/ChatbotProjetoSJWebJava/public/images/logo-icon.png">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/ChatbotProjetoSJWebJava/public/vendor/jquery-ui-1.12.1.custom/jquery-ui.structure.css">
+<link rel="stylesheet"
+	href="/ChatbotProjetoSJWebJava/public/vendor/jquery-ui-1.12.1.custom/jquery-ui.css">
+
+<!-- Scripts -->
+<script
+	src="/ChatbotProjetoSJWebJava/public/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!-- Styles -->
 <style>
 html, body {
@@ -73,8 +84,16 @@ html, body {
 	
 }
 
+.thead {
+
+}
+
 .container {
 	margin: 20px;
+}
+
+table th td {
+	font-weight: bold;
 }
 
 table td, table th {
@@ -85,21 +104,21 @@ table td, table th {
 </style>
 </head>
 <body>
-	<div class="container">
+	<div class="container col-md-12">
 		<div class="header">
 			<div>
 				<h2>Relatório de atendimento</h2>
 			</div>
 			<div>
-				<strong>Periodicidade:</strong> de 
+				<strong>Periodicidade:</strong> de
 				<fmt:formatDate value="${filtro.data_de}" pattern="dd/MM/yyyy" />
-				até 
+				até
 				<fmt:formatDate value="${filtro.data_ate}" pattern="dd/MM/yyyy" />
 			</div>
 		</div>
 		<hr>
 		<div>
-			<table>
+			<table class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
 						<th style="width: 200px;">ID do atendimento</th>
@@ -113,7 +132,8 @@ table td, table th {
 						<c:forEach var="atendimento" items="${atendimentos}">
 							<tr>
 								<td>${ atendimento.id }</td>
-								<td><fmt:formatDate value="${atendimento.data_criacao}" pattern="dd/MM/yyyy HH:mm:ss" /></td>
+								<td><fmt:formatDate value="${atendimento.data_criacao}"
+										pattern="dd/MM/yyyy HH:mm:ss" /></td>
 								<td>${ fn:length(atendimento.atendimentoHasPergunta) }</td>
 								<td>${ atendimento.duracao_atendimento }</td>
 							</tr>
@@ -125,31 +145,45 @@ table td, table th {
 		<hr>
 		<div>
 			<h2>Detalhes</h2>
-			<div>
-				<div>
-					<strong>Quantidade de atendimentos:</strong> <td>${ fn:length(relatorio.atendimentos) }</td>
-				</div>
-				<div>
-					<strong>Quantidade de atendimentos resolvidos na pelo
-						chatbot na primeira tentativa: </strong> ${ relatorio.quantidade_atendimentos.primeira_tentativas }
-				</div>
-				<div>
-					<strong>Quantidade de atendimentos resolvidos na pelo
-						chatbot na segunda tentativa: </strong> ${ relatorio.quantidade_atendimentos.segunda_tentativas }
-				</div>
-				<div>
-					<strong>Quantidade de atendimentos resolvidos na pelo
-						chatbot na terceira tentativa: </strong> ${ relatorio.quantidade_atendimentos.terceira_tentivas }
-				</div>
-				<div>
-					<strong>Quantidade de atendimentos encaminhado para
-						atendimento humano: </strong> ${ relatorio.quantidade_atendimentos.encaminhamento_humano }
-				</div>
-			</div>
+			<table class="table table-striped table-bordered table-hover">
+				<thead class="thead">
+					<tr>
+						<td><strong>Atributo</strong></td>
+						<td><strong>Valor</strong></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Quantidade de atendimentos:</td>
+						<td>${ fn:length(relatorio.atendimentos) }</td>
+					</tr>
+					<tr>
+						<td>Quantidade de atendimentos resolvidos na pelo chatbot na
+							primeira tentativa:</td>
+						<td>${relatorio.quantidade_atendimentos.primeira_tentativas}</td>
+					</tr>
+					<tr>
+						<td>Quantidade de atendimentos resolvidos na pelo chatbot na
+							segunda tentativa:</td>
+						<td>${ relatorio.quantidade_atendimentos.segunda_tentativas }</td>
+					</tr>
+					<tr>
+						<td>Quantidade de atendimentos resolvidos na pelo chatbot na
+							terceira tentativa:</td>
+						<td>${relatorio.quantidade_atendimentos.terceira_tentivas}</td>
+					</tr>
+					<tr>
+						<td>Quantidade de atendimentos encaminhado para atendimento
+							humano:</td>
+						<td>${ relatorio.quantidade_atendimentos.encaminhamento_humano }</td>
+					</tr>
+				</tbody>
+
+			</table>
 		</div>
 	</div>
 	<script>
-	window.print();
-	</script>
+                window.print();
+        </script>
 </body>
 </html>

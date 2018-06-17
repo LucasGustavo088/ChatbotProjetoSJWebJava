@@ -20,11 +20,11 @@ public class Relatorio {
 		this.atendimentos = atendimentos;
 	}
 	public QuantidadeAtendimentos getQuantidade_atendimentos() {
-		return quantidade_atendimentos;
+		return quantidadeAtendimentos;
 	}
 	public void setQuantidade_atendimentos(QuantidadeAtendimentos quantidade_atendimentos) {
-		this.quantidade_atendimentos = quantidade_atendimentos;
+		this.quantidadeAtendimentos = quantidade_atendimentos;
 	}
 	public ArrayList<Atendimento> atendimentos = new ArrayList<Atendimento>();
-	public QuantidadeAtendimentos quantidade_atendimentos;
+	public QuantidadeAtendimentos quantidadeAtendimentos;
 }

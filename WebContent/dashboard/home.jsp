@@ -55,7 +55,7 @@
 <script type="text/javascript">
     var popular_tabela_atendimento = "";
     $(document).ready(function () {
-        $('#popular_tabela_atendimento').DataTable( {
+        var table = $('#popular_tabela_atendimento').DataTable( {
             ajax: enderecoBack + 'dashboard/listar_pendencias_ajax/',
             searching: false,
             bFilter: true,
@@ -63,6 +63,10 @@
             lengthChange: false,
             order: [[ 0, "desc" ]]
         });
+        
+        setInterval( function () {
+            table.ajax.reload();
+        }, 5000 );
 
         $('#toggle_relatorio').click(function() {
             $('#div_relatorio').slideToggle();

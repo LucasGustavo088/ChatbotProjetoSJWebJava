@@ -42,7 +42,7 @@ public class HomeController extends HttpServlet {
 
 
 		PrintWriter out = response.getWriter();
-		out.println("teste 2222");
+		out.println("Função para testes");
 
 	}
 
