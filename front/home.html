@@ -629,7 +629,13 @@
       }
 
       function proxima_resposta(mensagem, nao_perguntar_satisfacao) {
-    	  desabilitar_envio();
+    	  
+    	  if(contador_resposta <= 2) {
+    		  desabilitar_envio();  
+    	  } else {
+    		  habilitar_envio();
+    	  }
+    	  
     	  
         if(contador_resposta == 2) {
           contador_resposta++;

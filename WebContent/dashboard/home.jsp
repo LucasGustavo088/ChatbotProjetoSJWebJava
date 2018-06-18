@@ -66,7 +66,7 @@
         
         setInterval( function () {
             table.ajax.reload();
-        }, 5000 );
+        }, 5000);
 
         $('#toggle_relatorio').click(function() {
             $('#div_relatorio').slideToggle();
