@@ -83,6 +83,7 @@ public class ChatbotController implements Filter {
         
         public void editarPalavraChavePergunta(String[] url, ServletRequest request, ServletResponse response) throws ServletException, IOException {
                 
+        		Alerta.alerta("Editar em desenvolvimento =)", "warning", request);
                 Topico topico = new Topico();
                 TopicoService ts = new TopicoService();
                 topico = ts.carregarCadastroCompleto(Integer.parseInt(url[2]));

@@ -268,9 +268,6 @@ public class ChatbotDialogController extends HttpServlet {
                         }
                 }
                 
-                //salvarPerguntaUsuarioExterno(mensagemUsuario);
-                
-                
                 if(respostaFinal.getId() == 0) {
                         
                 }

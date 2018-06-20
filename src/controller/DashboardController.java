@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -70,8 +71,11 @@ public class DashboardController implements Filter {
 
                         String status = "<strong>Não finalizado</strong>";
                         
-                        if(atendimento.getStatus().equals("finalizado")) {
-                                status = "<strong><span style='color: green'>Finalizado</span></strong>";
+                        if(atendimento.getStatus().equals("finalizado_ausente")) {
+                            status = "<strong><span>Finalizado (Por tempo) </span></strong>";
+                            botao_atender = " <a onclick='redirecionar_para_atendimento(" + atendimento.getId() + ");' class='btn btn-primary'> Visualizar</a>";
+                        } else if(atendimento.getStatus().equals("finalizado")) {
+                                status = "<strong><span>Finalizado</span></strong>";
                                 botao_atender = " <a onclick='redirecionar_para_atendimento(" + atendimento.getId() + ");' class='btn btn-primary'> Visualizar</a>";
                         } else if(atendimento.getStatus().equals("atendimento_iniciado")) {
                                 status = "<strong>Atendimento iniciado</strong>";
@@ -88,6 +92,18 @@ public class DashboardController implements Filter {
                         data.add(sdf.format(atendimento.getData_criacao()));
                         data.add(status);
                         data.add(botao_atender);
+                        
+                        Date dataAtual = new Date(0);
+                        long diferencaData = atendimento.getData_criacao().getTime() - dataAtual.getTime();
+                        long diffSeconds = diferencaData / 1000 % 60;
+                        long diffMinutes = diferencaData / (60 * 1000) % 60;
+                        long diffHours = diferencaData / (60 * 60 * 1000) % 24;
+                        long diffDays = diferencaData / (24 * 60 * 60 * 1000);
+                        AtendimentoService as = new AtendimentoService();
+                        if(diffHours > 0 && atendimento.getStatus().equals("atendimento_iniciado")) {
+                        	as.query("UPDATE atendimento SET status = '" + "finalizado_ausente" + "' WHERE ID = " + atendimento.getId());
+                        }
+                        
                         
                         aaData.add(data);
 

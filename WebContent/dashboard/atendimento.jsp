@@ -9,10 +9,12 @@
   </div>
 
   <div class="chat-forma">
-    <textarea id="mensagem_input"></textarea>
+    <input class="form-control col-md-12" style="height: 56px;" type="text" id="mensagem_input"/>
     <button id="botao_enviar_mensagem" onclick="enviar_mensagem()">Enviar</button>
   </div>
 </div>
+
+
 
 <!-- CLONES  -->
 <div id="clone_atendente" style="display: none;">
@@ -55,7 +57,7 @@
   });
 
   function enviar_mensagem() {
-    if($('#mensagem_input').val() != '') {
+    if($('#mensagem_input').val() != '' && $('#mensagem_input').val() != " ") {
         adicionar_mensagem_usuario();
 
         
@@ -118,6 +120,8 @@
                 adicionar_mensagem_usuario_caixa(chat.resposta.descricao);
               }
             });
+            
+            scroll_down_mensagem_enviada();
           }
         },
     });
@@ -159,7 +163,7 @@
       adicionar_log_ultima_mensagem_usuario_externo(mensagem);
 	  console.log(mensagem);
 	  adicionar_mensagem_usuario_externo_caixa();
-      $('#mensagem_input').focus();
+	  $('#mensagem_input').focus();
 	  
   }
   

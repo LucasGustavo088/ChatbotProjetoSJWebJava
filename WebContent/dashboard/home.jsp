@@ -13,6 +13,7 @@
                     <label for="data_de" class="col-md-12 control-label">De</label>
                     <div class="col-md-12">
                         <input type="text" required name="data_de" placeholder="dd/mm/AAAA" class="datepicker form-control" id="data_de">
+                        
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -22,12 +23,12 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="form-group row col-md-6">
-                <label for="outro_filtro" class="col-md-12 control-label">Outro filtro</label>
-                <div class="col-md-10">
-                    <input type="text" required name="outro_filtro" placeholder="Outro filtro" class="form-control" id="outro_filtro">
-                </div>
-            </div> -->
+            <div class="form-group row col-md-6">
+               
+            </div>
+            <div class="form-group row col-md-6">
+                <span style="color: red;"><strong>Necessário inserir datas de intervalo válidas.</strong></span>
+            </div>
 
             <div class="form-group row col-md-12" style="margin-top: 15px;">
                 <button type="submit" id="gerar_relatorio" style="float: right" class="btn btn-success"><i class="fas fa-clipboard"></i> Gerar</button>
